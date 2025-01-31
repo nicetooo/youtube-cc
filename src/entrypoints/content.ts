@@ -1,5 +1,4 @@
-// entrypoints/example-ui.content/index.ts
-import App from "./popup/App.svelte";
+import "~/assets/tailwind.css";
 import { mount, unmount } from "svelte";
 import "./popup/app.css";
 import CaptionList from "@/lib/CaptionList.svelte";
@@ -15,9 +14,11 @@ export default defineContentScript({
       position: "inline",
       anchor: "body",
 
-      onMount: (container) => {
-        document.body.prepend(container);
+      onMount: async (container) => {
+        await new Promise((r) => setTimeout(r, 1000));
+        const sec = document.getElementById("secondary");
 
+        sec?.prepend(container);
         // Create the Svelte app inside the UI container
         mount(CaptionList, {
           target: container,
