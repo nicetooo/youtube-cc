@@ -1,7 +1,8 @@
 import "~/assets/tailwind.css";
 import { mount, unmount } from "svelte";
 import "./popup/app.css";
-import CaptionList from "@/lib/CaptionList.svelte";
+import ContentMain from "@/lib/ContentMain.svelte";
+import { waitFor } from "@/lib/utils/wait";
 
 export default defineContentScript({
   matches: ["<all_urls>"],
@@ -15,12 +16,14 @@ export default defineContentScript({
       anchor: "body",
 
       onMount: async (container) => {
-        await new Promise((r) => setTimeout(r, 1000));
-        const sec = document.getElementById("secondary");
+        const sec = await waitFor<HTMLDivElement>(
+          () => document.getElementById("secondary"),
+          0
+        );
 
         sec?.prepend(container);
         // Create the Svelte app inside the UI container
-        mount(CaptionList, {
+        mount(ContentMain, {
           target: container,
         });
       },
