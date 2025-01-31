@@ -96,14 +96,20 @@
 
 {#if transcriptHTML.length > 0}
   <div
-    class="overflow-hidden w-full rounded-r-xl bg-gray-800 p-4"
-    style={`height: ${videoHeight}`}
+    class="overflow-hidden flex flex-col"
+    style={`
+      height: calc(${videoHeight} - 24px);
+      width: calc(100% - 24px);
+      background: var(--yt-spec-badge-chip-background);
+      border-radius: 12px;
+      padding:12px;
+      margin-bottom:12px;
+    `}
   >
     <input
       type="text"
       tabindex={0}
       bind:this={input}
-      class="search-box bg-black bg-opacity-90"
       placeholder="Search Caption..."
       onclick={(e) => e.stopPropagation()}
       onkeypress={(e) => e.stopPropagation()}
@@ -137,11 +143,24 @@
     overflow: auto;
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 10px;
-    height: 100%;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
+    padding-bottom: 12px;
+  }
+
+  input {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    color: inherit;
+    outline: none;
+    border: 1px solid;
+    border-color: #c6c6c6;
+    border-radius: 99px;
+    box-shadow: inset 0 1px 2px #eee;
+    padding: 6px;
+    padding-left: 12px;
+    font-size: 1.4rem;
+    margin-bottom: 4px;
   }
 
   .entry {
