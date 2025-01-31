@@ -27,6 +27,12 @@
     }));
   });
 
+  let filteredCaption = $derived.by(() => {
+    return transcriptHTML.filter(({ content = "" }, i) => {
+      return content?.toLowerCase().includes(captionQuery.toLowerCase());
+    });
+  });
+
   function toTimeStamp(time: string) {
     if (!video) {
       return;
@@ -116,7 +122,7 @@
       bind:value={captionQuery}
     />
     <div class="transcript">
-      {#each transcriptHTML as { start, content }}
+      {#each filteredCaption as { start, content }}
         <div
           role="button"
           class="entry"
@@ -151,7 +157,7 @@
     background-color: transparent;
     border: none;
     box-shadow: none;
-    color: inherit;
+    color: var(--yt-spec-text-primary);
     outline: none;
     border: 1px solid;
     border-color: #c6c6c6;
