@@ -54,7 +54,7 @@
 
       const ad = document.querySelector(".ytp-ad-player-overlay-layout");
       if (ad === null) {
-        videoCurrentTime = Math.floor(video.currentTime);
+        videoCurrentTime = video.currentTime;
       } else {
         console.log("skip ad");
         video.currentTime = 999;

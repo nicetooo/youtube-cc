@@ -6,13 +6,14 @@
   let input = $state();
   let captionQuery = $state("");
   let caption = $state("");
+  let isMouseHover = $state(false);
 
   function decodeHTML(str: string) {
     const doc = new DOMParser().parseFromString(str, "text/html");
     return doc.documentElement.textContent;
   }
 
-  let transcriptHTML = $derived.by(() => {
+  let captions = $derived.by(() => {
     if (!browser) {
       return [];
     }
@@ -23,12 +24,13 @@
     const texts = xmlDoc.getElementsByTagName("text");
     return Array.from(texts).map((text) => ({
       start: text.getAttribute("start") || "",
+      dur: text.getAttribute("dur") || "",
       content: text.textContent ? decodeHTML(text.textContent) : "",
     }));
   });
 
   let filteredCaption = $derived.by(() => {
-    return transcriptHTML.filter(({ content = "" }, i) => {
+    return captions.filter(({ content = "" }, i) => {
       return content?.toLowerCase().includes(captionQuery.toLowerCase());
     });
   });
@@ -81,6 +83,59 @@
     console.log({ text });
   }
 
+  function scrollParentToChild() {
+    const lines = document.getElementsByClassName(
+      "caption-line"
+    ) as HTMLCollectionOf<HTMLDivElement>;
+    const line = Array.from(lines).filter((l) => {
+      const { start = 0, dur = 0 } = l.dataset;
+      return (
+        Number(start) <= videoCurrentTime &&
+        Number(start) + Number(dur) > videoCurrentTime
+      );
+    })[0];
+
+    if (!line) {
+      return;
+    }
+    if (!line.parentElement) {
+      return;
+    }
+
+    var { bottom, top } = line.parentElement.getBoundingClientRect();
+
+    const parentCenter = Math.floor((bottom - top) / 2 + top);
+
+    var childRect = line.getBoundingClientRect();
+
+    const childCenter = line.clientHeight / 2;
+
+    const scrollTop = childRect.top - parentCenter + childCenter;
+    const scrollBot = childRect.bottom - parentCenter - childCenter;
+
+    if (Math.abs(scrollTop) < Math.abs(scrollBot)) {
+      line.parentElement.scrollTop += scrollTop;
+    } else {
+      line.parentElement.scrollTop += scrollBot;
+    }
+  }
+
+  $effect(() => {
+    if (isMouseHover) {
+      return;
+    }
+    scrollParentToChild();
+  });
+
+  const handleMouseEnter = () => {
+    isMouseHover = true;
+  };
+
+  const handleMouseLeave = () => {
+    scrollParentToChild();
+    isMouseHover = false;
+  };
+
   onMount(async () => {
     getCaptions();
     chrome.runtime.onMessage.addListener(
@@ -100,7 +155,8 @@
   });
 </script>
 
-{#if transcriptHTML.length > 0}
+{#if captions.length > 0}
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
     class="overflow-hidden flex flex-col"
     style={`
@@ -111,6 +167,8 @@
       padding:12px;
       margin-bottom:12px;
     `}
+    onmouseenter={handleMouseEnter}
+    onmouseleave={handleMouseLeave}
   >
     <input
       type="text"
@@ -122,15 +180,15 @@
       bind:value={captionQuery}
     />
     <div class="transcript">
-      {#each filteredCaption as { start, content }}
+      {#each filteredCaption as { start, dur, content }}
         <div
           role="button"
-          class="entry"
-          id={`entry-${start}`}
-          style={videoCurrentTime >= Math.floor(Number(start))
-            ? `opacity: 0.5;`
-            : ``}
+          class="caption-line"
+          id={`caption-line-${start}`}
+          style={videoCurrentTime >= Number(start) ? `opacity: 0.5;` : ``}
           tabindex="0"
+          data-start={start}
+          data-dur={dur}
           onclick={() => toTimeStamp(start)}
           onkeypress={(e) =>
             (e.key === "Enter" || e.key === " ") && toTimeStamp(start)}
@@ -162,14 +220,13 @@
     border: 1px solid;
     border-color: #c6c6c6;
     border-radius: 99px;
-    box-shadow: inset 0 1px 2px #eee;
     padding: 6px;
     padding-left: 12px;
     font-size: 1.4rem;
     margin-bottom: 4px;
   }
 
-  .entry {
+  .caption-line {
     display: flex;
     margin-bottom: 8px;
   }
@@ -180,12 +237,12 @@
     margin-right: 8px;
   }
 
-  .entry:hover {
+  .caption-line:hover {
     opacity: 0.5;
     cursor: pointer;
   }
 
-  .entry:active {
+  .caption-line:active {
     opacity: 0.5;
   }
 </style>
