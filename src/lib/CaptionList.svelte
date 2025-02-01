@@ -1,7 +1,9 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
 
-  const { video, videoHeight, videoCurrentTime } = $props();
+  let video: HTMLVideoElement | undefined = $state();
+  let videoHeight: number = $state(0);
+  let videoCurrentTime: number = $state(0);
 
   let timedtextUrl: URL | null = $state(null);
   let videoId: string | null = $state(null);
@@ -58,7 +60,7 @@
       return;
     }
 
-    console.log({ timedtextUrl });
+    console.log("getCaptions", timedtextUrl);
     const res = await fetch(timedtextUrl.toString());
     const text = await res.text();
     console.log({ text });
@@ -129,7 +131,50 @@
     isMouseHover = false;
   };
 
+  async function watchVideoSize() {
+    if (!video) {
+      return;
+    }
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (!video) {
+        return;
+      }
+      for (let entry of entries) {
+        videoHeight = entry.contentRect.height;
+      }
+    });
+
+    resizeObserver.observe(video);
+  }
+
   const setUp = async () => {
+    if (location.pathname !== "/watch") {
+      return;
+    }
+
+    video = await waitFor<HTMLVideoElement>(
+      () => document.getElementsByClassName("html5-main-video")[0],
+      0
+    );
+    video.addEventListener("timeupdate", function () {
+      if (!video) {
+        return;
+      }
+
+      const companion = document.querySelector("#companion");
+      if (companion) {
+        companion.remove();
+      }
+
+      const ad = document.querySelector(".ytp-ad-player-overlay-layout");
+      if (ad === null) {
+        videoCurrentTime = video.currentTime;
+      }
+    });
+
+    videoHeight = video?.height;
+    watchVideoSize();
+
     timedtextUrl = null;
     caption = "";
     await waitFor(() => document.getElementById("secondary"));
@@ -171,7 +216,7 @@
     class="overflow-hidden flex flex-col"
     style={`
      color: var(--yt-spec-text-primary);
-      height: calc(${videoHeight} - 24px);
+      height: calc(${videoHeight}px - 24px);
       width: calc(100% - 24px);
       background: var(--yt-spec-badge-chip-background);
       border-radius: 12px;
@@ -187,7 +232,7 @@
         class="flex-grow"
         tabindex={0}
         bind:this={input}
-        placeholder="Search Caption..."
+        placeholder={document.querySelector(".yt-searchbox-input").placeholder}
         onclick={(e) => e.stopPropagation()}
         onkeypress={(e) => e.stopPropagation()}
         bind:value={captionQuery}

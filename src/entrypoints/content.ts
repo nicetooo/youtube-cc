@@ -16,6 +16,7 @@ export default defineContentScript({
       anchor: "body",
 
       onMount: async (container) => {
+        console.log("content mount");
         const sec = await waitFor<HTMLDivElement>(
           () => document.getElementById("secondary"),
           0
