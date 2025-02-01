@@ -8,17 +8,19 @@ export default defineBackground(() => {
       });
     }
   });
-  chrome.runtime.onMessage.addListener(function (
-    request,
-    sender,
-    sendResponse
-  ) {
-    console.log(
-      sender.tab
-        ? "from a content script:" + sender.tab.url
-        : "from the extension"
-    );
-    if (request.greeting === "hello") sendResponse({ farewell: "goodbye" });
-  });
+
+  chrome.webRequest.onBeforeRequest.addListener(
+    (details) => {
+      if (details.url.includes("/api/timedtext")) {
+        console.log("Request detected:", details);
+        chrome.tabs.sendMessage(details.tabId, {
+          type: "timedtext_url",
+          url: details.url,
+        });
+      }
+    },
+    { urls: ["*://www.youtube.com/*"] }
+  );
+
   console.log("Hello background!", { id: browser.runtime.id });
 });
