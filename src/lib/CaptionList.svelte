@@ -218,7 +218,7 @@
     color: var(--yt-spec-text-primary);
     outline: none;
     border: 1px solid;
-    border-color: #c6c6c6;
+    border-color: hsl(0, 0%, 50%);
     border-radius: 99px;
     padding: 6px;
     padding-left: 12px;
