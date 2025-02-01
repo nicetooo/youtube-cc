@@ -9,6 +9,7 @@
   let input = $state();
   let captionQuery = $state("");
   let isMouseHover = $state(false);
+  let isAutoClicked = false;
 
   function decodeHTML(str: string) {
     const doc = new DOMParser().parseFromString(str, "text/html");
@@ -54,7 +55,6 @@
 
   async function getCaptions() {
     if (timedtextUrl?.searchParams.get("v") !== videoId) {
-      console.log("id not match", videoId, timedtextUrl);
       return;
     }
 
@@ -104,18 +104,19 @@
   });
 
   $effect(() => {
-    if (captions.length === 0 && videoCurrentTime) {
+    if (!caption && videoCurrentTime && !timedtextUrl && !isAutoClicked) {
       const subTitleBtn = document.getElementsByClassName(
         "ytp-subtitles-button"
       )[0] as HTMLDivElement;
       if (!subTitleBtn) {
         return;
       }
+      isAutoClicked = true;
       console.log({ subTitleBtn });
       subTitleBtn.click();
       setTimeout(() => {
         subTitleBtn.click();
-      }, 500);
+      }, 1000);
     }
   });
 
@@ -129,6 +130,7 @@
   };
 
   const setUp = async () => {
+    timedtextUrl = null;
     caption = "";
     await waitFor(() => document.getElementById("secondary"));
     videoId = new URL(location.href).searchParams.get("v");
@@ -153,7 +155,8 @@
             break;
           }
           default: {
-            console.log("unhandled", message);
+            // console.log("unhandled", message);
+            break;
           }
         }
       }

@@ -31,6 +31,22 @@
     observer.observe(video, config);
   }
 
+  async function removeAd() {
+    await waitFor(
+      () =>
+        document.querySelectorAll(
+          "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)"
+        )[0]
+    );
+    const ads = document.querySelectorAll(
+      "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)"
+    );
+    console.log("removing ads", ads);
+    Array.from(ads).forEach((a) => {
+      a.remove();
+    });
+  }
+
   onMount(async () => {
     video = await waitFor<HTMLVideoElement>(
       () => document.getElementsByClassName("html5-main-video")[0],
@@ -63,6 +79,27 @@
 
     videoHeight = window.getComputedStyle(video).height;
     watchVideoSize();
+    removeAd();
+    chrome.runtime.onMessage.addListener(
+      function (message, sender, sendResponse) {
+        switch (message.type) {
+          case "url_change": {
+            removeAd();
+            break;
+          }
+          case "has_load_more": {
+            setTimeout(() => {
+              removeAd();
+            }, 100);
+            break;
+          }
+          default: {
+            // console.log("unhandled", message);
+            break;
+          }
+        }
+      }
+    );
   });
 </script>
 

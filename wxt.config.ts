@@ -7,6 +7,6 @@ export default defineConfig({
   modules: ["@wxt-dev/module-svelte"],
   manifest: {
     permissions: ["webRequest"],
-    host_permissions: ["https://www.youtube.com"],
+    host_permissions: ["*://www.youtube.com/*", "*://youtube.com/*"],
   },
 });
