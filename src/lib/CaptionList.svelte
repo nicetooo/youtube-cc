@@ -156,12 +156,6 @@
     if (!captionsElm) {
       return;
     }
-    if (location.pathname !== "/watch" || !isCaptionOn) {
-      captionsElm.style.display = "none";
-      return;
-    } else {
-      captionsElm.style.display = "flex";
-    }
 
     video = await waitFor<HTMLVideoElement>(
       () => document.getElementsByClassName("html5-main-video")[0],
@@ -192,9 +186,14 @@
       return;
     }
     console.log({ captions, caption });
-    if (isCaptionOn && captions.length !== 0) {
+    if (
+      isCaptionOn &&
+      captions.length !== 0 &&
+      location.pathname === "/watch"
+    ) {
       captionsElm.style.display = "flex";
     } else {
+      console.log("hide captionElm");
       captionsElm.style.display = "none";
     }
   });
@@ -242,6 +241,7 @@
      border-radius: 12px;
      padding:12px;
      margin-bottom:12px;
+     display: none;
      border: 1px solid var(--yt-spec-10-percent-layer);
      `}
   onmouseenter={handleMouseEnter}
