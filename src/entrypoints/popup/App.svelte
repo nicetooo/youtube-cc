@@ -2,15 +2,13 @@
   import "carbon-components-svelte/css/g90.css";
   import { Toggle } from "carbon-components-svelte";
   let isStorageLoad = false;
-  let settings = $state({
-    caption: false,
-    wideScreen: false,
-    skipAd: false,
-    removeAds: false,
-  });
+  let caption = $state(true);
+  let wideScreen = $state(true);
+  let skipAd = $state(true);
+  let removeAds = $state(true);
 
   $effect(() => {
-    console.log({ ...settings });
+    const settings = { caption, wideScreen, skipAd, removeAds };
     if (!isStorageLoad) {
       return;
     }
@@ -21,12 +19,14 @@
 
   onMount(() => {
     console.log("popup mount");
-
     document.addEventListener("DOMContentLoaded", async () => {
-      const { settings: storageSettings } =
-        await chrome.storage.local.get("settings");
-      if (storageSettings) {
-        settings = storageSettings;
+      const { settings } = await chrome.storage.local.get("settings");
+      console.log("init settings", settings);
+      if (settings) {
+        caption = settings.caption;
+        wideScreen = settings.wideScreen;
+        skipAd = settings.skipAd;
+        removeAds = settings.removeAds;
       }
       isStorageLoad = true;
     });
@@ -34,14 +34,34 @@
 </script>
 
 <main>
-  <div class="flex flex-col gap-3" style="width: 250px;">
+  <div class="flex flex-col gap-9" style="width: 250px;">
     <div class="flex justify-between">
-      <Toggle labelText="Caption" bind:toggled={settings.caption} />
-      <Toggle labelText="WideScreen" bind:toggled={settings.wideScreen} />
+      <Toggle
+        labelText={browser.i18n.getMessage("transcription")}
+        labelA={browser.i18n.getMessage("label_a")}
+        labelB={browser.i18n.getMessage("label_b")}
+        bind:toggled={caption}
+      />
+      <Toggle
+        labelText={browser.i18n.getMessage("wide_screen")}
+        labelA={browser.i18n.getMessage("label_a")}
+        labelB={browser.i18n.getMessage("label_b")}
+        bind:toggled={wideScreen}
+      />
     </div>
     <div class="flex justify-between">
-      <Toggle labelText="Skip Video Ads" bind:toggled={settings.skipAd} />
-      <Toggle labelText="Remove Ad Items" bind:toggled={settings.removeAds} />
+      <Toggle
+        labelText={browser.i18n.getMessage("skip_video_ads")}
+        labelA={browser.i18n.getMessage("label_a")}
+        labelB={browser.i18n.getMessage("label_b")}
+        bind:toggled={skipAd}
+      />
+      <Toggle
+        labelText={browser.i18n.getMessage("remove_ad_items")}
+        labelA={browser.i18n.getMessage("label_a")}
+        labelB={browser.i18n.getMessage("label_b")}
+        bind:toggled={removeAds}
+      />
     </div>
   </div>
 </main>

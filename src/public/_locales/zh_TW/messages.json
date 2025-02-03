@@ -1,0 +1,26 @@
+{
+  "display_transcription": {
+    "message": "顯示轉錄"
+  },
+  "search": {
+    "message": "搜尋"
+  },
+  "transcription": {
+    "message": "轉錄"
+  },
+  "wide_screen": {
+    "message": "寬屏"
+  },
+  "skip_video_ads": {
+    "message": "跳過視頻廣告"
+  },
+  "remove_ad_items": {
+    "message": "刪除廣告項目"
+  },
+  "label_a": {
+    "message": "關閉"
+  },
+  "label_b": {
+    "message": "開啟"
+  }
+}

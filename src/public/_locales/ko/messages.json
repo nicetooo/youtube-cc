@@ -1,0 +1,26 @@
+{
+  "display_transcription": {
+    "message": "전사 표시"
+  },
+  "search": {
+    "message": "검색"
+  },
+  "transcription": {
+    "message": "전사"
+  },
+  "wide_screen": {
+    "message": "와이드스크린"
+  },
+  "skip_video_ads": {
+    "message": "동영상 광고 건너뛰기"
+  },
+  "remove_ad_items": {
+    "message": "광고 항목 제거"
+  },
+  "label_a": {
+    "message": "꺼짐"
+  },
+  "label_b": {
+    "message": "켜짐"
+  }
+}

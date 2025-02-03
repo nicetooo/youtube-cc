@@ -1,0 +1,26 @@
+{
+  "display_transcription": {
+    "message": "Display Transcription"
+  },
+  "search": {
+    "message": "Search"
+  },
+  "transcription": {
+    "message": "Transcription"
+  },
+  "wide_screen": {
+    "message": "Wide Screen"
+  },
+  "skip_video_ads": {
+    "message": "Skip Video Ads"
+  },
+  "remove_ad_items": {
+    "message": "Remove Ad Items"
+  },
+  "label_a": {
+    "message": "Off"
+  },
+  "label_b": {
+    "message": "On"
+  }
+}

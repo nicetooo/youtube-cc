@@ -1,0 +1,26 @@
+{
+  "display_transcription": {
+    "message": "显示转录"
+  },
+  "search": {
+    "message": "搜索"
+  },
+  "transcription": {
+    "message": "转录"
+  },
+  "wide_screen": {
+    "message": "宽屏"
+  },
+  "skip_video_ads": {
+    "message": "跳过视频广告"
+  },
+  "remove_ad_items": {
+    "message": "删除广告项目"
+  },
+  "label_a": {
+    "message": "关闭"
+  },
+  "label_b": {
+    "message": "开启"
+  }
+}

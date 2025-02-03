@@ -8,5 +8,6 @@ export default defineConfig({
   manifest: {
     permissions: ["webRequest", "storage"],
     host_permissions: ["*://www.youtube.com/*", "*://youtube.com/*"],
+    default_locale: "en",
   },
 });
