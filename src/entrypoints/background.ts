@@ -1,4 +1,28 @@
 export default defineBackground(() => {
+  function syncSettings() {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeTab = tabs[0].id;
+      if (!activeTab) {
+        return;
+      }
+      chrome.storage.local.get(["settings"], (result) => {
+        console.log("State loaded:", result);
+        if (result.settings) {
+          chrome.tabs.sendMessage(
+            activeTab,
+            {
+              type: "setting_init",
+              data: result.setting,
+            },
+            (response) => {
+              console.log("Response from content script:", response);
+            }
+          );
+        }
+      });
+    });
+  }
+
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (changeInfo.url) {
       console.log("Tab URL: ", changeInfo.url);
@@ -27,6 +51,23 @@ export default defineBackground(() => {
     },
     { urls: ["*://www.youtube.com/*"] }
   );
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log(message);
+    const { type, data } = message;
+    if (type === "content_script_ready") {
+      console.log(type);
+      chrome.storage.local.get(["settings"], (result) => {
+        console.log("sending init settings", result.settings);
+        chrome.runtime.sendMessage({
+          type: "init_settings",
+          data: result.settings,
+        });
+      });
+    }
+    // 注意 ⚠️，这个返回 true 很重要，不然sendResponse不能正常工作
+    return true;
+  });
 
   console.log("Hello background!", { id: browser.runtime.id });
 });

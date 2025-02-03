@@ -1,6 +1,5 @@
 import "~/assets/tailwind.css";
 import { mount, unmount } from "svelte";
-import "./popup/app.css";
 import ContentMain from "@/lib/ContentMain.svelte";
 import { waitFor } from "@/lib/utils/wait";
 

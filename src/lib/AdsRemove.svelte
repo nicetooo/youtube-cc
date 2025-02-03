@@ -1,36 +1,72 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
 
-  const isAdRemoveOn = $state(true);
+  let { isAdRemoveOn } = $props();
   async function removeAd() {
     if (!isAdRemoveOn) {
       return;
     }
+
     if (location.pathname === "/") {
-      await waitFor(
+      //主页
+      waitFor(
         () =>
           document.querySelectorAll(
             "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)"
           )[0]
-      );
-      const ads = document.querySelectorAll(
-        "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)"
-      );
-      ads.forEach((a) => {
-        a.remove();
+      ).then(() => {
+        const ads = document.querySelectorAll(
+          "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)"
+        );
+        console.log("remove ads ytd-rich-item-renderer");
+        ads.forEach((a) => {
+          a.remove();
+        });
       });
 
-      const mastheadAd = document.getElementById("masthead-ad");
-      if (mastheadAd) {
-        mastheadAd.remove();
-      }
+      waitFor(() => document.getElementById("masthead-ad")).then(() => {
+        const mastheadAd = document.getElementById("masthead-ad");
+        if (mastheadAd) {
+          console.log("remove ads masthead-ad");
+          mastheadAd.remove();
+        }
+      });
     }
 
     if (location.pathname === "/watch") {
-      await waitFor(() => document.querySelectorAll("ytd-ad-slot-renderer")[0]);
-      const ads = document.querySelectorAll("ytd-ad-slot-renderer");
-      ads.forEach((a) => {
-        a.remove();
+      //视频详情页
+      waitFor(() => document.querySelectorAll("ytd-ad-slot-renderer")[0]).then(
+        () => {
+          console.log("remove ads ytd-ad-slot-renderer");
+          const ads = document.querySelectorAll("ytd-ad-slot-renderer");
+          ads.forEach((a) => {
+            a.remove();
+          });
+        }
+      );
+
+      const companion = document.getElementById("companion");
+      if (companion) {
+        console.log("companion");
+        companion.remove();
+      }
+    }
+
+    if (location.pathname === "/results") {
+      // 搜索结果页
+      waitFor(
+        () =>
+          document.querySelectorAll(
+            "ytd-search-pyv-renderer:has(ytd-ad-slot-renderer)"
+          )[0]
+      ).then(() => {
+        console.log("remove ads ytd-search-pyv-renderer");
+        const ads = document.querySelectorAll(
+          "ytd-search-pyv-renderer:has(ytd-ad-slot-renderer)"
+        );
+        ads.forEach((a) => {
+          a.remove();
+        });
       });
     }
   }

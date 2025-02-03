@@ -1,16 +1,31 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
 
-  let isWideScreenOn = $state(true);
+  let { isWideScreenOn } = $props();
   let video: HTMLVideoElement | undefined = $state();
 
   let columns: HTMLDivElement | undefined = $state();
   let videoContainer: HTMLDivElement | undefined = $state();
   let chromeBottom: HTMLDivElement | undefined = $state();
 
+  let originalStyles = {
+    hasBackup: false,
+    columns: {},
+    video: {},
+    videoContainer: {},
+    chromeBottom: {},
+  };
+
   async function initSize() {
     if (!video || !columns || !videoContainer || !chromeBottom) {
       return;
+    }
+    if (!originalStyles.hasBackup) {
+      originalStyles.hasBackup = true;
+      originalStyles.columns = { ...columns.style };
+      originalStyles.videoContainer = { ...videoContainer.style };
+      originalStyles.video = { ...video.style };
+      originalStyles.chromeBottom = { ...chromeBottom.style };
     }
 
     columns.style.maxWidth = "100%";
@@ -18,14 +33,14 @@
     videoContainer.style.width = "100%";
     videoContainer.style.height = "100%";
 
-    video.style.width = videoContainer.clientWidth + "px";
-    video.style.height = videoContainer.clientHeight + "px";
+    video.style.width = "fit-content";
+    video.style.height = "100%";
 
     chromeBottom.style.width = videoContainer.clientWidth - 24 + "px";
   }
 
   async function watchVideoSize() {
-    if (!videoContainer) {
+    if (!videoContainer || !video) {
       return;
     }
     const resizeObserver = new ResizeObserver((entries) => {
@@ -33,11 +48,18 @@
         return;
       }
       for (let entry of entries) {
-        video.style.width = entry.contentRect.width + "px";
-        video.style.height = entry.contentRect.height + "px";
-
+        video.style.width = "fit-content";
+        video.style.height = "100%";
         chromeBottom.style.width = videoContainer.clientWidth - 24 + "px";
       }
+    });
+
+    video.addEventListener("timeupdate", function () {
+      if (!video || !isWideScreenOn) {
+        return;
+      }
+      video.style.width = "fit-content";
+      video.style.height = "100%";
     });
 
     resizeObserver.observe(videoContainer);
@@ -69,9 +91,37 @@
     watchVideoSize();
   }
 
+  function recover() {
+    Object.entries(originalStyles.columns).forEach(([k, v]: any) => {
+      if (columns) {
+        columns.style[k] = v;
+      }
+    });
+
+    Object.entries(originalStyles.video).forEach(([k, v]: any) => {
+      if (video) {
+        video.style[k] = v;
+      }
+    });
+
+    Object.entries(originalStyles.videoContainer).forEach(([k, v]: any) => {
+      if (videoContainer) {
+        videoContainer.style[k] = v;
+      }
+    });
+
+    Object.entries(originalStyles.chromeBottom).forEach(([k, v]: any) => {
+      if (chromeBottom) {
+        chromeBottom.style[k] = v;
+      }
+    });
+  }
+
   $effect(() => {
     if (isWideScreenOn) {
       setUp();
+    } else {
+      recover();
     }
   });
 
@@ -84,12 +134,12 @@
             break;
           }
           default: {
-            // console.log("unhandled", message);
             break;
           }
         }
       }
     );
+
     setUp();
   });
 </script>

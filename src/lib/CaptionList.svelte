@@ -1,6 +1,10 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
 
+  let { isCaptionOn } = $props();
+
+  let captionsElm = $state<HTMLDivElement | null>(null);
+
   let video: HTMLVideoElement | undefined = $state();
   let videoHeight: number = $state(0);
   let videoCurrentTime: number = $state(0);
@@ -148,8 +152,15 @@
   }
 
   const setUp = async () => {
-    if (location.pathname !== "/watch") {
+    await waitFor(() => captionsElm);
+    if (!captionsElm) {
       return;
+    }
+    if (location.pathname !== "/watch" || !isCaptionOn) {
+      captionsElm.style.display = "none";
+      return;
+    } else {
+      captionsElm.style.display = "flex";
     }
 
     video = await waitFor<HTMLVideoElement>(
@@ -159,11 +170,6 @@
     video.addEventListener("timeupdate", function () {
       if (!video) {
         return;
-      }
-
-      const companion = document.querySelector("#companion");
-      if (companion) {
-        companion.remove();
       }
 
       const ad = document.querySelector(".ytp-ad-player-overlay-layout");
@@ -181,7 +187,20 @@
     videoId = new URL(location.href).searchParams.get("v");
   };
 
+  $effect(() => {
+    if (!captionsElm) {
+      return;
+    }
+    console.log({ captions, caption });
+    if (isCaptionOn && captions.length !== 0) {
+      captionsElm.style.display = "flex";
+    } else {
+      captionsElm.style.display = "none";
+    }
+  });
+
   onMount(() => {
+    console.log("caption list onmount");
     chrome.runtime.onMessage.addListener(
       function (message, sender, sendResponse) {
         switch (message.type) {
@@ -206,47 +225,84 @@
         }
       }
     );
+
     setUp();
   });
 </script>
 
-{#if captions.length > 0}
-  <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div
-    class="overflow-hidden flex flex-col"
-    style={`
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+  bind:this={captionsElm}
+  class="overflow-hidden flex flex-col"
+  style={`
      color: var(--yt-spec-text-primary);
-      height: calc(${videoHeight}px - 24px);
-      width: calc(100% - 24px);
-      background: var(--yt-spec-badge-chip-background);
-      border-radius: 12px;
-      padding:12px;
-      margin-bottom:12px;
-    `}
-    onmouseenter={handleMouseEnter}
-    onmouseleave={handleMouseLeave}
-  >
-    <div class="flex">
+     height: calc(${videoHeight}px - 24px);
+     min-height: 596px;
+     width: calc(100% - 24px);
+     border-radius: 12px;
+     padding:12px;
+     margin-bottom:12px;
+     border: 1px solid var(--yt-spec-10-percent-layer);
+     `}
+  onmouseenter={handleMouseEnter}
+  onmouseleave={handleMouseLeave}
+>
+  {#if captions.length > 0}
+    <div
+      class="flex items-center gap-2"
+      style="height: 34px;margin-bottom: 6px;"
+    >
       <input
         type="text"
         class="flex-grow"
         tabindex={0}
         bind:this={input}
-        placeholder={document.querySelector(".yt-searchbox-input").placeholder}
+        placeholder={document.querySelector<HTMLInputElement>(
+          ".yt-searchbox-input"
+        )?.placeholder! || "Search"}
         onclick={(e) => e.stopPropagation()}
         onkeypress={(e) => e.stopPropagation()}
         bind:value={captionQuery}
       />
       <button
         class="ytp-button"
-        style="width: 32px;height:32px;"
+        style="width: 24px;height:24px;"
         aria-label="settings"
         title="settings"
       >
-        <svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          enable-background="new 0 0 24 24"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          focusable="false"
+          aria-hidden="true"
+          style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
           ><path
             fill="currentColor"
-            d="m 23.94,18.78 c .03,-0.25 .05,-0.51 .05,-0.78 0,-0.27 -0.02,-0.52 -0.05,-0.78 l 1.68,-1.32 c .15,-0.12 .19,-0.33 .09,-0.51 l -1.6,-2.76 c -0.09,-0.17 -0.31,-0.24 -0.48,-0.17 l -1.99,.8 c -0.41,-0.32 -0.86,-0.58 -1.35,-0.78 l -0.30,-2.12 c -0.02,-0.19 -0.19,-0.33 -0.39,-0.33 l -3.2,0 c -0.2,0 -0.36,.14 -0.39,.33 l -0.30,2.12 c -0.48,.2 -0.93,.47 -1.35,.78 l -1.99,-0.8 c -0.18,-0.07 -0.39,0 -0.48,.17 l -1.6,2.76 c -0.10,.17 -0.05,.39 .09,.51 l 1.68,1.32 c -0.03,.25 -0.05,.52 -0.05,.78 0,.26 .02,.52 .05,.78 l -1.68,1.32 c -0.15,.12 -0.19,.33 -0.09,.51 l 1.6,2.76 c .09,.17 .31,.24 .48,.17 l 1.99,-0.8 c .41,.32 .86,.58 1.35,.78 l .30,2.12 c .02,.19 .19,.33 .39,.33 l 3.2,0 c .2,0 .36,-0.14 .39,-0.33 l .30,-2.12 c .48,-0.2 .93,-0.47 1.35,-0.78 l 1.99,.8 c .18,.07 .39,0 .48,-0.17 l 1.6,-2.76 c .09,-0.17 .05,-0.39 -0.09,-0.51 l -1.68,-1.32 0,0 z m -5.94,2.01 c -1.54,0 -2.8,-1.25 -2.8,-2.8 0,-1.54 1.25,-2.8 2.8,-2.8 1.54,0 2.8,1.25 2.8,2.8 0,1.54 -1.25,2.8 -2.8,2.8 l 0,0 z"
+            d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"
+          ></path></svg
+        >
+      </button>
+      <button
+        class="ytp-button"
+        style="width: 24px;height:24px;"
+        aria-label="settings"
+        title="settings"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          enable-background="new 0 0 24 24"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          focusable="false"
+          aria-hidden="true"
+          style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
+          ><path
+            fill="currentColor"
+            d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z"
           ></path></svg
         >
       </button>
@@ -266,13 +322,13 @@
           onkeypress={(e) =>
             (e.key === "Enter" || e.key === " ") && toTimeStamp(start)}
         >
-          <span class="timestamp">[{formatTimestamp(start)}]</span>
+          <span class="timestamp">【{formatTimestamp(start)}】</span>
           <span class="text">{content}</span>
         </div>
       {/each}
     </div>
-  </div>
-{/if}
+  {/if}
+</div>
 
 <style>
   .transcript {
@@ -288,12 +344,11 @@
     box-shadow: none;
     outline: none;
     border: 1px solid;
-    border-color: hsl(0, 0%, 50%);
+    border-color: var(--yt-spec-10-percent-layer);
     border-radius: 99px;
     padding: 6px;
     padding-left: 12px;
     font-size: 13px;
-    margin-bottom: 4px;
   }
 
   .caption-line {
@@ -301,8 +356,13 @@
   }
 
   .timestamp {
-    font-size: 0.9em;
-    margin-right: 8px;
+    flex-shrink: 0;
+    color: var(--yt-live-chat-secondary-text-color);
+    font-weight: 500;
+  }
+
+  .text {
+    color: var(--yt-spec-text-primary);
   }
 
   .caption-line:hover {

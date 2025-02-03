@@ -1,17 +1,12 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
 
-  let isAdSkipOn = $state(true);
+  let { isAdSkipOn } = $props();
   let video: HTMLVideoElement | undefined = $state();
 
   const onTimeUpdate = () => {
-    if (!video) {
+    if (!video || !isAdSkipOn) {
       return;
-    }
-
-    const companion = document.querySelector("#companion");
-    if (companion) {
-      companion.remove();
     }
 
     const ad = document.querySelector(".ytp-ad-player-overlay-layout");
@@ -22,7 +17,7 @@
   };
 
   const setUp = async () => {
-    if (location.pathname !== "/watch" || !isAdSkipOn) {
+    if (location.pathname !== "/watch") {
       return;
     }
     video = await waitFor<HTMLVideoElement>(
@@ -43,12 +38,12 @@
             break;
           }
           default: {
-            // console.log("unhandled", message);
             break;
           }
         }
       }
     );
+
     setUp();
   });
 </script>

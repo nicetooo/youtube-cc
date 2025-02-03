@@ -1,40 +1,50 @@
 <script lang="ts">
-  import svelteLogo from "../../assets/svelte.svg";
-  import Counter from "../../lib/Counter.svelte";
+  import "carbon-components-svelte/css/g90.css";
+  import { Toggle } from "carbon-components-svelte";
+  let isStorageLoad = false;
+  let settings = $state({
+    caption: false,
+    wideScreen: false,
+    skipAd: false,
+    removeAds: false,
+  });
+
+  $effect(() => {
+    console.log({ ...settings });
+    if (!isStorageLoad) {
+      return;
+    }
+    chrome.storage.local.set({ settings }, () => {
+      console.log("State saved");
+    });
+  });
+
+  onMount(() => {
+    console.log("popup mount");
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const { settings: storageSettings } =
+        await chrome.storage.local.get("settings");
+      if (storageSettings) {
+        settings = storageSettings;
+      }
+      isStorageLoad = true;
+    });
+  });
 </script>
 
 <main>
-  <div>
-    <a href="https://wxt.dev" target="_blank" rel="noreferrer">
-      <img src="/wxt.svg" class="logo" alt="WXT Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
+  <div class="flex flex-col gap-3" style="width: 250px;">
+    <div class="flex justify-between">
+      <Toggle labelText="Caption" bind:toggled={settings.caption} />
+      <Toggle labelText="WideScreen" bind:toggled={settings.wideScreen} />
+    </div>
+    <div class="flex justify-between">
+      <Toggle labelText="Skip Video Ads" bind:toggled={settings.skipAd} />
+      <Toggle labelText="Remove Ad Items" bind:toggled={settings.removeAds} />
+    </div>
   </div>
-  <h1>WXT + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p class="read-the-docs">Click on the WXT and Svelte logos to learn more</p>
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #54bc4ae0);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
 </style>
