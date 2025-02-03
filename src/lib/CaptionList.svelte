@@ -135,6 +135,23 @@
     isMouseHover = false;
   };
 
+  const addComment = (e: any) => {
+    e.stopPropagation();
+    const placeholder = document.getElementById("simplebox-placeholder");
+    if (placeholder) {
+      placeholder.click();
+    }
+    const comment = document.getElementById("contenteditable-root");
+    if (comment) {
+      if (comment.innerText) {
+        comment.innerHTML =
+          comment.innerHTML + `<div>${e.target.dataset.comment}</div>`;
+      } else {
+        comment.innerText = e.target.dataset.comment;
+      }
+    }
+  };
+
   async function watchVideoSize() {
     if (!video) {
       return;
@@ -310,6 +327,7 @@
 
     <div class="transcript">
       {#each filteredCaption as { start, dur, content }}
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div
           role="button"
           class="caption-line"
@@ -324,6 +342,24 @@
         >
           <span class="timestamp">【{formatTimestamp(start)}】</span>
           <span class="text">{content}</span>
+          <span
+            class="comment"
+            onclick={addComment}
+            data-comment={`${formatTimestamp(start)}: ${content}`}
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              focusable="false"
+              aria-hidden="true"
+              style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
+              ><path
+                fill="currentColor"
+                d="M16 3v11H7.59L5 16.59V3h11m1-1H4v17l4-4h9V2zM8 18h8l4 4V6h-1v13.59L16.41 17H8v1z"
+              ></path></svg
+            ></span
+          >
         </div>
       {/each}
     </div>
@@ -372,5 +408,14 @@
 
   .caption-line:active {
     opacity: 0.5;
+  }
+
+  .comment {
+    margin-left: auto;
+    display: none;
+  }
+
+  .caption-line:hover .comment {
+    display: block;
   }
 </style>

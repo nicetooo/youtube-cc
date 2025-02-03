@@ -45,11 +45,13 @@
         }
       );
 
-      const companion = document.getElementById("companion");
-      if (companion) {
-        console.log("companion");
-        companion.remove();
-      }
+      waitFor(() => document.getElementById("player-ads")).then(() => {
+        const companion = document.getElementById("player-ads");
+        if (companion) {
+          console.log("player-ads");
+          companion.remove();
+        }
+      });
     }
 
     if (location.pathname === "/results") {
