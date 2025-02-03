@@ -98,7 +98,7 @@
         }
       }
     );
-    // removeAd();
+    removeAd();
   });
 </script>
 
