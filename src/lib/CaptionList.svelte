@@ -53,7 +53,7 @@
     }
     let videoTime = Math.floor(Number(time));
     video.currentTime = videoTime;
-    console.log({ videoTime });
+    // console.log({ videoTime });
   }
 
   function formatTimestamp(seconds: string) {
@@ -68,7 +68,7 @@
     }
     const res = await fetch(timedtextUrl.toString());
     const text = await res.text();
-    console.log({ text });
+    // console.log({ text });
     caption = text;
   }
 
@@ -110,22 +110,22 @@
     scrollParentToChild();
   });
 
-  $effect(() => {
-    if (!caption && videoCurrentTime && !timedtextUrl && !isAutoClicked) {
-      const subTitleBtn = document.getElementsByClassName(
-        "ytp-subtitles-button"
-      )[0] as HTMLDivElement;
-      if (!subTitleBtn) {
-        return;
-      }
-      isAutoClicked = true;
-      console.log({ subTitleBtn });
-      subTitleBtn.click();
-      setTimeout(() => {
-        subTitleBtn.click();
-      }, 1000);
+  const clickCCBtn = () => {
+    if (isAutoClicked) {
+      return;
     }
-  });
+    const subTitleBtn = document.getElementsByClassName(
+      "ytp-subtitles-button"
+    )[0] as HTMLDivElement;
+    if (!subTitleBtn) {
+      return;
+    }
+    isAutoClicked = true;
+    subTitleBtn.click();
+    setTimeout(() => {
+      subTitleBtn.click();
+    }, 1000);
+  };
 
   const handleMouseEnter = () => {
     isMouseHover = true;
@@ -170,7 +170,6 @@
   }
 
   const setUp = async () => {
-    videoId = new URL(location.href).searchParams.get("v");
     await waitFor(() => captionsElm);
     if (!captionsElm) {
       return;
@@ -188,56 +187,77 @@
       const ad = document.querySelector(".ytp-ad-player-overlay-layout");
       if (ad === null) {
         videoCurrentTime = video.currentTime;
+        clickCCBtn();
       }
     });
 
     videoHeight = video?.height;
     watchVideoSize();
 
-    timedtextUrl = null;
-    caption = "";
     await waitFor(() => document.getElementById("secondary"));
   };
 
   const getExpendState = async () => {
     const isExpandStorage = await chrome.storage.local.get("isExpand");
-    console.log({ isExpandStorage });
+    // console.log({ isExpandStorage });
     isExpand = isExpandStorage.isExpand;
     isStorageLoad = true;
   };
 
   $effect(() => {
-    console.log({ isExpand });
+    // console.log({ isExpand });
     if (!isStorageLoad) {
       return;
     }
     chrome.storage.local.set({ isExpand }, () => {
-      console.log("isExpand saved");
+      // console.log("isExpand saved");
     });
   });
 
   onMount(() => {
     getExpendState();
-
-    console.log("caption list onmount");
+    videoId = new URL(location.href).searchParams.get("v");
+    // console.log("caption list onmount");
     chrome.runtime.onMessage.addListener(
       function (message, sender, sendResponse) {
+        // console.log("onMessage", message);
         switch (message.type) {
           case "url_change": {
+            timedtextUrl = null;
+            caption = "";
+            isAutoClicked = false;
+            videoId = new URL(location.href).searchParams.get("v");
             setUp();
             break;
           }
           case "timedtext_url": {
-            console.log(JSON.stringify(message));
+            // console.log(JSON.stringify(message));
             const urlCalled = new URL(message.url);
+            if (urlCalled.searchParams.get("fmt")) {
+              urlCalled.searchParams.delete("fmt");
+            }
             if (urlCalled?.searchParams.get("v") !== videoId) {
               return;
             }
-            if (urlCalled.searchParams.get("fmt")) {
-              urlCalled.searchParams.delete("fmt");
+            if (!timedtextUrl) {
               timedtextUrl = urlCalled;
               getCaptions();
-            } else if (timedtextUrl?.toString() !== message.url) {
+            } else {
+              if (
+                urlCalled.searchParams.get("tlang") &&
+                urlCalled.searchParams.get("tlang") ===
+                  timedtextUrl?.searchParams.get("tlang")
+              ) {
+                return;
+              }
+
+              if (
+                urlCalled.searchParams.get("lang") ===
+                timedtextUrl?.searchParams.get("lang")
+              ) {
+                return;
+              }
+
               timedtextUrl = urlCalled;
               getCaptions();
             }
@@ -293,7 +313,7 @@
           />
           <button
             class="ytp-button"
-            style="width: 24px;height:24px;display:none;"
+            style="width: 24px;height:24px;"
             aria-label="settings"
             title="settings"
           >
@@ -312,6 +332,7 @@
               ></path></svg
             >
           </button>
+
           <button
             class="ytp-button"
             style="width: 24px;height:24px;"

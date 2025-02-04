@@ -18,7 +18,7 @@
         const ads = document.querySelectorAll(
           "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)"
         );
-        console.log("remove ads ytd-rich-item-renderer");
+        // console.log("remove ads ytd-rich-item-renderer");
         ads.forEach((a) => {
           a.remove();
         });
@@ -27,7 +27,7 @@
       waitFor(() => document.getElementById("masthead-ad")).then(() => {
         const mastheadAd = document.getElementById("masthead-ad");
         if (mastheadAd) {
-          console.log("remove ads masthead-ad");
+          // console.log("remove ads masthead-ad");
           mastheadAd.remove();
         }
       });
@@ -37,7 +37,7 @@
       //视频详情页
       waitFor(() => document.querySelectorAll("ytd-ad-slot-renderer")[0]).then(
         () => {
-          console.log("remove ads ytd-ad-slot-renderer");
+          // console.log("remove ads ytd-ad-slot-renderer");
           const ads = document.querySelectorAll("ytd-ad-slot-renderer");
           ads.forEach((a) => {
             a.remove();
@@ -48,7 +48,7 @@
       waitFor(() => document.getElementById("player-ads")).then(() => {
         const companion = document.getElementById("player-ads");
         if (companion) {
-          console.log("player-ads");
+          // console.log("player-ads");
           companion.remove();
         }
       });
@@ -62,7 +62,7 @@
             "ytd-search-pyv-renderer:has(ytd-ad-slot-renderer)"
           )[0]
       ).then(() => {
-        console.log("remove ads ytd-search-pyv-renderer");
+        // console.log("remove ads ytd-search-pyv-renderer");
         const ads = document.querySelectorAll(
           "ytd-search-pyv-renderer:has(ytd-ad-slot-renderer)"
         );

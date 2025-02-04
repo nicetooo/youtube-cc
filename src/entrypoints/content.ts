@@ -9,18 +9,15 @@ export default defineContentScript({
   registration: "manifest",
 
   main(ctx) {
-    console.log({ ctx });
     const ui = createIntegratedUi(ctx, {
       position: "inline",
       anchor: "body",
 
       onMount: async (container) => {
-        console.log("content mount");
         const sec = await waitFor<HTMLDivElement>(
           () => document.getElementById("secondary"),
           0
         );
-
         sec?.prepend(container);
         // Create the Svelte app inside the UI container
         mount(ContentMain, {

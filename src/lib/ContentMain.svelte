@@ -13,8 +13,6 @@
   let removeAds = $state(true);
 
   onMount(async () => {
-    console.log("content mount");
-
     const { settings } = await chrome.storage.local.get("settings");
     if (settings) {
       caption = settings.caption;

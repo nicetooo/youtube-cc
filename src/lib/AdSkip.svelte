@@ -11,7 +11,6 @@
 
     const ad = document.querySelector(".ytp-ad-player-overlay-layout");
     if (ad !== null) {
-      console.log("skip ad");
       video.currentTime = 999;
     }
   };

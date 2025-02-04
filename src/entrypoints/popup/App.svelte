@@ -12,16 +12,12 @@
     if (!isStorageLoad) {
       return;
     }
-    chrome.storage.local.set({ settings }, () => {
-      console.log("State saved");
-    });
+    chrome.storage.local.set({ settings }, () => {});
   });
 
   onMount(() => {
-    console.log("popup mount");
     document.addEventListener("DOMContentLoaded", async () => {
       const { settings } = await chrome.storage.local.get("settings");
-      console.log("init settings", settings);
       if (settings) {
         caption = settings.caption;
         wideScreen = settings.wideScreen;
