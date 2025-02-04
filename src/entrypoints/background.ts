@@ -37,10 +37,12 @@ export default defineBackground(() => {
     (details) => {
       if (details.url.includes("/api/timedtext")) {
         console.log("Request detected:", details);
-        chrome.tabs.sendMessage(details.tabId, {
-          type: "timedtext_url",
-          url: details.url,
-        });
+        setTimeout(() => {
+          chrome.tabs.sendMessage(details.tabId, {
+            type: "timedtext_url",
+            url: details.url,
+          });
+        }, 2000);
       }
       if (details.url.includes("/youtubei/v1/browse")) {
         console.log("has_load_more");

@@ -98,7 +98,6 @@
         }
       }
     );
-    removeAd();
   });
 </script>
 

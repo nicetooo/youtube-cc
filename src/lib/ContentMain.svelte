@@ -5,8 +5,10 @@
   import WideScreen from "./WideScreen.svelte";
 
   let isStorageLoad = $state(false);
+
+  //settings
   let caption = $state(true);
-  let wideScreen = $state(true);
+  let wideScreen = $state(false);
   let skipAd = $state(true);
   let removeAds = $state(true);
 
