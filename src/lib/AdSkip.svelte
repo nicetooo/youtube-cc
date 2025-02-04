@@ -1,7 +1,13 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
 
-  let { isAdSkipOn } = $props();
+  let {
+    isAdSkipOn,
+    port,
+  }: {
+    isAdSkipOn: boolean;
+    port: chrome.runtime.Port;
+  } = $props();
   let video: HTMLVideoElement | undefined = $state();
 
   const onTimeUpdate = () => {
@@ -27,21 +33,21 @@
     video.addEventListener("timeupdate", onTimeUpdate);
   };
 
+  $inspect({ isAdSkipOn });
+
   onMount(() => {
-    chrome.runtime.onMessage.addListener(
-      function (message, sender, sendResponse) {
-        switch (message.type) {
-          case "url_change": {
-            video?.removeEventListener("timeupdate", onTimeUpdate);
-            setUp();
-            break;
-          }
-          default: {
-            break;
-          }
+    port.onMessage.addListener(function (message) {
+      switch (message.type) {
+        case "url_change": {
+          video?.removeEventListener("timeupdate", onTimeUpdate);
+          setUp();
+          break;
+        }
+        default: {
+          break;
         }
       }
-    );
+    });
 
     setUp();
   });

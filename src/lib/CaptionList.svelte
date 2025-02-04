@@ -1,7 +1,13 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
 
-  let { isCaptionOn } = $props();
+  let {
+    isCaptionOn,
+    port,
+  }: {
+    isCaptionOn: boolean;
+    port: chrome.runtime.Port;
+  } = $props();
 
   let isExpand = $state(true);
   let isStorageLoad = false;
@@ -17,7 +23,7 @@
   let caption = $state("");
   let input = $state();
   let captionQuery = $state("");
-  let isMouseHover = $state(false);
+  let isMouseHover = false;
   let isAutoClicked = false;
 
   function decodeHTML(str: string) {
@@ -73,6 +79,9 @@
   }
 
   function scrollParentToChild() {
+    if (isMouseHover) {
+      return;
+    }
     const lines = document.getElementsByClassName(
       "caption-line"
     ) as HTMLCollectionOf<HTMLDivElement>;
@@ -103,14 +112,7 @@
     line.parentElement.scrollTop += scrollTop;
   }
 
-  $effect(() => {
-    if (isMouseHover) {
-      return;
-    }
-    scrollParentToChild();
-  });
-
-  const clickCCBtn = () => {
+  function clickCCBtn() {
     if (isAutoClicked) {
       return;
     }
@@ -125,7 +127,7 @@
     setTimeout(() => {
       subTitleBtn.click();
     }, 1000);
-  };
+  }
 
   const handleMouseEnter = () => {
     isMouseHover = true;
@@ -169,7 +171,7 @@
     resizeObserver.observe(video);
   }
 
-  const setUp = async () => {
+  async function setUp() {
     await waitFor(() => captionsElm);
     if (!captionsElm) {
       return;
@@ -184,6 +186,8 @@
         return;
       }
 
+      scrollParentToChild();
+
       const ad = document.querySelector(".ytp-ad-player-overlay-layout");
       if (ad === null) {
         videoCurrentTime = video.currentTime;
@@ -195,14 +199,14 @@
     watchVideoSize();
 
     await waitFor(() => document.getElementById("secondary"));
-  };
+  }
 
-  const getExpendState = async () => {
+  async function getExpendState() {
     const isExpandStorage = await chrome.storage.local.get("isExpand");
     // console.log({ isExpandStorage });
     isExpand = isExpandStorage.isExpand;
     isStorageLoad = true;
-  };
+  }
 
   $effect(() => {
     // console.log({ isExpand });
@@ -218,58 +222,56 @@
     getExpendState();
     videoId = new URL(location.href).searchParams.get("v");
     // console.log("caption list onmount");
-    chrome.runtime.onMessage.addListener(
-      function (message, sender, sendResponse) {
-        // console.log("onMessage", message);
-        switch (message.type) {
-          case "url_change": {
-            timedtextUrl = null;
-            caption = "";
-            isAutoClicked = false;
-            videoId = new URL(location.href).searchParams.get("v");
-            setUp();
-            break;
+    port.onMessage.addListener(function (message) {
+      // console.log("onMessage", message);
+      switch (message.type) {
+        case "url_change": {
+          timedtextUrl = null;
+          caption = "";
+          isAutoClicked = false;
+          videoId = new URL(location.href).searchParams.get("v");
+          setUp();
+          break;
+        }
+        case "timedtext_url": {
+          // console.log(JSON.stringify(message));
+          const urlCalled = new URL(message.url);
+          if (urlCalled.searchParams.get("fmt")) {
+            urlCalled.searchParams.delete("fmt");
           }
-          case "timedtext_url": {
-            // console.log(JSON.stringify(message));
-            const urlCalled = new URL(message.url);
-            if (urlCalled.searchParams.get("fmt")) {
-              urlCalled.searchParams.delete("fmt");
-            }
-            if (urlCalled?.searchParams.get("v") !== videoId) {
+          if (urlCalled?.searchParams.get("v") !== videoId) {
+            return;
+          }
+          if (!timedtextUrl) {
+            timedtextUrl = urlCalled;
+            getCaptions();
+          } else {
+            if (
+              urlCalled.searchParams.get("tlang") &&
+              urlCalled.searchParams.get("tlang") ===
+                timedtextUrl?.searchParams.get("tlang")
+            ) {
               return;
             }
-            if (!timedtextUrl) {
-              timedtextUrl = urlCalled;
-              getCaptions();
-            } else {
-              if (
-                urlCalled.searchParams.get("tlang") &&
-                urlCalled.searchParams.get("tlang") ===
-                  timedtextUrl?.searchParams.get("tlang")
-              ) {
-                return;
-              }
 
-              if (
-                urlCalled.searchParams.get("lang") ===
-                timedtextUrl?.searchParams.get("lang")
-              ) {
-                return;
-              }
-
-              timedtextUrl = urlCalled;
-              getCaptions();
+            if (
+              urlCalled.searchParams.get("lang") ===
+              timedtextUrl?.searchParams.get("lang")
+            ) {
+              return;
             }
-            break;
+
+            timedtextUrl = urlCalled;
+            getCaptions();
           }
-          default: {
-            // console.log("unhandled", message);
-            break;
-          }
+          break;
+        }
+        default: {
+          // console.log("unhandled", message);
+          break;
         }
       }
-    );
+    });
 
     setUp();
   });
@@ -293,8 +295,6 @@
        display: ${isCaptionOn && captions.length !== 0 && location.pathname === "/watch" ? "flex" : "none"};
        border: 1px solid var(--yt-spec-10-percent-layer);
        `}
-      onmouseenter={handleMouseEnter}
-      onmouseleave={handleMouseLeave}
     >
       {#if captions.length > 0}
         <div
@@ -313,7 +313,7 @@
           />
           <button
             class="ytp-button"
-            style="width: 24px;height:24px;"
+            style="width: 24px;height:24px;display:none;"
             aria-label="settings"
             title="settings"
           >
@@ -357,7 +357,11 @@
           </button>
         </div>
 
-        <div class="transcript">
+        <div
+          class="transcript"
+          onmouseenter={handleMouseEnter}
+          onmouseleave={handleMouseLeave}
+        >
           {#each filteredCaption as { start, dur, content }}
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <div

@@ -4,7 +4,7 @@ import ContentMain from "@/lib/ContentMain.svelte";
 import { waitFor } from "@/lib/utils/wait";
 
 export default defineContentScript({
-  matches: ["<all_urls>"],
+  matches: ["*://www.youtube.com/*", "*://youtube.com/*"],
   runAt: "document_end",
   registration: "manifest",
 
@@ -13,12 +13,13 @@ export default defineContentScript({
       position: "inline",
       anchor: "body",
 
-      onMount: async (container) => {
-        const sec = await waitFor<HTMLDivElement>(
+      onMount: (container) => {
+        waitFor<HTMLDivElement>(
           () => document.getElementById("secondary"),
           0
-        );
-        sec?.prepend(container);
+        ).then((sec) => {
+          sec?.prepend(container);
+        });
         // Create the Svelte app inside the UI container
         mount(ContentMain, {
           target: container,

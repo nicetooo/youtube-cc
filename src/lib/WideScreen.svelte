@@ -1,7 +1,13 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
 
-  let { isWideScreenOn } = $props();
+  let {
+    isWideScreenOn,
+    port,
+  }: {
+    isWideScreenOn: boolean;
+    port: chrome.runtime.Port;
+  } = $props();
   let video: HTMLVideoElement | undefined = $state();
 
   let columns: HTMLDivElement | undefined = $state();
@@ -125,20 +131,20 @@
     }
   });
 
+  $inspect({ isWideScreenOn });
+
   onMount(async () => {
-    chrome.runtime.onMessage.addListener(
-      function (message, sender, sendResponse) {
-        switch (message.type) {
-          case "url_change": {
-            setUp();
-            break;
-          }
-          default: {
-            break;
-          }
+    port.onMessage.addListener(function (message) {
+      switch (message.type) {
+        case "url_change": {
+          setUp();
+          break;
+        }
+        default: {
+          break;
         }
       }
-    );
+    });
 
     setUp();
   });

@@ -1,7 +1,13 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
 
-  let { isAdRemoveOn } = $props();
+  let {
+    isAdRemoveOn,
+    port,
+  }: {
+    isAdRemoveOn: boolean;
+    port: chrome.runtime.Port;
+  } = $props();
   async function removeAd() {
     if (!isAdRemoveOn) {
       return;
@@ -18,7 +24,7 @@
         const ads = document.querySelectorAll(
           "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)"
         );
-        // console.log("remove ads ytd-rich-item-renderer");
+        console.log("remove ads ytd-rich-item-renderer");
         ads.forEach((a) => {
           a.remove();
         });
@@ -73,6 +79,8 @@
     }
   }
 
+  $inspect({ isAdRemoveOn });
+
   $effect(() => {
     if (isAdRemoveOn) {
       removeAd();
@@ -80,24 +88,22 @@
   });
 
   onMount(() => {
-    chrome.runtime.onMessage.addListener(
-      function (message, sender, sendResponse) {
-        switch (message.type) {
-          case "url_change": {
-            removeAd();
-            break;
-          }
-          case "has_load_more": {
-            removeAd();
-            break;
-          }
-          default: {
-            // console.log("unhandled", message);
-            break;
-          }
+    port.onMessage.addListener(function (message) {
+      switch (message.type) {
+        case "url_change": {
+          removeAd();
+          break;
+        }
+        case "has_load_more": {
+          removeAd();
+          break;
+        }
+        default: {
+          break;
         }
       }
-    );
+    });
+    removeAd();
   });
 </script>
 
