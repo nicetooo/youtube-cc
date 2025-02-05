@@ -1,31 +1,14 @@
 <script lang="ts">
   import "carbon-components-svelte/css/g90.css";
   import { Toggle } from "carbon-components-svelte";
-  let isStorageLoad = false;
-  let caption = $state(true);
-  let wideScreen = $state(true);
-  let skipAd = $state(true);
-  let removeAds = $state(true);
+  import {
+    appStore,
+    subscribeStorageChange,
+  } from "../../lib/store/settings.svelte";
 
-  $effect(() => {
-    const settings = { caption, wideScreen, skipAd, removeAds };
-    if (!isStorageLoad) {
-      return;
-    }
-    chrome.storage.local.set({ settings }, () => {});
-  });
-
+  $inspect({ $appStore });
   onMount(() => {
-    document.addEventListener("DOMContentLoaded", async () => {
-      const { settings } = await chrome.storage.local.get("settings");
-      if (settings) {
-        caption = settings.caption;
-        wideScreen = settings.wideScreen;
-        skipAd = settings.skipAd;
-        removeAds = settings.removeAds;
-      }
-      isStorageLoad = true;
-    });
+    subscribeStorageChange();
   });
 </script>
 
@@ -36,13 +19,13 @@
         labelText={browser.i18n.getMessage("transcription")}
         labelA={browser.i18n.getMessage("label_a")}
         labelB={browser.i18n.getMessage("label_b")}
-        bind:toggled={caption}
+        bind:toggled={$appStore.settings.caption}
       />
       <Toggle
         labelText={browser.i18n.getMessage("wide_screen")}
         labelA={browser.i18n.getMessage("label_a")}
         labelB={browser.i18n.getMessage("label_b")}
-        bind:toggled={wideScreen}
+        bind:toggled={$appStore.settings.wideScreen}
       />
     </div>
     <div class="flex justify-between">
@@ -50,13 +33,13 @@
         labelText={browser.i18n.getMessage("skip_video_ads")}
         labelA={browser.i18n.getMessage("label_a")}
         labelB={browser.i18n.getMessage("label_b")}
-        bind:toggled={skipAd}
+        bind:toggled={$appStore.settings.skipAd}
       />
       <Toggle
         labelText={browser.i18n.getMessage("remove_ad_items")}
         labelA={browser.i18n.getMessage("label_a")}
         labelB={browser.i18n.getMessage("label_b")}
-        bind:toggled={removeAds}
+        bind:toggled={$appStore.settings.removeAds}
       />
     </div>
   </div>

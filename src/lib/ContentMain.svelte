@@ -2,46 +2,24 @@
   import AdSkip from "./AdSkip.svelte";
   import AdsRemove from "./AdsRemove.svelte";
   import CaptionList from "./CaptionList.svelte";
+  import SideComment from "./SideComment.svelte";
   import WideScreen from "./WideScreen.svelte";
+  import { appStore, subscribeStorageChange } from "./store/settings.svelte";
 
   const port = chrome.runtime.connect();
-  let isStorageLoad = $state(false);
 
-  //settings
-  let caption = $state(true);
-  let skipAd = $state(true);
-  let removeAds = $state(true);
-  let wideScreen = $state(false);
-
-  $effect(() => {
-    if (isStorageLoad) {
-      chrome.storage.onChanged.addListener((changes) => {
-        const { settings } = changes;
-
-        if (settings.newValue) {
-          caption = settings.newValue.caption;
-          wideScreen = settings.newValue.wideScreen;
-          skipAd = settings.newValue.skipAd;
-          removeAds = settings.newValue.removeAds;
-        }
-      });
-    }
+  $inspect({
+    $appStore,
   });
 
   onMount(() => {
-    chrome.storage.local.get("settings").then(({ settings }) => {
-      if (settings) {
-        caption = settings.caption;
-        wideScreen = settings.wideScreen;
-        skipAd = settings.skipAd;
-        removeAds = settings.removeAds;
-      }
-      isStorageLoad = true;
-    });
+    subscribeStorageChange();
   });
 </script>
 
-<CaptionList isCaptionOn={caption} {port}></CaptionList>
-<AdsRemove isAdRemoveOn={removeAds} {port}></AdsRemove>
-<WideScreen isWideScreenOn={wideScreen} {port}></WideScreen>
-<AdSkip isAdSkipOn={skipAd} {port}></AdSkip>
+<CaptionList isCaptionOn={$appStore.settings.caption} {port}></CaptionList>
+<AdsRemove isAdRemoveOn={$appStore.settings.removeAds} {port}></AdsRemove>
+<WideScreen isWideScreenOn={$appStore.settings.wideScreen} {port}></WideScreen>
+<AdSkip isAdSkipOn={$appStore.settings.skipAd} {port}></AdSkip>
+<SideComment isSideComment={$appStore.settings.sideComment} {port}
+></SideComment>
