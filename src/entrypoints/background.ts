@@ -43,12 +43,6 @@ function handleRequest(details: any, port: chrome.runtime.Port) {
       url: details.url,
     });
   }
-  if (details.url.includes("/youtubei/v1/browse")) {
-    // console.log("has_load_more request");
-    port.postMessage({
-      type: "has_load_more",
-    });
-  }
 }
 
 function handleUrlUpdate(
