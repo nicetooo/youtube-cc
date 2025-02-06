@@ -42,6 +42,14 @@
         bind:toggled={$appStore.settings.removeAds}
       />
     </div>
+    <div class="flex justify-between">
+      <Toggle
+        labelText={browser.i18n.getMessage("skip_video_ads")}
+        labelA={browser.i18n.getMessage("label_a")}
+        labelB={browser.i18n.getMessage("label_b")}
+        bind:toggled={$appStore.settings.sideComment}
+      />
+    </div>
   </div>
 </main>
 

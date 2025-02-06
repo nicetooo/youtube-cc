@@ -17,6 +17,9 @@
   "remove_ad_items": {
     "message": "Remove Ad Items"
   },
+  "side_comments": {
+    "message": "Side Comments"
+  },
   "label_a": {
     "message": "Off"
   },

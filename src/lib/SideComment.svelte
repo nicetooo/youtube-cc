@@ -8,30 +8,42 @@
     isSideComment: boolean;
     port: chrome.runtime.Port;
   } = $props();
-  let video: HTMLVideoElement | undefined = $state();
 
-  const onTimeUpdate = () => {
-    if (!video || !isSideComment) {
-      return;
-    }
-
-    const ad = document.querySelector(".ytp-ad-player-overlay-layout");
-    if (ad !== null) {
-      video.currentTime = 999;
-    }
-  };
+  let sideComment: HTMLDivElement | null = $state(null);
+  let commentPrevParent: HTMLDivElement | null = null;
 
   const setUp = async () => {
-    if (location.pathname !== "/watch") {
+    if (!isSideComment) {
       return;
     }
-    video = await waitFor<HTMLVideoElement>(
-      () => document.getElementsByClassName("html5-main-video")[0],
-      0
+    const ytdComments = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("ytd-comments")
     );
-
-    video.addEventListener("timeupdate", onTimeUpdate);
+    console.log({ ytdComments });
+    commentPrevParent = ytdComments.parentElement as HTMLDivElement;
+    await waitFor<HTMLDivElement>(() => sideComment);
+    sideComment?.prepend(ytdComments);
   };
+
+  const recover = async () => {
+    console.log("recover", commentPrevParent);
+    if (!commentPrevParent) {
+      return;
+    }
+    const ytdComments = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("ytd-comments")
+    );
+    commentPrevParent?.append(ytdComments);
+    commentPrevParent = null;
+  };
+
+  $effect(() => {
+    if (isSideComment) {
+      setUp();
+    } else {
+      recover();
+    }
+  });
 
   $inspect({ isSideComment });
 
@@ -39,7 +51,6 @@
     port.onMessage.addListener(function (message) {
       switch (message.type) {
         case "url_change": {
-          video?.removeEventListener("timeupdate", onTimeUpdate);
           setUp();
           break;
         }
@@ -53,4 +64,9 @@
   });
 </script>
 
-<div id="youtube-cc-comment"></div>
+<div
+  id="youtube-cc-comment"
+  bind:this={sideComment}
+  class="overflow-auto"
+  style={`height: ${isSideComment ? "700px" : "0px"};`}
+></div>

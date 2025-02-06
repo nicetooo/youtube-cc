@@ -17,9 +17,9 @@
   });
 </script>
 
+<SideComment isSideComment={$appStore.settings.sideComment} {port}
+></SideComment>
 <CaptionList isCaptionOn={$appStore.settings.caption} {port}></CaptionList>
 <AdsRemove isAdRemoveOn={$appStore.settings.removeAds} {port}></AdsRemove>
 <WideScreen isWideScreenOn={$appStore.settings.wideScreen} {port}></WideScreen>
 <AdSkip isAdSkipOn={$appStore.settings.skipAd} {port}></AdSkip>
-<SideComment isSideComment={$appStore.settings.sideComment} {port}
-></SideComment>
