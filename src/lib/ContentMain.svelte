@@ -6,6 +6,7 @@
   import WideScreen from "./WideScreen.svelte";
   import "svelte-material-ui/themes/fixation-dark.css";
   import { appStore, subscribeStorageChange } from "./store/settings.svelte";
+  import CommentSearch from "./CommentSearch.svelte";
 
   const port = chrome.runtime.connect();
 
@@ -18,9 +19,14 @@
   });
 </script>
 
-<SideComment isSideComment={$appStore.settings.sideComment} {port}
-></SideComment>
-<CaptionList isCaptionOn={$appStore.settings.caption} {port}></CaptionList>
-<AdsRemove isAdRemoveOn={$appStore.settings.removeAds} {port}></AdsRemove>
-<WideScreen isWideScreenOn={$appStore.settings.wideScreen} {port}></WideScreen>
-<AdSkip isAdSkipOn={$appStore.settings.skipAd} {port}></AdSkip>
+{#if $appStore.isStorageLoad}
+  <SideComment isSideComment={$appStore.settings.sideComment} {port}
+  ></SideComment>
+  <CaptionList isCaptionOn={$appStore.settings.caption} {port}></CaptionList>
+  <AdsRemove isAdRemoveOn={$appStore.settings.removeAds} {port}></AdsRemove>
+  <WideScreen isWideScreenOn={$appStore.settings.wideScreen} {port}
+  ></WideScreen>
+  <AdSkip isAdSkipOn={$appStore.settings.skipAd} {port}></AdSkip>
+  <CommentSearch isCommentSearchOn={$appStore.settings.commentSearch}
+  ></CommentSearch>
+{/if}

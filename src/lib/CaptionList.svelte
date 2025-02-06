@@ -284,7 +284,7 @@
   let clicked = $state();
 </script>
 
-<div bind:this={captionsElm}>
+<div bind:this={captionsElm} id="caption-list">
   {#if isExpand}
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div

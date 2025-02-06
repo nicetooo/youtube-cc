@@ -22,6 +22,7 @@
     console.log({ ytdComments });
     commentPrevParent = ytdComments.parentElement as HTMLDivElement;
     await waitFor<HTMLDivElement>(() => sideComment);
+
     sideComment?.prepend(ytdComments);
   };
 
@@ -65,8 +66,19 @@
 </script>
 
 <div
-  id="youtube-cc-comment"
+  id="side-comment"
   bind:this={sideComment}
   class="overflow-auto"
-  style={`height: ${isSideComment ? "700px" : "0px"};`}
+  style={`
+    color: var(--yt-spec-text-primary);
+    height: 700px;
+    min-height: 596px;
+    width: calc(100% - 24px);
+    border-radius: 12px;
+    padding:12px;
+    margin-bottom:12px;
+    display: ${isSideComment ? "flex" : "none"};
+    border: 1px solid var(--yt-spec-10-percent-layer);
+    background: ${window.getComputedStyle(document.documentElement).backgroundColor};
+    `}
 ></div>

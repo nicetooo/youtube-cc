@@ -10,6 +10,7 @@ export const appStore = writable({
     removeAds: true,
     wideScreen: false,
     sideComment: false,
+    commentSearch: true,
   },
 });
 
@@ -19,9 +20,12 @@ appStore.subscribe(async (value) => {
     const { settings } = await chrome.storage.local.get("settings");
     if (settings) {
       /** if has storage populate store with storage */
-      appStore.update(() => {
+      appStore.update((v) => {
         return {
-          settings,
+          settings: {
+            ...v.settings,
+            ...settings,
+          },
           isStorageLoad: true,
         };
       });

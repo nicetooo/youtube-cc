@@ -46,6 +46,12 @@
         {browser.i18n.getMessage("side_comments")}
       {/snippet}
     </FormField>
+    <FormField>
+      <Switch bind:checked={$appStore.settings.commentSearch} />
+      {#snippet label()}
+        {browser.i18n.getMessage("side_comments")}
+      {/snippet}
+    </FormField>
   </div>
 </main>
 
