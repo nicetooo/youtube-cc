@@ -4,6 +4,7 @@
   import CaptionList from "./CaptionList.svelte";
   import SideComment from "./SideComment.svelte";
   import WideScreen from "./WideScreen.svelte";
+  import "svelte-material-ui/themes/fixation-dark.css";
   import { appStore, subscribeStorageChange } from "./store/settings.svelte";
 
   const port = chrome.runtime.connect();

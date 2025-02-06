@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Menu from "@smui/menu";
+  import List, { Item, Separator } from "@smui/list";
   import { waitFor } from "./utils/wait";
 
   let {
@@ -277,6 +279,9 @@
   });
 
   $inspect({ isExpand, isCaptionOn, caption, captions });
+
+  let menu: any = $state();
+  let clicked = $state();
 </script>
 
 <div bind:this={captionsElm}>
@@ -313,9 +318,10 @@
           />
           <button
             class="ytp-button"
-            style="width: 24px;height:24px;display:none;"
+            style="width: 24px;height:24px;"
             aria-label="settings"
             title="settings"
+            onclick={() => menu.setOpen(true)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -331,6 +337,27 @@
                 d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"
               ></path></svg
             >
+            <Menu bind:this={menu}>
+              <List>
+                <Item
+                  style="height:30px;"
+                  onSMUIAction={() => (clicked = "Cut")}>Cut</Item
+                >
+                <Item
+                  style="height:30px;"
+                  onSMUIAction={() => (clicked = "Copy")}>Copy</Item
+                >
+                <Item
+                  style="height:30px;"
+                  onSMUIAction={() => (clicked = "Paste")}>Paste</Item
+                >
+                <Separator />
+                <Item
+                  style="height:30px;"
+                  onSMUIAction={() => (clicked = "Delete")}>Delete</Item
+                >
+              </List>
+            </Menu>
           </button>
 
           <button

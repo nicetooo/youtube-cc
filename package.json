@@ -15,6 +15,10 @@
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
+    "@smui/form-field": "^8.0.0-beta.3",
+    "@smui/list": "^8.0.0-beta.3",
+    "@smui/menu": "^8.0.0-beta.3",
+    "@smui/switch": "^8.0.0-beta.3",
     "@tailwindcss/postcss": "^4.0.1",
     "@tsconfig/svelte": "^5.0.4",
     "@types/chrome": "^0.0.280",
@@ -29,7 +33,7 @@
     "wxt": "^0.19.13"
   },
   "dependencies": {
-    "carbon-components-svelte": "^0.87.3",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "svelte-material-ui": "^8.0.0-beta.3"
   }
 }

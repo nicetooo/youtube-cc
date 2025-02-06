@@ -1,6 +1,7 @@
 <script lang="ts">
-  import "carbon-components-svelte/css/g90.css";
-  import { Toggle } from "carbon-components-svelte";
+  import Switch from "@smui/switch";
+  import FormField from "@smui/form-field";
+  import "svelte-material-ui/themes/svelte-dark.css";
   import {
     appStore,
     subscribeStorageChange,
@@ -13,43 +14,38 @@
 </script>
 
 <main>
-  <div class="flex flex-col gap-9" style="width: 250px;">
-    <div class="flex justify-between">
-      <Toggle
-        labelText={browser.i18n.getMessage("transcription")}
-        labelA={browser.i18n.getMessage("label_a")}
-        labelB={browser.i18n.getMessage("label_b")}
-        bind:toggled={$appStore.settings.caption}
-      />
-      <Toggle
-        labelText={browser.i18n.getMessage("wide_screen")}
-        labelA={browser.i18n.getMessage("label_a")}
-        labelB={browser.i18n.getMessage("label_b")}
-        bind:toggled={$appStore.settings.wideScreen}
-      />
-    </div>
-    <div class="flex justify-between">
-      <Toggle
-        labelText={browser.i18n.getMessage("skip_video_ads")}
-        labelA={browser.i18n.getMessage("label_a")}
-        labelB={browser.i18n.getMessage("label_b")}
-        bind:toggled={$appStore.settings.skipAd}
-      />
-      <Toggle
-        labelText={browser.i18n.getMessage("remove_ad_items")}
-        labelA={browser.i18n.getMessage("label_a")}
-        labelB={browser.i18n.getMessage("label_b")}
-        bind:toggled={$appStore.settings.removeAds}
-      />
-    </div>
-    <div class="flex justify-between">
-      <Toggle
-        labelText={browser.i18n.getMessage("skip_video_ads")}
-        labelA={browser.i18n.getMessage("label_a")}
-        labelB={browser.i18n.getMessage("label_b")}
-        bind:toggled={$appStore.settings.sideComment}
-      />
-    </div>
+  <div class="flex flex-col gap-3" style="width: 200px;">
+    <FormField>
+      <Switch bind:checked={$appStore.settings.caption} />
+      {#snippet label()}
+        {browser.i18n.getMessage("transcription")}
+      {/snippet}
+    </FormField>
+
+    <FormField>
+      <Switch bind:checked={$appStore.settings.wideScreen} />
+      {#snippet label()}
+        {browser.i18n.getMessage("wide_screen")}
+      {/snippet}
+    </FormField>
+    <FormField>
+      <Switch bind:checked={$appStore.settings.skipAd} />
+      {#snippet label()}
+        {browser.i18n.getMessage("skip_video_ads")}
+      {/snippet}
+    </FormField>
+    <FormField>
+      <Switch bind:checked={$appStore.settings.removeAds} />
+      {#snippet label()}
+        {browser.i18n.getMessage("remove_ad_items")}
+      {/snippet}
+    </FormField>
+    <FormField>
+      <Switch bind:checked={$appStore.settings.sideComment} />
+      {#snippet label()}
+        {browser.i18n.getMessage("side_comments")}
+      {/snippet}
+    </FormField>
   </div>
 </main>
 

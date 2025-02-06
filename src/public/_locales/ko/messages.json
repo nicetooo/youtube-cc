@@ -17,10 +17,7 @@
   "remove_ad_items": {
     "message": "광고 항목 제거"
   },
-  "label_a": {
-    "message": "꺼짐"
-  },
-  "label_b": {
-    "message": "켜짐"
+  "side_comments": {
+    "message": "사이드 댓글"
   }
 }

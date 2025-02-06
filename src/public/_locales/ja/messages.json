@@ -17,10 +17,7 @@
   "remove_ad_items": {
     "message": "広告アイテムを削除"
   },
-  "label_a": {
-    "message": "オフ"
-  },
-  "label_b": {
-    "message": "オン"
+  "side_comments": {
+    "message": "サイドコメント"
   }
 }

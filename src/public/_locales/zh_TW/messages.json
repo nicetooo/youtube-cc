@@ -17,10 +17,7 @@
   "remove_ad_items": {
     "message": "刪除廣告項目"
   },
-  "label_a": {
-    "message": "關閉"
-  },
-  "label_b": {
-    "message": "開啟"
+  "side_comments": {
+    "message": "側邊評論"
   }
 }

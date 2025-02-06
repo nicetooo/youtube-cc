@@ -17,10 +17,7 @@
   "remove_ad_items": {
     "message": "删除广告项目"
   },
-  "label_a": {
-    "message": "关闭"
-  },
-  "label_b": {
-    "message": "开启"
+  "side_comments": {
+    "message": "侧边评论"
   }
 }
