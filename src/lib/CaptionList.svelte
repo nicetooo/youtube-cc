@@ -299,6 +299,7 @@
        margin-bottom:12px;
        display: ${isCaptionOn && captions.length !== 0 && location.pathname === "/watch" ? "flex" : "none"};
        border: 1px solid var(--yt-spec-10-percent-layer);
+       background: ${window.getComputedStyle(document.documentElement).backgroundColor};
        `}
     >
       {#if captions.length > 0}
