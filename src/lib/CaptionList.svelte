@@ -468,6 +468,7 @@
   input {
     background-color: transparent;
     border: none;
+    color: var(--yt-live-chat-secondary-text-color);
     box-shadow: none;
     outline: none;
     border: 1px solid;
