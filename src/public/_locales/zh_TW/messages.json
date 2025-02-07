@@ -2,8 +2,8 @@
   "display_transcription": {
     "message": "顯示轉錄"
   },
-  "search": {
-    "message": "搜尋"
+  "search_transcription": {
+    "message": "搜尋轉錄"
   },
   "transcription": {
     "message": "轉錄"
@@ -19,5 +19,8 @@
   },
   "side_comments": {
     "message": "側邊評論"
+  },
+  "search_comment": {
+    "message": "搜尋評論"
   }
 }

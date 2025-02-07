@@ -288,7 +288,7 @@
   {#if isExpand}
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
-      class="overflow-hidden flex flex-col"
+      class="flex flex-col"
       style={`
        color: var(--yt-spec-text-primary);
        height: calc(${videoHeight}px - 24px);
@@ -311,7 +311,7 @@
             class="flex-grow"
             tabindex={0}
             bind:this={input}
-            placeholder={browser.i18n.getMessage("search")}
+            placeholder={browser.i18n.getMessage("search_transcription")}
             onclick={(e) => e.stopPropagation()}
             onkeypress={(e) => e.stopPropagation()}
             bind:value={captionQuery}

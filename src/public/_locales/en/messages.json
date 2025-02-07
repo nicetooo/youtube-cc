@@ -2,8 +2,8 @@
   "display_transcription": {
     "message": "Display Transcription"
   },
-  "search": {
-    "message": "Search"
+  "search_transcription": {
+    "message": "Search Transcription"
   },
   "transcription": {
     "message": "Transcription"
@@ -19,5 +19,8 @@
   },
   "side_comments": {
     "message": "Side Comments"
+  },
+  "search_comment": {
+    "message": "Search Comment"
   }
 }

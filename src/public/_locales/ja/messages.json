@@ -2,8 +2,8 @@
   "display_transcription": {
     "message": "文字起こしを表示"
   },
-  "search": {
-    "message": "検索"
+  "search_transcription": {
+    "message": "文字起こしを検索"
   },
   "transcription": {
     "message": "文字起こし"
@@ -15,9 +15,12 @@
     "message": "動画広告をスキップ"
   },
   "remove_ad_items": {
-    "message": "広告アイテムを削除"
+    "message": "広告項目を削除"
   },
   "side_comments": {
     "message": "サイドコメント"
+  },
+  "search_comment": {
+    "message": "コメントを検索"
   }
 }

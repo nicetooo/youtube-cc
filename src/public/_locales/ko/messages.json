@@ -2,14 +2,14 @@
   "display_transcription": {
     "message": "전사 표시"
   },
-  "search": {
-    "message": "검색"
+  "search_transcription": {
+    "message": "전사 검색"
   },
   "transcription": {
     "message": "전사"
   },
   "wide_screen": {
-    "message": "와이드스크린"
+    "message": "와이드 스크린"
   },
   "skip_video_ads": {
     "message": "동영상 광고 건너뛰기"
@@ -19,5 +19,8 @@
   },
   "side_comments": {
     "message": "사이드 댓글"
+  },
+  "search_comment": {
+    "message": "댓글 검색"
   }
 }

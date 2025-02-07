@@ -9,33 +9,77 @@
     port: chrome.runtime.Port;
   } = $props();
 
-  let sideComment: HTMLDivElement | null = $state(null);
-  let commentPrevParent: HTMLDivElement | null = null;
+  let captionListHeight = $state(0);
+  let disconnect: (() => void) | null = null;
+
+  function observeMutations(node: HTMLDivElement) {
+    const observer = new MutationObserver(() => {
+      captionListHeight = node.clientHeight;
+    });
+
+    observer.observe(node, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }
 
   const setUp = async () => {
     if (!isSideComment) {
       return;
     }
-    const ytdComments = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("ytd-comments")
-    );
-    console.log({ ytdComments });
-    commentPrevParent = ytdComments.parentElement as HTMLDivElement;
-    await waitFor<HTMLDivElement>(() => sideComment);
 
-    sideComment?.prepend(ytdComments);
+    const captionList = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("#caption-list")
+    );
+    disconnect = observeMutations(captionList);
+
+    const ytdComments = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("#comments")
+    );
+    const sideVideoList = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("#secondary-inner")
+    );
+    const belowVideo = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("#above-the-fold")
+    );
+    const secondaryColumn = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("#secondary")
+    );
+
+    const sideComment = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("#side-comment")
+    );
+
+    sideComment.prepend(ytdComments);
+
+    secondaryColumn?.append(sideComment);
+
+    belowVideo.appendChild(sideVideoList);
   };
 
   const recover = async () => {
-    console.log("recover", commentPrevParent);
-    if (!commentPrevParent) {
-      return;
-    }
+    disconnect?.();
     const ytdComments = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("ytd-comments")
+      document.querySelector("#comments")
     );
-    commentPrevParent?.append(ytdComments);
-    commentPrevParent = null;
+    const sideVideoList = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("#secondary-inner")
+    );
+    const belowVideo = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("#above-the-fold")
+    );
+    const secondaryColumn = await waitFor<HTMLDivElement>(() =>
+      document.querySelector("#secondary")
+    );
+
+    belowVideo.appendChild(ytdComments);
+
+    secondaryColumn.appendChild(sideVideoList);
   };
 
   $effect(() => {
@@ -63,16 +107,18 @@
 
     setUp();
   });
+
+  onDestroy(() => {
+    disconnect?.();
+  });
 </script>
 
 <div
   id="side-comment"
-  bind:this={sideComment}
   class="overflow-auto"
   style={`
     color: var(--yt-spec-text-primary);
-    height: 700px;
-    min-height: 596px;
+    height: calc(100vh - 118px - ${captionListHeight}px);
     width: calc(100% - 24px);
     border-radius: 12px;
     padding:12px;

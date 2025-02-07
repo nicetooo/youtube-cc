@@ -2,8 +2,8 @@
   "display_transcription": {
     "message": "显示转录"
   },
-  "search": {
-    "message": "搜索"
+  "search_transcription": {
+    "message": "搜索转录"
   },
   "transcription": {
     "message": "转录"
@@ -19,5 +19,8 @@
   },
   "side_comments": {
     "message": "侧边评论"
+  },
+  "search_comment": {
+    "message": "搜索评论"
   }
 }

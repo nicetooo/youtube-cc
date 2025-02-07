@@ -24,7 +24,11 @@
         if (!contentString) {
           return;
         }
-        if (contentString.innerText.includes(searchValue)) {
+        if (
+          contentString.innerText
+            .toLowerCase()
+            .includes(searchValue.toLowerCase())
+        ) {
           c.style.display = "block";
         } else {
           c.style.display = "none";
@@ -91,7 +95,7 @@
       tabindex={0}
       bind:this={input}
       bind:value={searchValue}
-      placeholder={browser.i18n.getMessage("search")}
+      placeholder={browser.i18n.getMessage("search_comment")}
       onclick={(e) => e.stopPropagation()}
       onkeypress={(e) => e.stopPropagation()}
       oninput={debounce(search, 1000)}
