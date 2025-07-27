@@ -27,6 +27,8 @@
   <WideScreen isWideScreenOn={$appStore.settings.wideScreen} {port}
   ></WideScreen>
   <AdSkip isAdSkipOn={$appStore.settings.skipAd} {port}></AdSkip>
-  <CommentSearch isCommentSearchOn={$appStore.settings.commentSearch}
+  <CommentSearch
+    isCommentSearchOn={$appStore.settings.commentSearch}
+    isSideComment={$appStore.settings.sideComment}
   ></CommentSearch>
 {/if}

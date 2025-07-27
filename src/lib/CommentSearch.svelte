@@ -5,8 +5,10 @@
 
   let {
     isCommentSearchOn,
+    isSideComment,
   }: {
     isCommentSearchOn: boolean;
+    isSideComment: boolean;
   } = $props();
 
   let commentSearch: HTMLDivElement | null = $state(null);
@@ -79,16 +81,14 @@
     display: ${isCommentSearchOn && commentShow ? "block" : "none"};
     position: sticky;
     top: 0;
+    padding-top: ${isSideComment ? "unset" : "10px"};
     background: ${window.getComputedStyle(document.documentElement).backgroundColor};
     z-index: 100;
     border-radius: 99px;
 `}
   bind:this={commentSearch}
 >
-  <div
-    class="flex"
-    style="height: 34px;margin-bottom: 6px;border-radius: 99px;"
-  >
+  <div class="flex" style="height: 34px;border-radius: 99px;">
     <input
       type="text"
       class="flex-grow"

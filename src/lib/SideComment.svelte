@@ -33,6 +33,10 @@
       return;
     }
 
+    if (location.pathname !== "/watch") {
+      return;
+    }
+
     const captionList = await waitFor<HTMLDivElement>(() =>
       document.querySelector("#caption-list")
     );
@@ -41,6 +45,8 @@
     const ytdComments = await waitFor<HTMLDivElement>(() =>
       document.querySelector("#comments")
     );
+    ytdComments.style.width = "100%";
+
     const sideVideoList = await waitFor<HTMLDivElement>(() =>
       document.querySelector("#secondary-inner")
     );
@@ -63,10 +69,15 @@
   };
 
   const recover = async () => {
+    if (location.pathname !== "/watch") {
+      return;
+    }
     disconnect?.();
     const ytdComments = await waitFor<HTMLDivElement>(() =>
       document.querySelector("#comments")
     );
+    ytdComments.style.width = "unset";
+
     const sideVideoList = await waitFor<HTMLDivElement>(() =>
       document.querySelector("#secondary-inner")
     );

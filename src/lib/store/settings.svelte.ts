@@ -5,8 +5,8 @@ import { isEqual } from "lodash";
 export const appStore = writable({
   isStorageLoad: false,
   settings: {
-    caption: true,
-    skipAd: true,
+    caption: false,
+    skipAd: false,
     removeAds: true,
     wideScreen: false,
     sideComment: false,

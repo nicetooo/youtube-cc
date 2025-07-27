@@ -17,25 +17,25 @@
 <main>
   <Card variant="outlined" padded>
     <div class="flex flex-col gap-3" style="width: 200px;">
-      <FormField>
+      <!-- <FormField>
         <Switch bind:checked={$appStore.settings.caption} />
         {#snippet label()}
           {browser.i18n.getMessage("transcription")}
         {/snippet}
-      </FormField>
+      </FormField> -->
 
-      <FormField>
+      <!-- <FormField>
         <Switch bind:checked={$appStore.settings.wideScreen} />
         {#snippet label()}
           {browser.i18n.getMessage("wide_screen")}
         {/snippet}
-      </FormField>
-      <FormField>
+      </FormField> -->
+      <!-- <FormField>
         <Switch bind:checked={$appStore.settings.skipAd} />
         {#snippet label()}
           {browser.i18n.getMessage("skip_video_ads")}
         {/snippet}
-      </FormField>
+      </FormField> -->
       <FormField>
         <Switch bind:checked={$appStore.settings.removeAds} />
         {#snippet label()}

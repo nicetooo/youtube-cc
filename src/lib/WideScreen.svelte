@@ -49,15 +49,13 @@
     if (!videoContainer || !video) {
       return;
     }
-    const resizeObserver = new ResizeObserver((entries) => {
+    const resizeObserver = new ResizeObserver(() => {
       if (!video || !chromeBottom || !videoContainer) {
         return;
       }
-      for (let entry of entries) {
-        video.style.width = "fit-content";
-        video.style.height = "100%";
-        chromeBottom.style.width = videoContainer.clientWidth - 24 + "px";
-      }
+      video.style.width = "fit-content";
+      video.style.height = "100%";
+      chromeBottom.style.width = videoContainer.clientWidth - 24 + "px";
     });
 
     video.addEventListener("timeupdate", function () {
