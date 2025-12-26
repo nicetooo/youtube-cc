@@ -25,8 +25,6 @@ export function observeNodeAdd(callback: () => void) {
       requestAnimationFrame(checkElement);
       return;
     }
-
-    console.log("check");
     callback();
 
     needCheck = false;

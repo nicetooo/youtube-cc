@@ -20,9 +20,9 @@
     document
       .querySelectorAll<HTMLDivElement>("ytd-comment-thread-renderer")
       .forEach((c) => {
-        const contentString = c.querySelector<HTMLDivElement>(
-          "yt-attributed-string"
-        );
+        const contentString = c
+          ?.querySelector<HTMLDivElement>("ytd-comment-view-model")
+          ?.querySelector<HTMLDivElement>("yt-attributed-string");
         if (!contentString) {
           return;
         }
@@ -52,13 +52,15 @@
 
   async function setUpSearch() {
     const ytdComments = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#comments ytd-item-section-renderer")
+      document.querySelector("#comments ytd-item-section-renderer"),
     );
     await waitFor(() =>
-      document.querySelector("ytd-comment-thread-renderer yt-attributed-string")
+      document.querySelector(
+        "ytd-comment-thread-renderer yt-attributed-string",
+      ),
     );
     const search = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#comment-search")
+      document.querySelector("#comment-search"),
     );
     commentShow = true;
     ytdComments.style.position = "relative";
