@@ -21,7 +21,7 @@
 </script>
 
 <main
-  class="cc-plus-style-root w-[340px] bg-[#0f0f0f] text-[#f1f1f1] flex flex-col min-h-[520px] font-sans selection:bg-red-500/30"
+  class="cc-plus-style-root w-[340px] bg-[#0f0f0f] text-[#f1f1f1] flex flex-col h-auto font-sans selection:bg-red-500/30"
 >
   <!-- Header with Glassmorphism -->
   <header
@@ -60,7 +60,7 @@
   </header>
 
   <!-- Scrollable Content -->
-  <div class="flex-grow p-6 flex flex-col gap-8 custom-scrollbar">
+  <div class="p-4 flex flex-col gap-4 custom-scrollbar">
     <!-- Section: Player Controls -->
     <section transition:fade>
       <div class="flex items-center gap-2 mb-4">
@@ -155,27 +155,29 @@
         </button>
 
         <!-- Skip Ads -->
-        <button
-          on:click={() => toggle("skipAd")}
-          class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[#1a1a1a] border border-white/5 hover:border-white/10 hover:bg-[#222] transition-all group"
-        >
-          <div class="flex flex-col text-left">
-            <span
-              class="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors"
-              >{i18n("skip_video_ads")}</span
-            >
-            <span class="text-xs text-gray-500"
-              >{i18n("skip_video_ads_sub")}</span
-            >
-          </div>
-          <div
-            class={`w-10 h-5 rounded-full relative transition-colors duration-300 ${$appStore.settings.skipAd ? "bg-red-600" : "bg-[#333]"}`}
+        {#if false}
+          <button
+            on:click={() => toggle("skipAd")}
+            class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[#1a1a1a] border border-white/5 hover:border-white/10 hover:bg-[#222] transition-all group"
           >
+            <div class="flex flex-col text-left">
+              <span
+                class="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors"
+                >{i18n("skip_video_ads" as any)}</span
+              >
+              <span class="text-xs text-gray-500"
+                >{i18n("skip_video_ads_sub" as any)}</span
+              >
+            </div>
             <div
-              class={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${$appStore.settings.skipAd ? "left-6" : "left-1"}`}
-            ></div>
-          </div>
-        </button>
+              class={`w-10 h-5 rounded-full relative transition-colors duration-300 ${$appStore.settings.skipAd ? "bg-red-600" : "bg-[#333]"}`}
+            >
+              <div
+                class={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${$appStore.settings.skipAd ? "left-6" : "left-1"}`}
+              ></div>
+            </div>
+          </button>
+        {/if}
 
         <!-- Side Comments -->
         <button
@@ -225,28 +227,21 @@
       </div>
     </section>
   </div>
-
-  <!-- Minimal Footer -->
-  <footer
-    class="px-6 py-4 bg-[#1a1a1a] border-t border-white/5 flex items-center justify-center"
-  >
-    <div
-      class="flex items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity cursor-default"
-    >
-      <div class="w-1 h-1 bg-green-500 rounded-full animate-pulse"></div>
-      <span
-        class="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none"
-        >All Systems Green</span
-      >
-    </div>
-  </footer>
 </main>
 
 <style>
+  :global(html),
   :global(body) {
-    background-color: #0f0f0f;
+    width: fit-content;
     margin: 0;
     padding: 0;
+    background-color: #0f0f0f;
+    overflow: hidden; /* Prevent scrollbars from adding size */
+  }
+
+  /* Ensure the app wrapper usually present in Svelte mounts behaves */
+  :global(#app) {
+    display: contents;
   }
 
   .custom-scrollbar {
