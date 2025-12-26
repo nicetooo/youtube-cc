@@ -283,8 +283,8 @@
 
   $inspect({ isExpand, isCaptionOn, caption, captions });
 
-  let isMenuOpen = $state(false);
-  let clicked = $state("");
+  // let isMenuOpen = $state(false);
+  // let clicked = $state("");
 </script>
 
 <div bind:this={captionsElm} id="caption-list">
@@ -320,7 +320,7 @@
             onkeypress={(e) => e.stopPropagation()}
             bind:value={captionQuery}
           />
-          <div class="relative">
+          <!-- <div class="relative">
             <button
               class="ytp-button"
               style="width: 24px;height:24px;"
@@ -372,7 +372,7 @@
                 </button>
               </div>
             {/if}
-          </div>
+          </div> -->
 
           <button
             class="ytp-button"
