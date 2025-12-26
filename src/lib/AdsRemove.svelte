@@ -1,5 +1,7 @@
 <script lang="ts">
   import { observeNodeAdd } from "./utils/observe";
+  import { AD_REMOVAL_SELECTORS } from "./configs/ad-selectors";
+
   let {
     isAdRemoveOn,
   }: {
@@ -9,37 +11,27 @@
 
   let disconnect: () => void | null;
 
+  const removeElements = (selectors: string[]) => {
+    selectors.forEach((selector) => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach((el) => el.remove());
+    });
+  };
+
   const setUp = () =>
     observeNodeAdd(() => {
-      //主页
-      if (location.pathname === "/") {
-        const ads = document.querySelectorAll(
-          "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)"
-        );
-        ads.forEach((a) => a.remove());
+      const path = location.pathname;
 
-        const mastheadAd = document.getElementById("masthead-ad");
-        mastheadAd?.remove();
+      if (path === "/") {
+        removeElements(AD_REMOVAL_SELECTORS.HOME);
+      } else if (path === "/watch") {
+        removeElements(AD_REMOVAL_SELECTORS.WATCH);
+      } else if (path === "/results") {
+        removeElements(AD_REMOVAL_SELECTORS.RESULTS);
       }
 
-      //视频详情页
-      if (location.pathname === "/watch") {
-        const ads = document.querySelectorAll("ytd-ad-slot-renderer");
-        ads.forEach((a) => {
-          a.remove();
-        });
-
-        const companion = document.getElementById("player-ads");
-        companion?.remove();
-      }
-
-      // 搜索结果页
-      if (location.pathname === "/results") {
-        const ads = document.querySelectorAll("ytd-ad-slot-renderer");
-        ads.forEach((a: any) => {
-          a.remove();
-        });
-      }
+      // Always check for global ad elements
+      removeElements(AD_REMOVAL_SELECTORS.GLOBAL);
     });
 
   $effect(() => {
