@@ -6,12 +6,11 @@ export default defineConfig({
   extensionApi: "chrome",
   modules: ["@wxt-dev/module-svelte"],
   manifest: {
-    permissions: ["storage"],
+    permissions: ["storage", "webRequest", "tabs"],
+    host_permissions: ["*://www.youtube.com/*"],
     default_locale: "en",
   },
   runner: {
-    // Use a persistent profile so you stay logged into YouTube
-    chromiumArgs: ["--user-data-dir=./.wxt/user-data"],
     // Automatically open YouTube when starting dev mode
     startUrls: ["https://www.youtube.com"],
   },

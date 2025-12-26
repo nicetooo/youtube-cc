@@ -20,15 +20,17 @@
 </script>
 
 {#if $appStore.isStorageLoad}
-  <SideComment isSideComment={$appStore.settings.sideComment} {port}
-  ></SideComment>
-  <CaptionList isCaptionOn={$appStore.settings.caption} {port}></CaptionList>
-  <AdsRemove isAdRemoveOn={$appStore.settings.removeAds} {port}></AdsRemove>
-  <WideScreen isWideScreenOn={$appStore.settings.wideScreen} {port}
-  ></WideScreen>
-  <AdSkip isAdSkipOn={$appStore.settings.skipAd} {port}></AdSkip>
-  <CommentSearch
-    isCommentSearchOn={$appStore.settings.commentSearch}
-    isSideComment={$appStore.settings.sideComment}
-  ></CommentSearch>
+  <div id="cc-plus-container" class="cc-plus-style-root">
+    <SideComment isSideComment={$appStore.settings.sideComment} {port}
+    ></SideComment>
+    <CaptionList isCaptionOn={$appStore.settings.caption} {port}></CaptionList>
+    <AdsRemove isAdRemoveOn={$appStore.settings.removeAds} {port}></AdsRemove>
+    <WideScreen isWideScreenOn={$appStore.settings.wideScreen} {port}
+    ></WideScreen>
+    <AdSkip isAdSkipOn={$appStore.settings.skipAd} {port}></AdSkip>
+    <CommentSearch
+      isCommentSearchOn={$appStore.settings.commentSearch}
+      isSideComment={$appStore.settings.sideComment}
+    ></CommentSearch>
+  </div>
 {/if}
