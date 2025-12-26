@@ -6,8 +6,7 @@ export default defineConfig({
   extensionApi: "chrome",
   modules: ["@wxt-dev/module-svelte"],
   manifest: {
-    permissions: ["webRequest", "storage"],
-    host_permissions: ["*://www.youtube.com/*", "*://youtube.com/*"],
+    permissions: ["storage"],
     default_locale: "en",
   },
 });

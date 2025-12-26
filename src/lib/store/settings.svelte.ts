@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 
 /** sync store between popup & content.js */
 export const appStore = writable({

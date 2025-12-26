@@ -1,20 +1,34 @@
-export async function waitFor<T>(getter: () => any, timeout: number = 0) {
-  let timeoutHandle: NodeJS.Timeout, intervalHandle: NodeJS.Timeout;
-
+export async function waitFor<T extends Element>(
+  getter: () => T | null | undefined,
+  timeout: number = 0
+): Promise<T> {
   return new Promise<T>((resolve, reject) => {
-    if (timeout != 0) {
+    const element = getter();
+    if (element) {
+      resolve(element);
+      return;
+    }
+
+    let timeoutHandle: NodeJS.Timeout;
+    if (timeout > 0) {
       timeoutHandle = setTimeout(() => {
-        reject();
+        observer.disconnect();
+        reject(new Error("waitFor timeout"));
       }, timeout);
     }
 
-    intervalHandle = setInterval(() => {
-      const res = getter();
-      if (res) {
-        clearInterval(intervalHandle);
-        clearTimeout(timeoutHandle);
-        resolve(res);
+    const observer = new MutationObserver(() => {
+      const element = getter();
+      if (element) {
+        observer.disconnect();
+        if (timeoutHandle) clearTimeout(timeoutHandle);
+        resolve(element);
       }
-    }, 100);
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
   });
 }

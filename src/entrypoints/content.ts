@@ -25,7 +25,7 @@ export default defineContentScript({
           target: container,
         });
       },
-      onRemove: (app) => {
+      onRemove: (app: any) => {
         // Destroy the app when the UI is removed
         unmount(app);
       },

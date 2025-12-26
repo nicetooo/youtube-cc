@@ -1,6 +1,6 @@
 <script lang="ts">
   import { observeNodeAdd } from "./utils/observe";
-  import { debounce } from "lodash";
+  import { debounce } from "lodash-es";
   import { waitFor } from "./utils/wait";
 
   let {

@@ -1,7 +1,6 @@
 <script lang="ts">
-  import Menu from "@smui/menu";
-  import List, { Item, Separator } from "@smui/list";
   import { waitFor } from "./utils/wait";
+  import { throttle } from "lodash-es";
 
   let {
     isCaptionOn,
@@ -80,7 +79,7 @@
     caption = text;
   }
 
-  function scrollParentToChild() {
+  const scrollParentToChild = throttle(() => {
     if (isMouseHover) {
       return;
     }
@@ -112,7 +111,7 @@
     const scrollTop = childRect.bottom - parentCenter;
 
     line.parentElement.scrollTop += scrollTop;
-  }
+  }, 200);
 
   function clickCCBtn() {
     if (isAutoClicked) {
@@ -280,8 +279,8 @@
 
   $inspect({ isExpand, isCaptionOn, caption, captions });
 
-  let menu: any = $state();
-  let clicked = $state();
+  let isMenuOpen = $state(false);
+  let clicked = $state("");
 </script>
 
 <div bind:this={captionsElm} id="caption-list">
@@ -317,49 +316,57 @@
             onkeypress={(e) => e.stopPropagation()}
             bind:value={captionQuery}
           />
-          <button
-            class="ytp-button"
-            style="width: 24px;height:24px;"
-            aria-label="settings"
-            title="settings"
-            onclick={() => menu.setOpen(true)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              enable-background="new 0 0 24 24"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-              focusable="false"
-              aria-hidden="true"
-              style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
-              ><path
-                fill="currentColor"
-                d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"
-              ></path></svg
+          <div class="relative">
+            <button
+              class="ytp-button"
+              style="width: 24px;height:24px;"
+              aria-label="settings"
+              title="settings"
+              onclick={() => (isMenuOpen = !isMenuOpen)}
             >
-            <Menu bind:this={menu}>
-              <List>
-                <Item
-                  style="height:30px;"
-                  onSMUIAction={() => (clicked = "Cut")}>Cut</Item
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enable-background="new 0 0 24 24"
+                height="24"
+                viewBox="0 0 24 24"
+                width="24"
+                focusable="false"
+                aria-hidden="true"
+                style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
+                ><path
+                  fill="currentColor"
+                  d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"
+                ></path></svg
+              >
+            </button>
+            {#if isMenuOpen}
+              <div
+                class="absolute right-0 top-8 z-50 w-32 rounded-md border border-[var(--yt-spec-10-percent-layer)] bg-[var(--yt-spec-base-background)] py-1 shadow-lg"
+              >
+                {#each ["Cut", "Copy", "Paste"] as action}
+                  <button
+                    class="block w-full px-4 py-2 text-left text-sm text-[var(--yt-spec-text-primary)] hover:bg-[var(--yt-spec-10-percent-layer)]"
+                    onclick={() => {
+                      clicked = action;
+                      isMenuOpen = false;
+                    }}
+                  >
+                    {action}
+                  </button>
+                {/each}
+                <div class="my-1 h-px bg-[var(--yt-spec-10-percent-layer)]"></div>
+                <button
+                  class="block w-full px-4 py-2 text-left text-sm text-[var(--yt-spec-text-primary)] hover:bg-[var(--yt-spec-10-percent-layer)]"
+                  onclick={() => {
+                    clicked = "Delete";
+                    isMenuOpen = false;
+                  }}
                 >
-                <Item
-                  style="height:30px;"
-                  onSMUIAction={() => (clicked = "Copy")}>Copy</Item
-                >
-                <Item
-                  style="height:30px;"
-                  onSMUIAction={() => (clicked = "Paste")}>Paste</Item
-                >
-                <Separator />
-                <Item
-                  style="height:30px;"
-                  onSMUIAction={() => (clicked = "Delete")}>Delete</Item
-                >
-              </List>
-            </Menu>
-          </button>
+                  Delete
+                </button>
+              </div>
+            {/if}
+          </div>
 
           <button
             class="ytp-button"
