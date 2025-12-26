@@ -29,6 +29,10 @@
     "wxt": "^0.19.13"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21"
+    "@smui/card": "^7.0.0",
+    "@smui/form-field": "^7.0.0",
+    "@smui/switch": "^7.0.0",
+    "lodash-es": "^4.17.21",
+    "svelte-material-ui": "^7.0.0"
   }
 }
