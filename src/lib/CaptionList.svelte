@@ -1,6 +1,7 @@
 <script lang="ts">
   import { waitFor } from "./utils/wait";
   import { throttle } from "lodash-es";
+  import { i18n } from "./i18n";
 
   let {
     isCaptionOn,
@@ -84,7 +85,7 @@
       return;
     }
     const lines = document.getElementsByClassName(
-      "caption-line"
+      "caption-line",
     ) as HTMLCollectionOf<HTMLDivElement>;
     const line = Array.from(lines).filter((l) => {
       const { start = 0, dur = 0 } = l.dataset;
@@ -118,7 +119,7 @@
       return;
     }
     const subTitleBtn = document.getElementsByClassName(
-      "ytp-subtitles-button"
+      "ytp-subtitles-button",
     )[0] as HTMLDivElement;
     if (!subTitleBtn) {
       return;
@@ -179,8 +180,11 @@
     }
 
     video = await waitFor<HTMLVideoElement>(
-      () => document.getElementsByClassName("html5-main-video")[0],
-      0
+      () =>
+        document.getElementsByClassName(
+          "html5-main-video",
+        )[0] as HTMLVideoElement,
+      0,
     );
     video.addEventListener("timeupdate", function () {
       if (!video) {
@@ -311,7 +315,7 @@
             class="flex-grow"
             tabindex={0}
             bind:this={input}
-            placeholder={browser.i18n.getMessage("search_transcription")}
+            placeholder={i18n("search_transcription")}
             onclick={(e) => e.stopPropagation()}
             onkeypress={(e) => e.stopPropagation()}
             bind:value={captionQuery}
@@ -354,7 +358,9 @@
                     {action}
                   </button>
                 {/each}
-                <div class="my-1 h-px bg-[var(--yt-spec-10-percent-layer)]"></div>
+                <div
+                  class="my-1 h-px bg-[var(--yt-spec-10-percent-layer)]"
+                ></div>
                 <button
                   class="block w-full px-4 py-2 text-left text-sm text-[var(--yt-spec-text-primary)] hover:bg-[var(--yt-spec-10-percent-layer)]"
                   onclick={() => {
@@ -440,7 +446,7 @@
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div class="show-btn" onclick={() => (isExpand = true)}>
-      {browser.i18n.getMessage("display_transcription")}
+      {i18n("display_transcription")}
     </div>
   {/if}
 </div>

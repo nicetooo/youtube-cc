@@ -13,5 +13,6 @@ export default defineConfig({
   runner: {
     // Automatically open YouTube when starting dev mode
     startUrls: ["https://www.youtube.com"],
+    chromiumArgs: ["--lang=en-US"],
   },
 });

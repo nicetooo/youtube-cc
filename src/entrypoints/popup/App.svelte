@@ -4,6 +4,7 @@
     appStore,
     subscribeStorageChange,
   } from "../../lib/store/settings.svelte";
+  import { i18n } from "../../lib/i18n";
   import { fade, slide } from "svelte/transition";
 
   onMount(() => {
@@ -80,10 +81,10 @@
           <div class="flex flex-col text-left">
             <span
               class="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors"
-              >Transcription Panel</span
+              >{i18n("transcription")}</span
             >
             <span class="text-xs text-gray-500"
-              >Interactive sidebar transcript</span
+              >{i18n("transcription_sub")}</span
             >
           </div>
           <div
@@ -103,11 +104,9 @@
           <div class="flex flex-col text-left">
             <span
               class="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors"
-              >Theater Expander</span
+              >{i18n("wide_screen")}</span
             >
-            <span class="text-xs text-gray-500"
-              >Maximize immersion automatically</span
-            >
+            <span class="text-xs text-gray-500">{i18n("wide_screen_sub")}</span>
           </div>
           <div
             class={`w-10 h-5 rounded-full relative transition-colors duration-300 ${$appStore.settings.wideScreen ? "bg-red-600" : "bg-[#333]"}`}
@@ -140,10 +139,10 @@
           <div class="flex flex-col text-left">
             <span
               class="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors"
-              >Ad-Free Layout</span
+              >{i18n("remove_ad_items")}</span
             >
             <span class="text-xs text-gray-500"
-              >Cleaner banners & UI elements</span
+              >{i18n("remove_ad_items_sub")}</span
             >
           </div>
           <div
@@ -163,10 +162,10 @@
           <div class="flex flex-col text-left">
             <span
               class="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors"
-              >Instant Forward</span
+              >{i18n("skip_video_ads")}</span
             >
             <span class="text-xs text-gray-500"
-              >Auto-skip video advertisements</span
+              >{i18n("skip_video_ads_sub")}</span
             >
           </div>
           <div
@@ -186,10 +185,10 @@
           <div class="flex flex-col text-left">
             <span
               class="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors"
-              >Dynamic Sidebar</span
+              >{i18n("side_comments")}</span
             >
             <span class="text-xs text-gray-500"
-              >Shift comments to the right</span
+              >{i18n("side_comments_sub")}</span
             >
           </div>
           <div
@@ -209,9 +208,10 @@
           <div class="flex flex-col text-left">
             <span
               class="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors"
-              >Smart Discovery</span
+              >{i18n("search_comment")}</span
             >
-            <span class="text-xs text-gray-500">Search and filter comments</span
+            <span class="text-xs text-gray-500"
+              >{i18n("search_comment_sub")}</span
             >
           </div>
           <div

@@ -22,5 +22,23 @@
   },
   "search_comment": {
     "message": "搜索评论"
+  },
+  "transcription_sub": {
+    "message": "交互式侧边栏转录"
+  },
+  "wide_screen_sub": {
+    "message": "自动最大化沉浸感"
+  },
+  "remove_ad_items_sub": {
+    "message": "更清洁的横幅和界面元素"
+  },
+  "skip_video_ads_sub": {
+    "message": "自动跳过视频广告"
+  },
+  "side_comments_sub": {
+    "message": "将评论移至右侧"
+  },
+  "search_comment_sub": {
+    "message": "搜索和过滤评论"
   }
 }

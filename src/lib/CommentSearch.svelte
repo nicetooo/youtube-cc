@@ -1,5 +1,6 @@
 <script lang="ts">
   import { observeNodeAdd } from "./utils/observe";
+  import { i18n } from "./i18n";
   import { debounce } from "lodash-es";
   import { waitFor } from "./utils/wait";
 
@@ -21,8 +22,8 @@
       .querySelectorAll<HTMLDivElement>("ytd-comment-thread-renderer")
       .forEach((c) => {
         const contentString = c
-          ?.querySelector<HTMLDivElement>("ytd-comment-view-model")
-          ?.querySelector<HTMLDivElement>("yt-attributed-string");
+          .querySelector("ytd-comment-view-model")
+          ?.querySelector("yt-attributed-string") as HTMLDivElement | null;
         if (!contentString) {
           return;
         }
@@ -73,6 +74,7 @@
 
   $inspect({ isCommentSearchOn });
   onMount(() => {
+    console.log("Current UI Language:", browser.i18n.getUILanguage());
     setUpSearch();
   });
 </script>
@@ -97,7 +99,7 @@
       tabindex={0}
       bind:this={input}
       bind:value={searchValue}
-      placeholder={browser.i18n.getMessage("search_comment")}
+      placeholder={i18n("search_comment")}
       onclick={(e) => e.stopPropagation()}
       onkeypress={(e) => e.stopPropagation()}
       oninput={debounce(search, 1000)}

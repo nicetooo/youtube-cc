@@ -22,5 +22,23 @@
   },
   "search_comment": {
     "message": "搜尋評論"
+  },
+  "transcription_sub": {
+    "message": "互動式側邊欄轉錄"
+  },
+  "wide_screen_sub": {
+    "message": "自動最大化沉浸感"
+  },
+  "remove_ad_items_sub": {
+    "message": "更清潔的橫幅和介面元素"
+  },
+  "skip_video_ads_sub": {
+    "message": "自動跳過視頻廣告"
+  },
+  "side_comments_sub": {
+    "message": "將評論移至右側"
+  },
+  "search_comment_sub": {
+    "message": "搜尋和過濾評論"
   }
 }

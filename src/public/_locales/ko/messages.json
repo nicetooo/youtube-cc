@@ -22,5 +22,23 @@
   },
   "search_comment": {
     "message": "댓글 검색"
+  },
+  "transcription_sub": {
+    "message": "인터랙티브 사이드바 전사"
+  },
+  "wide_screen_sub": {
+    "message": "몰입감 자동 극대화"
+  },
+  "remove_ad_items_sub": {
+    "message": "더 깔끔한 배너 및 UI 요소"
+  },
+  "skip_video_ads_sub": {
+    "message": "동영상 광고 자동 건너뛰기"
+  },
+  "side_comments_sub": {
+    "message": "댓글을 오른쪽으로 이동"
+  },
+  "search_comment_sub": {
+    "message": "댓글 검색 및 필터링"
   }
 }
