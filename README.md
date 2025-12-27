@@ -6,7 +6,7 @@
   <h3>Transform your YouTube viewing experience with interactive transcripts, immersive cinema mode, and advanced comment search.</h3>
   
   <a href="https://nicetooo.github.io/youtube-cc/"><strong>🌐 Official Website</strong></a> |
-  <a href="https://chrome.google.com/webstore/detail/YOUR_ID_HERE"><strong>📥 Install from Chrome Web Store</strong></a>
+  <a href="https://chromewebstore.google.com/detail/youtube-cc/gagahifolmmnnppdoohdbkibammhkpeb"><strong>📥 Install from Chrome Web Store</strong></a>
 </div>
 
 <br>
@@ -45,7 +45,7 @@ Fully localized and optimized for:
 ## 🚀 Installation
 
 ### Option 1: Chrome Web Store (Recommended)
-1. Visit the [CC Plus on Chrome Web Store](https://chrome.google.com/webstore/detail/YOUR_ID_HERE).
+1. Visit the [CC Plus on Chrome Web Store](https://chromewebstore.google.com/detail/youtube-cc/gagahifolmmnnppdoohdbkibammhkpeb).
 2. Click **"Add to Chrome"**.
 
 ### Option 2: Manual Installation (Developer Mode)
