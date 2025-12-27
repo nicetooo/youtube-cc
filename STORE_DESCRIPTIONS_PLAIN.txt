@@ -1,0 +1,156 @@
+Chrome Web Store Descriptions (Plain Text)
+========================================
+
+🇺🇸 English
+----------
+CC Plus - YouTube Transcript, Comment Search & Focus Mode
+
+Transform your YouTube experience with CC Plus!
+
+Are you tired of scrolling through endless video descriptions or fighting with the default subtitles? Do you want to find that one specific comment without clicking "Load more" a hundred times?
+
+CC Plus is the ultimate enhancement suite designed to make your YouTube viewing more productive, immersive, and distraction-free.
+
+WHY YOU SHOULD INSTALL IT:
+* Save Time: Instantly find what you need in the video comments.
+* Learn Better: Perfect for language learners and students who need to follow transcripts closely.
+* Immersive Viewing: Enjoy videos the way they were meant to be seen, without cluttered sidebars.
+
+KEY FEATURES:
+📝 Interactive Transcript Sidebar
+A synchronized transcript that auto-scrolls. Click any line to jump instantly to that moment in the video. Great for navigating long talks or tutorials!
+
+🔍 Advanced Comment Search
+Stop scrolling endlessly. Search and filter thousands of comments by keyword instantly to find the discussions that matter.
+
+🖥️ Wide Screen Cinema Mode
+Automatically expands the video player to fill your window. Perfect for ultrawide monitors.
+
+✨ Distraction-Free Focus Mode
+Hide sidebar recommendations and banners to focus 100% on the content.
+
+Install CC Plus today and upgrade how you watch YouTube!
+
+
+🇨🇳 Chinese (Simplified) - 简体中文
+--------------------------------
+Title: CC Plus - YouTube 字幕侧边栏、评论搜索与沉浸模式
+
+使用 CC Plus 彻底改变您的 YouTube 观看体验！
+
+您是否厌倦了在漫长的视频中寻找重点？想要快速找到特定的精彩评论，却只能不断点击“加载更多”？
+
+CC Plus 是为您打造的终极 YouTube 增强工具，旨在让您的观看体验更高效、更沉浸、更专注。
+
+为什么您应该安装它：
+* 节省时间：瞬间定位视频内容和评论讨论。
+* 学习利器：交互式字幕侧边栏让外语学习者或学生也能轻松跟上节奏。
+* 沉浸体验：告别杂乱的页面，享受影院级的宽屏观看模式。
+
+核心功能：
+📝 交互式字幕侧边栏
+自动滚动的同步字幕。点击任意一句字幕，视频即刻跳转至对应时间点。浏览长视频和教程的神器！
+
+🔍 高级评论搜索
+告别无尽的下滑。输入关键词，瞬间在成千上万条评论中找到您感兴趣的内容。
+
+🖥️ 宽屏影院模式
+自动将播放器扩展至窗口全宽。完美适配带鱼屏和宽屏显示器。
+
+✨ 专注模式
+隐藏侧边推荐栏和顶部横幅，让您 100% 专注于视频内容。
+
+立即安装 CC Plus，升级您的 YouTube 体验！
+
+
+🇨🇳 Chinese (Traditional) - 繁體中文
+---------------------------------
+Title: CC Plus - YouTube 字幕側邊欄、留言搜尋與沉浸模式
+
+使用 CC Plus 徹底改變您的 YouTube 觀看體驗！
+
+您是否厭倦了在漫長的影片中尋找重點？想要快速找到特定的精彩留言，卻只能不斷點擊「載入更多」？
+
+CC Plus 是為您打造的終極 YouTube 增強工具，旨在讓您的觀看體驗更高效、更沉浸、更專注。
+
+為什麼您應該安裝它：
+* 節省時間：瞬間定位影片內容和留言討論。
+* 學習利器：互動式字幕側邊欄讓外語學習者或學生也能輕鬆跟上節奏。
+* 沉浸體驗：告別雜亂的頁面，享受影院級的寬螢幕觀看模式。
+
+核心功能：
+📝 互動式字幕側邊欄
+自動捲動的同步字幕。點擊任一句字幕，影片即刻跳轉至對應時間點。瀏覽長影片和教學的神器！
+
+🔍 進階留言搜尋
+告別無盡的下滑。輸入關鍵字，瞬間在成千上萬條留言中找到您感興趣的內容。
+
+🖥️ 寬螢幕影院模式
+自動將播放器擴展至視窗全寬。完美適配超寬螢幕顯示器。
+
+✨ 專注模式
+隱藏側邊推薦欄和頂部橫幅，讓您 100% 專注於影片內容。
+
+立即安裝 CC Plus，升級您的 YouTube 體驗！
+
+
+🇯🇵 Japanese - 日本語
+------------------
+Title: CC Plus - YouTube 字幕サイドバー、コメント検索、没入モード
+
+CC PlusでYouTube体験を一変させましょう！
+
+長い動画の説明欄をスクロールしたり、標準の字幕機能に使いにくさを感じたりしていませんか？「もっと読み込む」を何度もクリックせずに、特定のコメントを見つけたいと思ったことはありませんか？
+
+CC Plusは、YouTubeでの視聴をより生産的で、没入感があり、集中できるものにするための究極の拡張機能です。
+
+インストールのメリット:
+* 時間の節約: 動画内の重要な箇所や、特定のコメントを瞬時に見つけられます。
+* 学習に最適: インタラクティブな字幕は、語学学習者や学生にとって強力なツールになります。
+* 没入感: 画面の乱雑さを排除し、本来あるべき姿で動画を楽しめます。
+
+主な機能:
+📝 インタラクティブな字幕サイドバー
+自動スクロールする同期字幕。任意の行をクリックすると、動画のその瞬間にジャンプします。講義やチュートリアルの視聴に最適です！
+
+🔍 高度なコメント検索
+終わりのないスクロールはもう不要。キーワードで何千ものコメントを瞬時にフィルタリングし、重要な議論を見つけ出します。
+
+🖥️ ワイドスクリーン・シネマモード
+動画プレーヤーを自動的にウィンドウ幅いっぱいに拡大します。ウルトラワイドモニターに最適です。
+
+✨ 集中モード
+サイドバーのおすすめ動画やバナーを非表示にし、コンテンツに100%集中できます。
+
+今すぐCC Plusをインストールして、YouTubeライフをアップグレードしましょう！
+
+
+🇰🇷 Korean - 한국어
+----------------
+Title: CC Plus - YouTube 자막 사이드바, 댓글 검색 및 시네마 모드
+
+CC Plus로 YouTube 시청 경험을 완전히 바꾸세요!
+
+긴 동영상의 설명을 계속 스크롤하거나 불편한 기본 자막과 씨름하고 계신가요? "더 보기"를 수없이 클릭하지 않고 특정 댓글을 찾고 싶으신가요?
+
+CC Plus는 YouTube 시청을 더욱 생산적이고, 몰입감 있게, 그리고 방해 요소 없이 만들어주는 최고의 확장 프로그램입니다.
+
+설치 권장 이유:
+* 시간 절약: 동영상의 핵심 내용이나 특정 댓글을 즉시 찾을 수 있습니다.
+* 학습 효율 향상: 대본을 따라가야 하는 언어 학습자와 학생들에게 완벽한 도구입니다.
+* 몰입감 있는 시청: 복잡한 사이드바 없이 영상 본연의 즐거움을 느껴보세요.
+
+핵심 기능:
+📝 대화형 자막 사이드바
+자동으로 스크롤되는 동기화된 자막입니다. 자막의 아무 줄이나 클릭하면 해당 영상 시점으로 즉시 이동합니다. 긴 강연이나 튜토리얼을 볼 때 매우 유용합니다!
+
+🔍 고급 댓글 검색
+끝도 없는 스크롤은 이제 그만. 키워드 하나로 수천 개의 댓글을 즉시 필터링하여 원하는 내용을 찾아보세요.
+
+🖥️ 와이드 스크린 시네마 모드
+동영상 플레이어를 브라우저 창 너비에 맞춰 자동으로 확장합니다. 울트라 와이드 모니터에 최적화되어 있습니다.
+
+✨ 집중 모드
+추천 동영상 사이드바와 배너를 숨겨 오직 콘텐츠에만 100% 집중할 수 있습니다.
+
+지금 CC Plus를 설치하고 YouTube 경험을 업그레이드하세요!

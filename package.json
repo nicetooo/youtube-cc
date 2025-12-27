@@ -1,6 +1,6 @@
 {
   "name": "youtube-cc",
-  "description": "manifest.json description",
+  "description": "Transform your YouTube viewing experience with interactive transcripts, immersive cinema mode, and advanced comment search.",
   "private": true,
   "version": "0.9.1",
   "type": "module",
