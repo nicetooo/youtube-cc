@@ -1,12 +1,12 @@
 {
   "display_transcription": {
-    "message": "显示转录"
+    "message": "显示字幕"
   },
   "search_transcription": {
-    "message": "搜索转录"
+    "message": "搜索字幕"
   },
   "transcription": {
-    "message": "转录"
+    "message": "字幕"
   },
   "wide_screen": {
     "message": "宽屏"
@@ -24,7 +24,7 @@
     "message": "搜索评论"
   },
   "transcription_sub": {
-    "message": "交互式侧边栏转录"
+    "message": "交互式侧边栏字幕"
   },
   "wide_screen_sub": {
     "message": "自动最大化沉浸感"

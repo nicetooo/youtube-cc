@@ -55,6 +55,9 @@
     });
   });
 
+  // 提取显示条件为 derived state
+  let shouldShow = $derived(isCaptionOn && location.pathname === "/watch");
+
   function toTimeStamp(time: string) {
     if (!video) {
       return;
@@ -281,8 +284,6 @@
     setUp();
   });
 
-  $inspect({ isExpand, isCaptionOn, caption, captions });
-
   // let isMenuOpen = $state(false);
   // let clicked = $state("");
 </script>
@@ -295,108 +296,56 @@
       style={`
        color: var(--yt-spec-text-primary);
        height: calc(${videoHeight}px - 24px);
+       max-height: 80vh;
        min-height: 596px;
        width: calc(100% - 24px);
        border-radius: 12px;
        padding:12px;
        margin-bottom:12px;
-       display: ${isCaptionOn && captions.length !== 0 && location.pathname === "/watch" ? "flex" : "none"};
+       display: ${shouldShow ? "flex" : "none"};
        border: 1px solid var(--yt-spec-10-percent-layer);
        background: ${window.getComputedStyle(document.documentElement).backgroundColor};
        `}
     >
-      {#if captions.length > 0}
-        <div
-          class="flex items-center gap-2"
-          style="height: 34px;margin-bottom: 6px;"
+      <div
+        class="flex items-center gap-2"
+        style="height: 34px;margin-bottom: 6px;"
+      >
+        <input
+          type="text"
+          class="flex-grow"
+          tabindex={0}
+          placeholder={i18n("search_transcription")}
+          onclick={(e) => e.stopPropagation()}
+          onkeypress={(e) => e.stopPropagation()}
+          bind:value={captionQuery}
+        />
+
+        <button
+          class="ytp-button"
+          style="width: 24px;height:24px;"
+          aria-label="settings"
+          title="settings"
+          onclick={() => (isExpand = false)}
         >
-          <input
-            type="text"
-            class="flex-grow"
-            tabindex={0}
-            placeholder={i18n("search_transcription")}
-            onclick={(e) => e.stopPropagation()}
-            onkeypress={(e) => e.stopPropagation()}
-            bind:value={captionQuery}
-          />
-          <!-- <div class="relative">
-            <button
-              class="ytp-button"
-              style="width: 24px;height:24px;"
-              aria-label="settings"
-              title="settings"
-              onclick={() => (isMenuOpen = !isMenuOpen)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                enable-background="new 0 0 24 24"
-                height="24"
-                viewBox="0 0 24 24"
-                width="24"
-                focusable="false"
-                aria-hidden="true"
-                style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
-                ><path
-                  fill="currentColor"
-                  d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"
-                ></path></svg
-              >
-            </button>
-            {#if isMenuOpen}
-              <div
-                class="absolute right-0 top-8 z-50 w-32 rounded-md border border-[var(--yt-spec-10-percent-layer)] bg-[var(--yt-spec-base-background)] py-1 shadow-lg"
-              >
-                {#each ["Cut", "Copy", "Paste"] as action}
-                  <button
-                    class="block w-full px-4 py-2 text-left text-sm text-[var(--yt-spec-text-primary)] hover:bg-[var(--yt-spec-10-percent-layer)]"
-                    onclick={() => {
-                      clicked = action;
-                      isMenuOpen = false;
-                    }}
-                  >
-                    {action}
-                  </button>
-                {/each}
-                <div
-                  class="my-1 h-px bg-[var(--yt-spec-10-percent-layer)]"
-                ></div>
-                <button
-                  class="block w-full px-4 py-2 text-left text-sm text-[var(--yt-spec-text-primary)] hover:bg-[var(--yt-spec-10-percent-layer)]"
-                  onclick={() => {
-                    clicked = "Delete";
-                    isMenuOpen = false;
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            {/if}
-          </div> -->
-
-          <button
-            class="ytp-button"
-            style="width: 24px;height:24px;"
-            aria-label="settings"
-            title="settings"
-            onclick={() => (isExpand = false)}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            enable-background="new 0 0 24 24"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            focusable="false"
+            aria-hidden="true"
+            style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
+            ><path
+              fill="currentColor"
+              d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z"
+            ></path></svg
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              enable-background="new 0 0 24 24"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-              focusable="false"
-              aria-hidden="true"
-              style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
-              ><path
-                fill="currentColor"
-                d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z"
-              ></path></svg
-            >
-          </button>
-        </div>
+        </button>
+      </div>
 
+      {#if captions.length > 0}
         <div
           class="transcript"
           onmouseenter={handleMouseEnter}
@@ -439,9 +388,17 @@
             </div>
           {/each}
         </div>
+      {:else}
+        <div class="loading-state">
+          <p
+            style="text-align: center; color: var(--yt-spec-text-secondary); padding: 20px;"
+          >
+            {i18n("loading_captions")}
+          </p>
+        </div>
       {/if}
     </div>
-  {:else if isCaptionOn && captions.length !== 0 && location.pathname === "/watch"}
+  {:else if shouldShow}
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div class="show-btn" onclick={() => (isExpand = true)}>

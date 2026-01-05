@@ -1,12 +1,12 @@
 {
   "display_transcription": {
-    "message": "顯示轉錄"
+    "message": "顯示字幕"
   },
   "search_transcription": {
-    "message": "搜尋轉錄"
+    "message": "搜尋字幕"
   },
   "transcription": {
-    "message": "轉錄"
+    "message": "字幕"
   },
   "wide_screen": {
     "message": "寬屏"
@@ -24,7 +24,7 @@
     "message": "搜尋評論"
   },
   "transcription_sub": {
-    "message": "互動式側邊欄轉錄"
+    "message": "互動式側邊欄字幕"
   },
   "wide_screen_sub": {
     "message": "自動最大化沉浸感"

@@ -25,9 +25,9 @@
 
 {#if $appStore.isStorageLoad}
   <div id="cc-plus-container" class="cc-plus-style-root">
+    <CaptionList isCaptionOn={$appStore.settings.caption} {port}></CaptionList>
     <SideComment isSideComment={$appStore.settings.sideComment} {port}
     ></SideComment>
-    <CaptionList isCaptionOn={$appStore.settings.caption} {port}></CaptionList>
     <AdsRemove isAdRemoveOn={$appStore.settings.removeAds} {port}></AdsRemove>
     <WideScreen isWideScreenOn={$appStore.settings.wideScreen} {port}
     ></WideScreen>
