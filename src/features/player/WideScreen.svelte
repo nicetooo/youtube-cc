@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { waitFor } from "./utils/wait";
+  import { waitFor } from "@/shared/utils/wait";
 
   let {
     isWideScreenOn,

@@ -1,13 +1,16 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import AdSkip from "./AdSkip.svelte";
-  import AdsRemove from "./AdsRemove.svelte";
-  import CaptionList from "./CaptionList.svelte";
-  import SideComment from "./SideComment.svelte";
-  import WideScreen from "./WideScreen.svelte";
+  import AdSkip from "@/features/ads/AdSkip.svelte";
+  import AdsRemove from "@/features/ads/AdsRemove.svelte";
+  import CaptionList from "@/features/caption/CaptionList.svelte";
+  import SideComment from "@/features/comments/SideComment.svelte";
+  import WideScreen from "@/features/player/WideScreen.svelte";
 
-  import { appStore, subscribeStorageChange } from "./store/settings.svelte";
-  import CommentSearch from "./CommentSearch.svelte";
+  import {
+    appStore,
+    subscribeStorageChange,
+  } from "@/shared/stores/settings.svelte";
+  import CommentSearch from "@/features/comments/CommentSearch.svelte";
 
   const port = chrome.runtime.connect();
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { observeNodeAdd } from "./utils/observe";
-  import { AD_REMOVAL_SELECTORS } from "./configs/ad-selectors";
+  import { observeNodeAdd } from "@/shared/utils/observe";
+  import { AD_REMOVAL_SELECTORS } from "./ad-selectors";
 
   let {
     isAdRemoveOn,

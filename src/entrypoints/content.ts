@@ -1,7 +1,7 @@
 import "~/assets/tailwind.css";
 import { mount, unmount } from "svelte";
-import ContentMain from "@/lib/ContentMain.svelte";
-import { waitFor } from "@/lib/utils/wait";
+import ContentMain from "@/shared/components/ContentMain.svelte";
+import { waitFor } from "@/shared/utils/wait";
 import type { ContentScriptContext } from "wxt/client";
 
 export default defineContentScript({

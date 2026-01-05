@@ -3,8 +3,8 @@
   import {
     appStore,
     subscribeStorageChange,
-  } from "../../lib/store/settings.svelte";
-  import { i18n } from "../../lib/i18n";
+  } from "@/shared/stores/settings.svelte";
+  import { i18n } from "@/shared/i18n/i18n";
   import { fade } from "svelte/transition";
 
   onMount(() => {

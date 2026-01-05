@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { observeNodeAdd } from "./utils/observe";
-  import { i18n } from "./i18n";
+  import { observeNodeAdd } from "@/shared/utils/observe";
+  import { i18n } from "@/shared/i18n/i18n";
   import { debounce } from "lodash-es";
-  import { waitFor } from "./utils/wait";
+  import { waitFor } from "@/shared/utils/wait";
 
   let {
     isCommentSearchOn,

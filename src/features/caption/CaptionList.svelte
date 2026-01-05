@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { waitFor } from "./utils/wait";
+  import { waitFor } from "@/shared/utils/wait";
   import { throttle } from "lodash-es";
-  import { i18n } from "./i18n";
+  import { i18n } from "@/shared/i18n/i18n";
 
   let {
     isCaptionOn,

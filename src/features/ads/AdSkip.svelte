@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { waitFor } from "./utils/wait";
+  import { waitFor } from "@/shared/utils/wait";
 
-  import { AD_SKIP_SELECTORS } from "./configs/ad-selectors";
+  import { AD_SKIP_SELECTORS } from "./ad-selectors";
 
   let {
     isAdSkipOn,

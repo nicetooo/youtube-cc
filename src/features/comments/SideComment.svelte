@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
-  import { waitFor } from "./utils/wait";
+  import { waitFor } from "@/shared/utils/wait";
 
   let {
     isSideComment,
