@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { waitFor } from "./utils/wait";
 
   let {
@@ -78,17 +79,20 @@
     }
 
     video = await waitFor<HTMLVideoElement>(
-      () => document.getElementsByClassName("html5-main-video")[0],
+      () =>
+        document.getElementsByClassName(
+          "html5-main-video"
+        )[0] as HTMLVideoElement,
       0
     );
-    videoContainer = await waitFor<HTMLDivElement>(() =>
-      document.querySelector(".html5-video-container")
+    videoContainer = await waitFor<HTMLDivElement>(
+      () => document.querySelector(".html5-video-container") as HTMLDivElement
     );
-    columns = await waitFor<HTMLDivElement>(() =>
-      document.getElementById("columns")
+    columns = await waitFor<HTMLDivElement>(
+      () => document.getElementById("columns") as HTMLDivElement
     );
-    chromeBottom = await waitFor<HTMLDivElement>(() =>
-      document.querySelector(".ytp-chrome-bottom")
+    chromeBottom = await waitFor<HTMLDivElement>(
+      () => document.querySelector(".ytp-chrome-bottom") as HTMLDivElement
     );
 
     initSize();

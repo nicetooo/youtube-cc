@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount, onDestroy } from "svelte";
   import { waitFor } from "./utils/wait";
 
   let {
@@ -37,60 +38,89 @@
       return;
     }
 
-    const captionList = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#caption-list")
+    await waitFor(() => document.querySelector(".html5-main-video"));
+    await waitFor(() => document.querySelector("ytd-watch-flexy"));
+    await waitFor(() => document.querySelector("ytd-comments"));
+    await waitFor(() => document.querySelector("#secondary-inner"));
+
+    const captionList = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#caption-list") as HTMLDivElement
     );
     disconnect = observeMutations(captionList);
 
-    const ytdComments = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#comments")
+    const ytdComments = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#comments") as HTMLDivElement
     );
     ytdComments.style.width = "100%";
 
-    const sideVideoList = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#secondary-inner")
+    const sideVideoList = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#secondary-inner") as HTMLDivElement
     );
-    const belowVideo = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#above-the-fold")
+    const belowVideo = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#above-the-fold") as HTMLDivElement
     );
-    const secondaryColumn = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#secondary")
-    );
-
-    const sideComment = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#side-comment")
+    const secondaryColumn = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#secondary") as HTMLDivElement
     );
 
-    sideComment.prepend(ytdComments);
+    const sideComment = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#side-comment") as HTMLDivElement
+    );
 
-    secondaryColumn?.append(sideComment);
-
-    belowVideo.appendChild(sideVideoList);
+    // Prevent loop: only move if not already there
+    if (ytdComments.parentElement !== sideComment) {
+      sideComment.prepend(ytdComments);
+    }
+    if (secondaryColumn && !secondaryColumn.contains(sideComment)) {
+      secondaryColumn.append(sideComment);
+    }
+    if (belowVideo.parentElement !== sideVideoList) {
+      // Logic for moving sideVideoList seems to be placing it into belowVideo
+      // creating the swapping effect.
+      // Confirm where sideVideoList is currently:
+      // standard layout: #secondary-inner is inside #secondary
+      // our layout: #secondary-inner is inside #above-the-fold
+      if (sideVideoList.parentElement !== belowVideo) {
+        belowVideo.appendChild(sideVideoList);
+      }
+    }
   };
 
   const recover = async () => {
+    // recovery also needs to be careful not to run on non-watch pages if SPA navigation happened
     if (location.pathname !== "/watch") {
       return;
     }
     disconnect?.();
-    const ytdComments = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#comments")
+    const ytdComments = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#comments") as HTMLDivElement
     );
     ytdComments.style.width = "unset";
 
-    const sideVideoList = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#secondary-inner")
+    const sideVideoList = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#secondary-inner") as HTMLDivElement
     );
-    const belowVideo = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#above-the-fold")
+    const belowVideo = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#above-the-fold") as HTMLDivElement
     );
-    const secondaryColumn = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#secondary")
+    const secondaryColumn = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#secondary") as HTMLDivElement
     );
 
-    belowVideo.appendChild(ytdComments);
+    // unexpected: if we are not in our modified state, do not recover blindly
+    // Default state: comments are in #below (or #primary-inner > #below), actually #comments is typically under #below
+    // To safe recover:
+    // Put comments back to #belowVideo (which is likely #above-the-fold or #below based on YT version, assuming existing vars are correct target)
+    // Put sideVideoList back to #secondary
 
-    secondaryColumn.appendChild(sideVideoList);
+    // Check if recover is needed
+    if (ytdComments.parentElement !== belowVideo && belowVideo) {
+      belowVideo.appendChild(ytdComments);
+    }
+
+    if (sideVideoList.parentElement !== secondaryColumn && secondaryColumn) {
+      secondaryColumn.appendChild(sideVideoList);
+    }
   };
 
   $effect(() => {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import AdSkip from "./AdSkip.svelte";
   import AdsRemove from "./AdsRemove.svelte";
   import CaptionList from "./CaptionList.svelte";

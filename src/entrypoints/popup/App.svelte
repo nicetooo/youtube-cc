@@ -5,7 +5,7 @@
     subscribeStorageChange,
   } from "../../lib/store/settings.svelte";
   import { i18n } from "../../lib/i18n";
-  import { fade, slide } from "svelte/transition";
+  import { fade } from "svelte/transition";
 
   onMount(() => {
     subscribeStorageChange();

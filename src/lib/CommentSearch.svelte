@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { observeNodeAdd } from "./utils/observe";
   import { i18n } from "./i18n";
   import { debounce } from "lodash-es";
@@ -12,9 +13,7 @@
     isSideComment: boolean;
   } = $props();
 
-  let commentSearch: HTMLDivElement | null = $state(null);
   let commentShow: boolean = $state(false);
-  let input: HTMLInputElement | null = $state(null);
   let searchValue: string = $state("");
 
   function search() {
@@ -52,16 +51,17 @@
   });
 
   async function setUpSearch() {
-    const ytdComments = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#comments ytd-item-section-renderer"),
+    const ytdComments = await waitFor<HTMLDivElement>(
+      () =>
+        document.querySelector(
+          "#comments ytd-item-section-renderer"
+        ) as HTMLDivElement
     );
     await waitFor(() =>
-      document.querySelector(
-        "ytd-comment-thread-renderer yt-attributed-string",
-      ),
+      document.querySelector("ytd-comment-thread-renderer yt-attributed-string")
     );
-    const search = await waitFor<HTMLDivElement>(() =>
-      document.querySelector("#comment-search"),
+    const search = await waitFor<HTMLDivElement>(
+      () => document.querySelector("#comment-search") as HTMLDivElement
     );
     commentShow = true;
     ytdComments.style.position = "relative";
@@ -74,7 +74,7 @@
 
   $inspect({ isCommentSearchOn });
   onMount(() => {
-    console.log("Current UI Language:", browser.i18n.getUILanguage());
+    // console.log("Current UI Language:", browser.i18n.getUILanguage());
     setUpSearch();
   });
 </script>
@@ -90,14 +90,12 @@
     z-index: 100;
     border-radius: 99px;
 `}
-  bind:this={commentSearch}
 >
   <div class="flex" style="height: 34px;border-radius: 99px;">
     <input
       type="text"
       class="flex-grow"
       tabindex={0}
-      bind:this={input}
       bind:value={searchValue}
       placeholder={i18n("search_comment")}
       onclick={(e) => e.stopPropagation()}

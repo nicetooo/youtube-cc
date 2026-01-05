@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { waitFor } from "./utils/wait";
   import { throttle } from "lodash-es";
   import { i18n } from "./i18n";
@@ -23,7 +24,6 @@
   let timedtextUrl: URL | null = null;
   let videoId: string | null = $state(null);
   let caption = $state("");
-  let input = $state();
   let captionQuery = $state("");
   let isMouseHover = false;
   let isAutoClicked = false;
@@ -34,7 +34,7 @@
   }
 
   let captions = $derived.by(() => {
-    if (!browser) {
+    if (typeof window === "undefined") {
       return [];
     }
     const parser = new DOMParser();
@@ -50,7 +50,7 @@
   });
 
   let filteredCaption = $derived.by(() => {
-    return captions.filter(({ content = "" }, i) => {
+    return captions.filter(({ content = "" }, _i) => {
       return content?.toLowerCase().includes(captionQuery.toLowerCase());
     });
   });
@@ -85,7 +85,7 @@
       return;
     }
     const lines = document.getElementsByClassName(
-      "caption-line",
+      "caption-line"
     ) as HTMLCollectionOf<HTMLDivElement>;
     const line = Array.from(lines).filter((l) => {
       const { start = 0, dur = 0 } = l.dataset;
@@ -119,7 +119,7 @@
       return;
     }
     const subTitleBtn = document.getElementsByClassName(
-      "ytp-subtitles-button",
+      "ytp-subtitles-button"
     )[0] as HTMLDivElement;
     if (!subTitleBtn) {
       return;
@@ -182,9 +182,9 @@
     video = await waitFor<HTMLVideoElement>(
       () =>
         document.getElementsByClassName(
-          "html5-main-video",
+          "html5-main-video"
         )[0] as HTMLVideoElement,
-      0,
+      0
     );
     video.addEventListener("timeupdate", function () {
       if (!video) {
@@ -314,7 +314,6 @@
             type="text"
             class="flex-grow"
             tabindex={0}
-            bind:this={input}
             placeholder={i18n("search_transcription")}
             onclick={(e) => e.stopPropagation()}
             onkeypress={(e) => e.stopPropagation()}

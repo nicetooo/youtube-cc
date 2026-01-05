@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { waitFor } from "./utils/wait";
 
   import { AD_SKIP_SELECTORS } from "./configs/ad-selectors";
@@ -30,9 +31,9 @@
     video = await waitFor<HTMLVideoElement>(
       () =>
         document.getElementsByClassName(
-          "html5-main-video",
+          "html5-main-video"
         )[0] as HTMLVideoElement,
-      0,
+      0
     );
 
     video.addEventListener("timeupdate", onTimeUpdate);

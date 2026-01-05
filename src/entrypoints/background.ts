@@ -1,5 +1,5 @@
 export default defineBackground(() => {
-  const queue: any = [];
+  const queue: Array<(p: chrome.runtime.Port) => void> = [];
 
   chrome.runtime.onConnect.addListener((port) => {
     chrome.webRequest.onBeforeRequest.addListener(
@@ -26,18 +26,21 @@ export default defineBackground(() => {
     });
 
     if (port) {
-      // console.log("connected run queue");
-      while (!!queue.length) {
+      while (queue.length > 0) {
         const func = queue.pop();
-        func(port);
+        if (func) {
+          func(port);
+        }
       }
     }
   });
 });
 
-function handleRequest(details: any, port: chrome.runtime.Port) {
-  if (details.url.includes("/api/timedtext")) {
-    // console.log("more text request");
+function handleRequest(
+  details: chrome.webRequest.WebRequestDetails,
+  port: chrome.runtime.Port
+) {
+  if (details.url && details.url.includes("/api/timedtext")) {
     port.postMessage({
       type: "timedtext_url",
       url: details.url,
@@ -46,9 +49,9 @@ function handleRequest(details: any, port: chrome.runtime.Port) {
 }
 
 function handleUrlUpdate(
-  tabId: any,
-  changeInfo: any,
-  tab: any,
+  _tabId: number,
+  changeInfo: chrome.tabs.TabChangeInfo,
+  _tab: chrome.tabs.Tab,
   port: chrome.runtime.Port
 ) {
   if (changeInfo.url) {

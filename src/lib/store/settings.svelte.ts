@@ -31,9 +31,9 @@ appStore.subscribe(async (value) => {
       });
     } else {
       /** if has no storage populate store with default setting */
-      appStore.update(({ settings }) => {
+      appStore.update((v) => {
         return {
-          settings,
+          settings: v.settings,
           isStorageLoad: true,
         };
       });
@@ -51,15 +51,23 @@ appStore.subscribe(async (value) => {
   chrome.storage.local.set({ settings: value.settings }, () => {});
 });
 
+let isSubscribed = false;
+
 export function subscribeStorageChange() {
+  if (isSubscribed) return;
+  isSubscribed = true;
+
   // console.log("sub");
   chrome.storage.onChanged.addListener((changes) => {
     const { settings } = changes;
     // console.log("change", settings);
+    if (!settings) return;
+
     if (settings && isEqual(settings.newValue, settings.oldValue)) {
       // console.log("is equal");
       return;
     }
+
     if (settings) {
       appStore.update((v) => {
         return {

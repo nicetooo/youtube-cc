@@ -3,8 +3,7 @@ export function observeNodeAdd(callback: () => void) {
   let observer: MutationObserver;
 
   const observe = () => {
-    console.log("observe");
-    observer = new MutationObserver((mutationsList, observer) => {
+    observer = new MutationObserver((mutationsList, _observer) => {
       for (const mutation of mutationsList) {
         if (mutation.type === "childList") {
           if (mutation.addedNodes.length) {
@@ -35,7 +34,7 @@ export function observeNodeAdd(callback: () => void) {
   checkElement();
 
   return () => {
-    console.log("observer disconnected");
+    // console.log("observer disconnected");
     observer.disconnect();
     needCheck = false;
   };

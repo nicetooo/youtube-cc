@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { observeNodeAdd } from "./utils/observe";
   import { AD_REMOVAL_SELECTORS } from "./configs/ad-selectors";
 
