@@ -15,6 +15,7 @@ export const messages = {
     side_comments_sub: "Shift comments to the right",
     search_comment_sub: "Search and filter comments",
     loading_captions: "Loading captions... Try toggling YouTube's CC button if captions don't appear.",
+    swap_captions: "Swap Primary/Secondary",
   },
   zh_CN: {
     display_transcription: "显示字幕",
@@ -32,6 +33,7 @@ export const messages = {
     side_comments_sub: "将评论移至右侧",
     search_comment_sub: "搜索和过滤评论",
     loading_captions: "正在加载字幕... 如果字幕未显示,请尝试开关 YouTube 的字幕按钮 (CC)。",
+    swap_captions: "交换主/副字幕",
   },
   zh_TW: {
     display_transcription: "顯示字幕",
@@ -49,6 +51,7 @@ export const messages = {
     side_comments_sub: "將評論移至右側",
     search_comment_sub: "搜尋和過濾評論",
     loading_captions: "正在載入字幕... 如果字幕未顯示,請嘗試開關 YouTube 的字幕按鈕 (CC)。",
+    swap_captions: "交換主/副字幕",
   },
   ja: {
     display_transcription: "文字起こしを表示",
@@ -66,6 +69,7 @@ export const messages = {
     side_comments_sub: "コメントを右側に移動",
     search_comment_sub: "コメントの検索とフィルタリング",
     loading_captions: "字幕を読み込んでいます... 字幕が表示されない場合は、YouTubeのCCボタンを切り替えてみてください。",
+    swap_captions: "主/副字幕の入れ替え",
   },
   ko: {
     display_transcription: "전사 표시",
@@ -83,6 +87,7 @@ export const messages = {
     side_comments_sub: "댓글을 오른쪽으로 이동",
     search_comment_sub: "댓글 검색 및 필터링",
     loading_captions: "자막을 불러오는 중... 자막이 표시되지 않으면 YouTube의 CC 버튼을 전환해 보세요.",
+    swap_captions: "주/부 자막 교체",
   },
 };
 

@@ -22,8 +22,10 @@
   let videoCurrentTime: number = $state(0);
 
   let timedtextUrl: URL | null = null;
+  let secondTimedtextUrl: URL | null = null; // 第二语言字幕
   let videoId: string | null = $state(null);
   let caption = $state("");
+  let secondCaption = $state(""); // 第二语言字幕内容
   let captionQuery = $state("");
   let isMouseHover = false;
   let isAutoClicked = false;
@@ -33,20 +35,57 @@
     return doc.documentElement.textContent;
   }
 
-  let captions = $derived.by(() => {
+  interface CaptionItem {
+    start: string;
+    dur: string;
+    content: string | null;
+    secondContent: string;
+  }
+
+  let captions = $derived.by((): CaptionItem[] => {
     if (typeof window === "undefined") {
       return [];
     }
     const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(caption, "text/xml");
 
-    // 获取所有的 <text> 元素
+    // 解析主字幕
+    const xmlDoc = parser.parseFromString(caption, "text/xml");
     const texts = xmlDoc.getElementsByTagName("text");
-    return Array.from(texts).map((text) => ({
+    const primaryCaptions = Array.from(texts).map((text) => ({
       start: text.getAttribute("start") || "",
       dur: text.getAttribute("dur") || "",
       content: text.textContent ? decodeHTML(text.textContent) : "",
     }));
+
+    // 如果没有第二字幕,直接返回主字幕
+    if (!secondCaption) {
+      return primaryCaptions.map((p) => ({ ...p, secondContent: "" }));
+    }
+
+    // 解析第二字幕
+    const xmlDoc2 = parser.parseFromString(secondCaption, "text/xml");
+    const texts2 = xmlDoc2.getElementsByTagName("text");
+    const secondaryCaptions = Array.from(texts2).map((text) => ({
+      start: text.getAttribute("start") || "",
+      dur: text.getAttribute("dur") || "",
+      content: text.textContent ? decodeHTML(text.textContent) : "",
+    }));
+
+    // 合并主辅字幕
+    return primaryCaptions.map((primary) => {
+      // 查找时间轴匹配的第二字幕
+      const secondary = secondaryCaptions.find((sec) => {
+        const primaryStart = Number(primary.start);
+        const secStart = Number(sec.start);
+        // 允许0.5秒的误差
+        return Math.abs(primaryStart - secStart) < 0.5;
+      });
+
+      return {
+        ...primary,
+        secondContent: secondary?.content || "",
+      };
+    });
   });
 
   let filteredCaption = $derived.by(() => {
@@ -79,8 +118,30 @@
     }
     const res = await fetch(timedtextUrl.toString());
     const text = await res.text();
-    // console.log({ text });
     caption = text;
+  }
+
+  async function getSecondCaptions() {
+    if (!secondTimedtextUrl) {
+      return;
+    }
+    const res = await fetch(secondTimedtextUrl.toString());
+    const text = await res.text();
+    secondCaption = text;
+  }
+
+  function swapCaptions() {
+    if (!secondCaption) return;
+
+    // 交换 URL (引用地址)
+    const tempUrl = timedtextUrl;
+    timedtextUrl = secondTimedtextUrl;
+    secondTimedtextUrl = tempUrl;
+
+    // 交换内容 (Svelte 状态)
+    const tempCaption = caption;
+    caption = secondCaption;
+    secondCaption = tempCaption;
   }
 
   const scrollParentToChild = throttle(() => {
@@ -235,7 +296,9 @@
       switch (message.type) {
         case "url_change": {
           timedtextUrl = null;
+          secondTimedtextUrl = null;
           caption = "";
+          secondCaption = "";
           isAutoClicked = false;
           videoId = new URL(location.href).searchParams.get("v");
           setUp();
@@ -253,27 +316,51 @@
           if (urlCalled?.searchParams.get("v") !== videoId) {
             return;
           }
+
+          // 关键修复:检查是否与当前已有的 URL 完全一致(避免 fetch 拦截形成的无限循环)
+          if (
+            urlCalled.toString() === timedtextUrl?.toString() ||
+            urlCalled.toString() === secondTimedtextUrl?.toString()
+          ) {
+            return;
+          }
+
           if (!timedtextUrl) {
+            // 第一个字幕
             timedtextUrl = urlCalled;
             getCaptions();
           } else {
-            if (
-              urlCalled.searchParams.get("tlang") &&
-              urlCalled.searchParams.get("tlang") ===
-                timedtextUrl?.searchParams.get("tlang")
-            ) {
-              return;
-            }
+            // 检查是否是相同语言
+            const newLang = urlCalled.searchParams.get("lang");
+            const newTlang = urlCalled.searchParams.get("tlang");
+            const primaryLang = timedtextUrl.searchParams.get("lang");
+            const primaryTlang = timedtextUrl.searchParams.get("tlang");
 
-            if (
-              urlCalled.searchParams.get("lang") ===
-              timedtextUrl?.searchParams.get("lang")
-            ) {
-              return;
-            }
+            const isSameLang =
+              newLang === primaryLang && newTlang === primaryTlang;
 
-            timedtextUrl = urlCalled;
-            getCaptions();
+            if (isSameLang) {
+              // 相同语言,更新主字幕
+              timedtextUrl = urlCalled;
+              getCaptions();
+            } else if (secondTimedtextUrl) {
+              // 已有第二字幕,检查是否相同
+              const secondLang = secondTimedtextUrl.searchParams.get("lang");
+              const secondTlang = secondTimedtextUrl.searchParams.get("tlang");
+              const isSameAsSecond =
+                newLang === secondLang && newTlang === secondTlang;
+
+              if (!isSameAsSecond) {
+                // 不同的第二字幕,更新
+                secondTimedtextUrl = urlCalled;
+                getSecondCaptions();
+              }
+              // 如果相同,忽略(避免重复请求)
+            } else {
+              // 没有第二字幕,添加
+              secondTimedtextUrl = urlCalled;
+              getSecondCaptions();
+            }
           }
           break;
         }
@@ -349,6 +436,23 @@
           {/if}
         </div>
 
+        {#if secondCaption}
+          <button
+            class="ytp-button"
+            style="width: 24px;height:24px;display: flex; align-items: center; justify-content: center;"
+            aria-label="swap"
+            title={i18n("swap_captions")}
+            onclick={swapCaptions}
+          >
+            <svg viewBox="0 0 24 24" height="20" width="20"
+              ><path
+                fill="currentColor"
+                d="M16 17.01V10h-2v7.01h-3L15 21l4-3.99h-3zM9 3L5 6.99h3V14h2V6.99h3L9 3z"
+              ></path></svg
+            >
+          </button>
+        {/if}
+
         <button
           class="ytp-button"
           style="width: 24px;height:24px;"
@@ -379,7 +483,7 @@
           onmouseenter={handleMouseEnter}
           onmouseleave={handleMouseLeave}
         >
-          {#each filteredCaption as { start, dur, content }}
+          {#each filteredCaption as { start, dur, content, secondContent }}
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <div
               role="button"
@@ -394,7 +498,12 @@
                 (e.key === "Enter" || e.key === " ") && toTimeStamp(start)}
             >
               <span class="timestamp">【{formatTimestamp(start)}】</span>
-              <span class="text">{content}</span>
+              <div class="caption-content">
+                <span class="text">{content}</span>
+                {#if secondContent}
+                  <span class="text secondary">{secondContent}</span>
+                {/if}
+              </div>
               <span
                 class="comment flex-shrink-0"
                 onclick={addComment}
@@ -481,6 +590,13 @@
     display: flex;
   }
 
+  .caption-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
   .timestamp {
     flex-shrink: 0;
     color: var(--yt-live-chat-secondary-text-color);
@@ -489,6 +605,12 @@
 
   .text {
     color: var(--yt-spec-text-primary);
+  }
+
+  .text.secondary {
+    color: var(--yt-spec-text-secondary);
+    font-size: 0.9em;
+    font-style: italic;
   }
 
   .caption-line:hover {
