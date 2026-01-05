@@ -72,7 +72,6 @@
     }
   }
 
-  $inspect({ isCommentSearchOn });
   onMount(() => {
     // console.log("Current UI Language:", browser.i18n.getUILanguage());
     setUpSearch();
@@ -91,10 +90,14 @@
     border-radius: 99px;
 `}
 >
-  <div class="flex" style="height: 34px;border-radius: 99px;">
+  <div
+    class="flex"
+    style="height: 34px;border-radius: 99px; position: relative;"
+  >
     <input
       type="text"
       class="flex-grow"
+      style="padding-right: 32px;"
       tabindex={0}
       bind:value={searchValue}
       placeholder={i18n("search_comment")}
@@ -102,6 +105,31 @@
       onkeypress={(e) => e.stopPropagation()}
       oninput={debounce(search, 1000)}
     />
+    {#if searchValue}
+      <button
+        class="clear-btn"
+        aria-label="clear"
+        title="clear"
+        onclick={() => {
+          searchValue = "";
+          search();
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18"
+          viewBox="0 0 24 24"
+          width="18"
+          focusable="false"
+          aria-hidden="true"
+          style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
+          ><path
+            fill="currentColor"
+            d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z"
+          ></path></svg
+        >
+      </button>
+    {/if}
   </div>
 </div>
 
@@ -118,5 +146,26 @@
     padding: 6px;
     padding-left: 12px;
     font-size: 13px;
+  }
+
+  .clear-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--yt-spec-text-secondary);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .clear-btn:hover {
+    opacity: 1;
   }
 </style>

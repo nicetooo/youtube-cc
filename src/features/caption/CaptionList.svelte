@@ -311,15 +311,40 @@
         class="flex items-center gap-2"
         style="height: 34px;margin-bottom: 6px;"
       >
-        <input
-          type="text"
-          class="flex-grow"
-          tabindex={0}
-          placeholder={i18n("search_transcription")}
-          onclick={(e) => e.stopPropagation()}
-          onkeypress={(e) => e.stopPropagation()}
-          bind:value={captionQuery}
-        />
+        <div style="position: relative; flex-grow: 1;">
+          <input
+            type="text"
+            class="flex-grow"
+            style="width: 100%; padding-right: 32px;"
+            tabindex={0}
+            placeholder={i18n("search_transcription")}
+            onclick={(e) => e.stopPropagation()}
+            onkeypress={(e) => e.stopPropagation()}
+            bind:value={captionQuery}
+          />
+          {#if captionQuery}
+            <button
+              class="clear-btn"
+              aria-label="clear"
+              title="clear"
+              onclick={() => (captionQuery = "")}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="18"
+                viewBox="0 0 24 24"
+                width="18"
+                focusable="false"
+                aria-hidden="true"
+                style="pointer-events: none; display: inherit; width: 100%; height: 100%;"
+                ><path
+                  fill="currentColor"
+                  d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z"
+                ></path></svg
+              >
+            </button>
+          {/if}
+        </div>
 
         <button
           class="ytp-button"
@@ -479,5 +504,26 @@
 
   .caption-line:hover .comment {
     display: block;
+  }
+
+  .clear-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--yt-spec-text-secondary);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .clear-btn:hover {
+    opacity: 1;
   }
 </style>
