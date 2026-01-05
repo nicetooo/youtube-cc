@@ -16,6 +16,7 @@
     "lint:fix": "eslint src --ext .ts,.svelte --fix",
     "format": "prettier --write 'src/**/*.{ts,svelte,css}'",
     "format:check": "prettier --check 'src/**/*.{ts,svelte,css}'",
+    "setup": "./dev-setup.sh",
     "postinstall": "wxt prepare"
   },
   "devDependencies": {

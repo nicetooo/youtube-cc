@@ -12,7 +12,21 @@ export default defineConfig({
   },
   runner: {
     // Automatically open YouTube when starting dev mode
-    startUrls: ["https://www.youtube.com"],
-    chromiumArgs: ["--lang=en-US"],
+    startUrls: ["https://www.youtube.com/watch?v=dQw4w9WgXcQ"],
+    
+    // Disable other extensions for cleaner dev environment
+    disabled: false,
+    
+    // Chrome binary path for macOS
+    binaries: {
+      chrome: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    },
+    
+    // Browser arguments for better dev experience
+    chromiumArgs: [
+      "--lang=en-US",
+      // Auto-open DevTools (optional, comment out if not needed)
+      // "--auto-open-devtools-for-tabs",
+    ],
   },
 });
