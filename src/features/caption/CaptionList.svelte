@@ -413,7 +413,7 @@
     border: 1px solid var(--yt-spec-10-percent-layer);
     border-radius: 99px;
     height: 34px;
-    margin: 4px;
+    width: calc(100% - 24px);
     margin-bottom: 12px;
     font-size: 14px;
     font-weight: 500;
