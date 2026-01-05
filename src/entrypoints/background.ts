@@ -41,6 +41,7 @@ function handleRequest(
   port: chrome.runtime.Port
 ) {
   if (details.url && details.url.includes("/api/timedtext")) {
+    console.log("[Background] Timedtext URL intercepted:", details.url);
     port.postMessage({
       type: "timedtext_url",
       url: details.url,

@@ -231,7 +231,7 @@
     videoId = new URL(location.href).searchParams.get("v");
     // console.log("caption list onmount");
     port.onMessage.addListener(function (message) {
-      // console.log("onMessage", message);
+      console.log("[CaptionList] onMessage", message);
       switch (message.type) {
         case "url_change": {
           timedtextUrl = null;
@@ -242,7 +242,10 @@
           break;
         }
         case "timedtext_url": {
-          // console.log(JSON.stringify(message));
+          console.log(
+            "[CaptionList] timedtext_url received:",
+            JSON.stringify(message)
+          );
           const urlCalled = new URL(message.url);
           if (urlCalled.searchParams.get("fmt")) {
             urlCalled.searchParams.delete("fmt");
@@ -416,7 +419,7 @@
       {:else}
         <div class="loading-state">
           <p
-            style="text-align: center; color: var(--yt-spec-text-secondary); padding: 20px;"
+            style="text-align: center; color: var(--yt-spec-text-secondary); padding: 20px; line-height: 1.5; font-size: 13px;"
           >
             {i18n("loading_captions")}
           </p>
