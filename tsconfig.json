@@ -18,7 +18,8 @@
     }
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "wxt-env.d.ts"
   ],
   "exclude": [
     "node_modules",

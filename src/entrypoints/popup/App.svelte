@@ -55,7 +55,7 @@
     <div
       class="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[9px] font-bold text-gray-400 uppercase tracking-tighter"
     >
-      v1.0.0
+      v{__APP_VERSION__}
     </div>
   </header>
 

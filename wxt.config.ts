@@ -1,4 +1,5 @@
 import { defineConfig } from "wxt";
+import pkg from "./package.json";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -30,6 +31,9 @@ export default defineConfig({
     ],
   },
   vite: () => ({
+    define: {
+      __APP_VERSION__: JSON.stringify(pkg.version),
+    },
     build: {
       minify: "terser",
       terserOptions: {
@@ -41,3 +45,4 @@ export default defineConfig({
     },
   }),
 });
+
