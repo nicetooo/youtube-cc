@@ -27,6 +27,7 @@
   let caption = $state("");
   let secondCaption = $state(""); // 第二语言字幕内容
   let captionQuery = $state("");
+  let hasChat = $state(false);
   let isMouseHover = false;
   let isAutoClicked = false;
 
@@ -242,7 +243,16 @@
     if (!captionsElm) {
       return;
     }
+    const content = await Promise.race([
+      waitFor(() => document.querySelector("#comments #sections")),
+      waitFor(() => document.querySelector("#chat #chatframe")),
+    ]);
 
+    if (content.id === "chatframe") {
+      hasChat = true;
+    } else {
+      hasChat = false;
+    }
     video = await waitFor<HTMLVideoElement>(
       () =>
         document.getElementsByClassName(
@@ -379,7 +389,9 @@
 </script>
 
 <div bind:this={captionsElm} id="caption-list">
-  {#if isExpand}
+  {#if hasChat}
+    <div id="empty-caption-list"></div>
+  {:else if isExpand}
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
       class="flex flex-col"

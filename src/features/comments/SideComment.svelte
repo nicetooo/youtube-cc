@@ -11,6 +11,7 @@
   } = $props();
 
   let captionListHeight = $state(0);
+  let hasChat = $state(false);
   let disconnect: (() => void) | null = null;
 
   function observeMutations(node: HTMLDivElement) {
@@ -42,6 +43,16 @@
     await waitFor(() => document.querySelector("ytd-watch-flexy"));
     await waitFor(() => document.querySelector("ytd-comments"));
     await waitFor(() => document.querySelector("#secondary-inner"));
+    const content = await Promise.race([
+      waitFor(() => document.querySelector("#comments #sections")),
+      waitFor(() => document.querySelector("#chat #chatframe")),
+    ]);
+    if (content.id === "chatframe") {
+      hasChat = true;
+      recover();
+      return;
+    }
+    hasChat = false;
 
     const captionList = await waitFor<HTMLDivElement>(
       () => document.querySelector("#caption-list") as HTMLDivElement
@@ -164,7 +175,7 @@
     border-radius: 12px;
     padding:12px;
     margin-bottom:12px;
-    display: ${isSideComment ? "flex" : "none"};
+    display: ${isSideComment && !hasChat ? "flex" : "none"};
     border: 1px solid var(--yt-spec-10-percent-layer);
     background: ${window.getComputedStyle(document.documentElement).backgroundColor};
     `}
