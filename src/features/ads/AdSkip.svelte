@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { waitFor } from "@/shared/utils/wait";
 
-  import { AD_SKIP_SELECTORS } from "./ad-selectors";
+  import { getAdSelectors, SELECTORS_STORAGE_KEY } from "./ad-selectors";
 
   let {
     isAdSkipOn,
@@ -12,13 +12,14 @@
     port: chrome.runtime.Port;
   } = $props();
   let video: HTMLVideoElement | undefined = $state();
+  let selectors = $state<any>(null);
 
   const onTimeUpdate = () => {
-    if (!video || !isAdSkipOn) {
+    if (!video || !isAdSkipOn || !selectors) {
       return;
     }
 
-    const ad = document.querySelector(AD_SKIP_SELECTORS.OVERLAY);
+    const ad = document.querySelector(selectors.AD_SKIP_SELECTORS.OVERLAY);
     if (ad !== null) {
       video.currentTime = 999;
     }
@@ -39,9 +40,17 @@
     video.addEventListener("timeupdate", onTimeUpdate);
   };
 
-  $inspect({ isAdSkipOn });
+  onMount(async () => {
+    // Initial load
+    selectors = await getAdSelectors();
 
-  onMount(() => {
+    // Listen for updates
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area === "local" && changes[SELECTORS_STORAGE_KEY]) {
+        selectors = changes[SELECTORS_STORAGE_KEY].newValue;
+      }
+    });
+
     port.onMessage.addListener(function (message) {
       switch (message.type) {
         case "url_change": {

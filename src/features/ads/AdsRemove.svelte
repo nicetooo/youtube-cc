@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { observeNodeAdd } from "@/shared/utils/observe";
-  import { AD_REMOVAL_SELECTORS } from "./ad-selectors";
+  import { getAdSelectors, SELECTORS_STORAGE_KEY } from "./ad-selectors";
 
   let {
     isAdRemoveOn,
@@ -10,10 +10,12 @@
     port: chrome.runtime.Port;
   } = $props();
 
+  let selectors = $state<any>(null);
   let disconnect: () => void | null;
 
-  const removeElements = (selectors: string[]) => {
-    selectors.forEach((selector) => {
+  const removeElements = (selectorsList: string[]) => {
+    if (!selectorsList) return;
+    selectorsList.forEach((selector) => {
       const elements = document.querySelectorAll(selector);
       elements.forEach((el) => el.remove());
     });
@@ -21,30 +23,41 @@
 
   const setUp = () =>
     observeNodeAdd(() => {
+      if (!selectors) return;
       const path = location.pathname;
 
+      const removalSelectors = selectors.AD_REMOVAL_SELECTORS;
       if (path === "/") {
-        removeElements(AD_REMOVAL_SELECTORS.HOME);
+        removeElements(removalSelectors.HOME);
       } else if (path === "/watch") {
-        removeElements(AD_REMOVAL_SELECTORS.WATCH);
+        removeElements(removalSelectors.WATCH);
       } else if (path === "/results") {
-        removeElements(AD_REMOVAL_SELECTORS.RESULTS);
+        removeElements(removalSelectors.RESULTS);
       }
 
       // Always check for global ad elements
-      removeElements(AD_REMOVAL_SELECTORS.GLOBAL);
+      removeElements(removalSelectors.GLOBAL);
     });
 
   $effect(() => {
-    if (isAdRemoveOn) {
+    if (isAdRemoveOn && selectors) {
       disconnect = setUp();
     } else {
       disconnect?.();
     }
   });
 
-  $inspect({ isAdRemoveOn });
-  onMount(() => {
+  onMount(async () => {
+    // Initial load
+    selectors = await getAdSelectors();
+
+    // Listen for updates
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area === "local" && changes[SELECTORS_STORAGE_KEY]) {
+        selectors = changes[SELECTORS_STORAGE_KEY].newValue;
+      }
+    });
+
     if (isAdRemoveOn) {
       disconnect = setUp();
     }

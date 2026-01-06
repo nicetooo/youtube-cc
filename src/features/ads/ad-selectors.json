@@ -1,0 +1,24 @@
+{
+    "AD_REMOVAL_SELECTORS": {
+        "HOME": [
+            "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)",
+            "#masthead-ad"
+        ],
+        "WATCH": [
+            "ytd-ad-slot-renderer",
+            "#player-ads",
+            "ytd-engagement-panel-section-list-renderer:has(ytd-ad-slot-renderer)"
+        ],
+        "RESULTS": [
+            "ytd-ad-slot-renderer"
+        ],
+        "GLOBAL": [
+            "ytd-ad-slot-renderer",
+            "ytd-promoted-sparkles-web-renderer"
+        ]
+    },
+    "AD_SKIP_SELECTORS": {
+        "OVERLAY": ".ytp-ad-player-overlay-layout",
+        "SKIP_BUTTON": ".ytp-ad-skip-button, .ytp-skip-ad-button"
+    }
+}

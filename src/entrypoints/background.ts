@@ -1,5 +1,18 @@
+import { updateSelectorsFromGithub } from "@/features/ads/ad-selectors";
+
 export default defineBackground(() => {
   const queue: Array<(p: chrome.runtime.Port) => void> = [];
+
+  // Set up periodic update
+  chrome.alarms.create("update-selectors", { periodInMinutes: 6 * 60 }); // Every 6 hours
+  chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === "update-selectors") {
+      updateSelectorsFromGithub();
+    }
+  });
+
+  // Initial update on startup
+  updateSelectorsFromGithub();
 
   chrome.runtime.onConnect.addListener((port) => {
     chrome.webRequest.onBeforeRequest.addListener(
