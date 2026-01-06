@@ -8,6 +8,8 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "paths": {
       "@/*": [
         "./src/*"

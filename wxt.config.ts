@@ -30,16 +30,16 @@ export default defineConfig({
       // "--auto-open-devtools-for-tabs",
     ],
   },
-  vite: () => ({
+  vite: ({ mode }) => ({
     define: {
       __APP_VERSION__: JSON.stringify(pkg.version),
     },
     build: {
-      minify: "terser",
+      minify: mode === "production" ? "terser" : false, // 开发模式不压缩
       terserOptions: {
         compress: {
-          drop_console: true,
-          drop_debugger: true,
+          drop_console: mode === "production", // 仅在正式版移除 Log
+          drop_debugger: mode === "production",
         },
       },
     },

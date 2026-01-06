@@ -3,18 +3,23 @@ import { updateSelectorsFromGithub } from "@/features/ads/ad-selectors";
 export default defineBackground(() => {
   const queue: Array<(p: chrome.runtime.Port) => void> = [];
 
-  // Set up periodic update
-  chrome.alarms.create("update-selectors", { periodInMinutes: 6 * 60 }); // Every 6 hours
+  // --- Ad Selectors Sync Logic ---
+  
+  // Update every 6 hours
+  chrome.alarms.create("update-selectors", { periodInMinutes: 6 * 60 });
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === "update-selectors") {
       updateSelectorsFromGithub();
     }
   });
 
-  // Initial update on startup
+  // Run once on startup
   updateSelectorsFromGithub();
 
+  // --- Runtime Messaging Logic ---
+
   chrome.runtime.onConnect.addListener((port) => {
+    // Intercept timedtext requests
     chrome.webRequest.onBeforeRequest.addListener(
       (details) => {
         if (port) {
@@ -23,11 +28,10 @@ export default defineBackground(() => {
           queue.push((p: chrome.runtime.Port) => handleRequest(details, p));
         }
       },
-      {
-        urls: ["*://www.youtube.com/*"],
-      }
+      { urls: ["*://www.youtube.com/*"] }
     );
 
+    // Watch for internal YouTube URL changes (SPA navigation)
     chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       if (port) {
         handleUrlUpdate(tabId, changeInfo, tab, port);
@@ -38,12 +42,11 @@ export default defineBackground(() => {
       }
     });
 
+    // Process queued messages once connected
     if (port) {
       while (queue.length > 0) {
         const func = queue.pop();
-        if (func) {
-          func(port);
-        }
+        if (func) func(port);
       }
     }
   });
@@ -54,7 +57,6 @@ function handleRequest(
   port: chrome.runtime.Port
 ) {
   if (details.url && details.url.includes("/api/timedtext")) {
-    console.log("[Background] Timedtext URL intercepted:", details.url);
     port.postMessage({
       type: "timedtext_url",
       url: details.url,
