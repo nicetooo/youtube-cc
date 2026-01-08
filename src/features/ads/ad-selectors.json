@@ -2,7 +2,8 @@
     "AD_REMOVAL_SELECTORS": {
         "HOME": [
             "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)",
-            "#masthead-ad"
+            "#masthead-ad",
+            "ytd-statement-banner-renderer"
         ],
         "WATCH": [
             "ytd-ad-slot-renderer",
