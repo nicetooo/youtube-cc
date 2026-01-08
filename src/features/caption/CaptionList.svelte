@@ -501,7 +501,9 @@
               role="button"
               class="caption-line"
               id={`caption-line-${start}`}
-              style={videoCurrentTime >= Number(start) ? `opacity: 0.5;` : ``}
+              style={videoCurrentTime > Number(start) + Number(dur) / 2
+                ? `opacity: 0.5;`
+                : ``}
               tabindex="0"
               data-start={start}
               data-dur={dur}
