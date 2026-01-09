@@ -8,7 +8,8 @@
         "WATCH": [
             "ytd-ad-slot-renderer",
             "#player-ads",
-            "ytd-engagement-panel-section-list-renderer:has(ytd-ad-slot-renderer)"
+            "ytd-engagement-panel-section-list-renderer:has(ytd-ad-slot-renderer)",
+            "#panels panel-ad-header-image-lockup-view-model"
         ],
         "RESULTS": [
             "ytd-ad-slot-renderer"
