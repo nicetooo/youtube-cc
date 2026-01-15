@@ -12,10 +12,15 @@
   });
 
   // Toggle helper to ensure reactive updates work smoothly
-  function toggle(key: keyof typeof $appStore.settings) {
+  function toggle(key: "caption" | "skipAd" | "removeAds" | "wideScreen" | "sideComment" | "commentSearch") {
     appStore.update((s) => {
-      s.settings[key] = !s.settings[key];
-      return { ...s };
+      return {
+        ...s,
+        settings: {
+          ...s.settings,
+          [key]: !s.settings[key],
+        },
+      };
     });
   }
 </script>

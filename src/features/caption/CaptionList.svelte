@@ -7,13 +7,31 @@
   let {
     isCaptionOn,
     port,
+    fontSize = 14,
+    onFontSizeChange,
   }: {
     isCaptionOn: boolean;
     port: chrome.runtime.Port;
+    fontSize?: number;
+    onFontSizeChange?: (size: number) => void;
   } = $props();
 
   let isExpand = $state(true);
   let isStorageLoad = false;
+  let showFontSizePopup = $state(false);
+
+  const MIN_FONT_SIZE = 12;
+  const MAX_FONT_SIZE = 24;
+
+  function increaseFontSize() {
+    const newSize = Math.min(fontSize + 2, MAX_FONT_SIZE);
+    onFontSizeChange?.(newSize);
+  }
+
+  function decreaseFontSize() {
+    const newSize = Math.max(fontSize - 2, MIN_FONT_SIZE);
+    onFontSizeChange?.(newSize);
+  }
 
   let captionsElm = $state<HTMLDivElement | null>(null);
 
@@ -465,6 +483,48 @@
           </button>
         {/if}
 
+        <div class="font-size-control">
+          <button
+            class="ytp-button"
+            style="width: 24px;height:24px;display: flex; align-items: center; justify-content: center;"
+            aria-label={i18n("font_size")}
+            title={i18n("font_size")}
+            onclick={() => (showFontSizePopup = !showFontSizePopup)}
+          >
+            <svg viewBox="0 0 24 24" height="18" width="18">
+              <path
+                fill="currentColor"
+                d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z"
+              />
+            </svg>
+          </button>
+          {#if showFontSizePopup}
+            <div class="font-size-popup">
+              <button
+                class="font-size-btn"
+                onclick={decreaseFontSize}
+                disabled={fontSize <= MIN_FONT_SIZE}
+                aria-label="decrease font size"
+              >
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                  <path fill="currentColor" d="M19 13H5v-2h14v2z" />
+                </svg>
+              </button>
+              <span class="font-size-value">{fontSize}px</span>
+              <button
+                class="font-size-btn"
+                onclick={increaseFontSize}
+                disabled={fontSize >= MAX_FONT_SIZE}
+                aria-label="increase font size"
+              >
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                  <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+              </button>
+            </div>
+          {/if}
+        </div>
+
         <button
           class="ytp-button"
           style="width: 24px;height:24px;"
@@ -492,6 +552,7 @@
       {#if captions.length > 0}
         <div
           class="transcript"
+          style={`font-size: ${fontSize}px;`}
           onmouseenter={handleMouseEnter}
           onmouseleave={handleMouseLeave}
         >
@@ -582,7 +643,6 @@
   .transcript {
     overflow: auto;
     font-family: Arial, sans-serif;
-    font-size: 1.4rem;
     padding-bottom: 4px;
   }
 
@@ -664,5 +724,53 @@
 
   .clear-btn:hover {
     opacity: 1;
+  }
+
+  .font-size-control {
+    position: relative;
+  }
+
+  .font-size-popup {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--yt-spec-menu-background, #282828);
+    border: 1px solid var(--yt-spec-10-percent-layer);
+    border-radius: 8px;
+    padding: 8px 12px;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .font-size-btn {
+    background: transparent;
+    border: none;
+    color: var(--yt-spec-text-primary);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .font-size-btn:hover:not(:disabled) {
+    background: var(--yt-spec-10-percent-layer);
+  }
+
+  .font-size-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .font-size-value {
+    font-size: 12px;
+    color: var(--yt-spec-text-secondary);
+    min-width: 36px;
+    text-align: center;
   }
 </style>

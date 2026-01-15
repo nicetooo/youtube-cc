@@ -11,6 +11,7 @@ export const appStore = writable({
     wideScreen: false,
     sideComment: false,
     commentSearch: true,
+    captionFontSize: 14,
   },
 });
 

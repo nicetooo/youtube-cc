@@ -21,11 +21,26 @@
   onMount(() => {
     subscribeStorageChange();
   });
+
+  function handleFontSizeChange(size: number) {
+    appStore.update((v) => ({
+      ...v,
+      settings: {
+        ...v.settings,
+        captionFontSize: size,
+      },
+    }));
+  }
 </script>
 
 {#if $appStore.isStorageLoad}
   <div id="cc-plus-container" class="cc-plus-style-root">
-    <CaptionList isCaptionOn={$appStore.settings.caption} {port}></CaptionList>
+    <CaptionList
+      isCaptionOn={$appStore.settings.caption}
+      {port}
+      fontSize={$appStore.settings.captionFontSize}
+      onFontSizeChange={handleFontSizeChange}
+    ></CaptionList>
     <SideComment isSideComment={$appStore.settings.sideComment} {port}
     ></SideComment>
     <AdsRemove isAdRemoveOn={$appStore.settings.removeAds} {port}></AdsRemove>
