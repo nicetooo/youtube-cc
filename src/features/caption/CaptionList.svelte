@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { waitFor } from "@/shared/utils/wait";
   import { throttle } from "lodash-es";
   import { i18n } from "@/shared/i18n/i18n";
@@ -22,6 +22,11 @@
 
   const MIN_FONT_SIZE = 12;
   const MAX_FONT_SIZE = 24;
+
+  // 用于清理的引用
+  let timeUpdateHandler: (() => void) | null = null;
+  let resizeObserver: ResizeObserver | null = null;
+  let portMessageHandler: ((message: any) => void) | null = null;
 
   function increaseFontSize() {
     const newSize = Math.min(fontSize + 2, MAX_FONT_SIZE);
@@ -135,18 +140,34 @@
     if (!timedtextUrl) {
       return;
     }
-    const res = await fetch(timedtextUrl.toString());
-    const text = await res.text();
-    caption = text;
+    try {
+      const res = await fetch(timedtextUrl.toString());
+      if (!res.ok) {
+        console.error("[CaptionList] Failed to fetch captions:", res.status);
+        return;
+      }
+      const text = await res.text();
+      caption = text;
+    } catch (err) {
+      console.error("[CaptionList] Error fetching captions:", err);
+    }
   }
 
   async function getSecondCaptions() {
     if (!secondTimedtextUrl) {
       return;
     }
-    const res = await fetch(secondTimedtextUrl.toString());
-    const text = await res.text();
-    secondCaption = text;
+    try {
+      const res = await fetch(secondTimedtextUrl.toString());
+      if (!res.ok) {
+        console.error("[CaptionList] Failed to fetch second captions:", res.status);
+        return;
+      }
+      const text = await res.text();
+      secondCaption = text;
+    } catch (err) {
+      console.error("[CaptionList] Error fetching second captions:", err);
+    }
   }
 
   function swapCaptions() {
@@ -231,11 +252,14 @@
     }
     const comment = document.getElementById("contenteditable-root");
     if (comment) {
+      const commentText = e.target.dataset.comment || "";
       if (comment.innerText) {
-        comment.innerHTML =
-          comment.innerHTML + `<div>${e.target.dataset.comment}</div>`;
+        // 使用 DOM API 安全地添加内容，避免 XSS
+        const div = document.createElement("div");
+        div.textContent = commentText;
+        comment.appendChild(div);
       } else {
-        comment.innerText = e.target.dataset.comment;
+        comment.textContent = commentText;
       }
     }
   };
@@ -244,7 +268,10 @@
     if (!video) {
       return;
     }
-    const resizeObserver = new ResizeObserver((entries) => {
+    // 先清理旧的 observer
+    resizeObserver?.disconnect();
+
+    resizeObserver = new ResizeObserver((entries) => {
       if (!video) {
         return;
       }
@@ -278,7 +305,14 @@
         )[0] as HTMLVideoElement,
       0
     );
-    video.addEventListener("timeupdate", function () {
+
+    // 先移除旧的监听器
+    if (timeUpdateHandler && video) {
+      video.removeEventListener("timeupdate", timeUpdateHandler);
+    }
+
+    // 创建新的监听器
+    timeUpdateHandler = () => {
       if (!video) {
         return;
       }
@@ -290,7 +324,9 @@
         videoCurrentTime = video.currentTime;
         clickCCBtn();
       }
-    });
+    };
+
+    video.addEventListener("timeupdate", timeUpdateHandler);
 
     videoHeight = video?.height;
     watchVideoSize();
@@ -318,8 +354,9 @@
   onMount(() => {
     getExpendState();
     videoId = new URL(location.href).searchParams.get("v");
-    // console.log("caption list onmount");
-    port.onMessage.addListener(function (message) {
+
+    // 保存监听器引用以便清理
+    portMessageHandler = function (message: any) {
       console.log("[CaptionList] onMessage", message);
       switch (message.type) {
         case "url_change": {
@@ -393,13 +430,29 @@
           break;
         }
         default: {
-          // console.log("unhandled", message);
           break;
         }
       }
-    });
+    };
 
+    port.onMessage.addListener(portMessageHandler);
     setUp();
+  });
+
+  onDestroy(() => {
+    // 清理 port 监听器
+    if (portMessageHandler) {
+      port.onMessage.removeListener(portMessageHandler);
+      portMessageHandler = null;
+    }
+    // 清理事件监听器
+    if (timeUpdateHandler && video) {
+      video.removeEventListener("timeupdate", timeUpdateHandler);
+      timeUpdateHandler = null;
+    }
+    // 清理 ResizeObserver
+    resizeObserver?.disconnect();
+    resizeObserver = null;
   });
 
   // let isMenuOpen = $state(false);

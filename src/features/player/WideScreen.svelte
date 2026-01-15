@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { waitFor } from "@/shared/utils/wait";
 
   let {
@@ -14,6 +14,10 @@
   let columns: HTMLDivElement | undefined = $state();
   let videoContainer: HTMLDivElement | undefined = $state();
   let chromeBottom: HTMLDivElement | undefined = $state();
+
+  // 用于清理的引用
+  let resizeObserver: ResizeObserver | null = null;
+  let timeUpdateHandler: (() => void) | null = null;
 
   let originalStyles = {
     hasBackup: false,
@@ -50,7 +54,16 @@
     if (!videoContainer || !video) {
       return;
     }
-    const resizeObserver = new ResizeObserver(() => {
+
+    // 清理旧的 observer 和 listener
+    if (resizeObserver) {
+      resizeObserver.disconnect();
+    }
+    if (timeUpdateHandler && video) {
+      video.removeEventListener("timeupdate", timeUpdateHandler);
+    }
+
+    resizeObserver = new ResizeObserver(() => {
       if (!video || !chromeBottom || !videoContainer) {
         return;
       }
@@ -59,14 +72,15 @@
       chromeBottom.style.width = videoContainer.clientWidth - 24 + "px";
     });
 
-    video.addEventListener("timeupdate", function () {
+    timeUpdateHandler = () => {
       if (!video || !isWideScreenOn) {
         return;
       }
       video.style.width = "fit-content";
       video.style.height = "100%";
-    });
+    };
 
+    video.addEventListener("timeupdate", timeUpdateHandler);
     resizeObserver.observe(videoContainer);
   }
 
@@ -133,7 +147,18 @@
     }
   });
 
-  $inspect({ isWideScreenOn });
+  onDestroy(() => {
+    // 清理 ResizeObserver
+    if (resizeObserver) {
+      resizeObserver.disconnect();
+      resizeObserver = null;
+    }
+    // 清理 timeupdate 事件监听器
+    if (timeUpdateHandler && video) {
+      video.removeEventListener("timeupdate", timeUpdateHandler);
+      timeUpdateHandler = null;
+    }
+  });
 
   onMount(async () => {
     port.onMessage.addListener(function (message) {

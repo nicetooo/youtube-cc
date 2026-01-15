@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { observeNodeAdd } from "@/shared/utils/observe";
   import { getAdSelectors, SELECTORS_STORAGE_KEY } from "./ad-selectors";
 
@@ -11,7 +11,8 @@
   } = $props();
 
   let selectors = $state<any>(null);
-  let disconnect: () => void | null;
+  let disconnect: (() => void) | null = null;
+  let storageChangeHandler: ((changes: { [key: string]: chrome.storage.StorageChange }, area: string) => void) | null = null;
 
   const removeElements = (selectorsList: string[]) => {
     if (!selectorsList) return;
@@ -51,16 +52,28 @@
     // Initial load
     selectors = await getAdSelectors();
 
-    // Listen for updates
-    chrome.storage.onChanged.addListener((changes, area) => {
+    // 保存监听器引用以便清理
+    storageChangeHandler = (changes, area) => {
       if (area === "local" && changes[SELECTORS_STORAGE_KEY]) {
         selectors = changes[SELECTORS_STORAGE_KEY].newValue;
       }
-    });
+    };
+    chrome.storage.onChanged.addListener(storageChangeHandler);
 
     if (isAdRemoveOn) {
       disconnect = setUp();
     }
+  });
+
+  onDestroy(() => {
+    // 清理 storage 监听器
+    if (storageChangeHandler) {
+      chrome.storage.onChanged.removeListener(storageChangeHandler);
+      storageChangeHandler = null;
+    }
+    // 清理 MutationObserver
+    disconnect?.();
+    disconnect = null;
   });
 </script>
 

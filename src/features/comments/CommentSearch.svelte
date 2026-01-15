@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { observeNodeAdd } from "@/shared/utils/observe";
   import { i18n } from "@/shared/i18n/i18n";
   import { debounce } from "lodash-es";
@@ -38,7 +38,7 @@
       });
   }
 
-  let disconnect: () => void | null;
+  let disconnect: (() => void) | null = null;
 
   const setUpObserve = () => observeNodeAdd(search);
 
@@ -75,6 +75,11 @@
   onMount(() => {
     // console.log("Current UI Language:", browser.i18n.getUILanguage());
     setUpSearch();
+  });
+
+  onDestroy(() => {
+    disconnect?.();
+    disconnect = null;
   });
 </script>
 

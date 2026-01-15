@@ -1,53 +1,55 @@
 import { updateSelectorsFromGithub } from "@/features/ads/ad-selectors";
 
 export default defineBackground(() => {
-  const queue: Array<(p: chrome.runtime.Port) => void> = [];
+  // 存储所有活跃的 port 连接
+  const ports = new Map<number, chrome.runtime.Port>();
 
   // --- Ad Selectors Sync Logic ---
-  
+
   // Update every 6 hours
   chrome.alarms.create("update-selectors", { periodInMinutes: 6 * 60 });
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === "update-selectors") {
-      updateSelectorsFromGithub();
+      updateSelectorsFromGithub().catch(console.error);
     }
   });
 
   // Run once on startup
-  updateSelectorsFromGithub();
+  updateSelectorsFromGithub().catch(console.error);
 
   // --- Runtime Messaging Logic ---
 
-  chrome.runtime.onConnect.addListener((port) => {
-    // Intercept timedtext requests
-    chrome.webRequest.onBeforeRequest.addListener(
-      (details) => {
-        if (port) {
-          handleRequest(details, port);
-        } else {
-          queue.push((p: chrome.runtime.Port) => handleRequest(details, p));
-        }
-      },
-      { urls: ["*://www.youtube.com/*"] }
-    );
-
-    // Watch for internal YouTube URL changes (SPA navigation)
-    chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-      if (port) {
-        handleUrlUpdate(tabId, changeInfo, tab, port);
-      } else {
-        queue.push((p: chrome.runtime.Port) =>
-          handleUrlUpdate(tabId, changeInfo, tab, p)
-        );
+  // 只注册一次 webRequest 监听器
+  chrome.webRequest.onBeforeRequest.addListener(
+    (details) => {
+      // 发送给所有连接的 port
+      for (const port of ports.values()) {
+        handleRequest(details, port);
       }
-    });
+    },
+    { urls: ["*://www.youtube.com/*"] }
+  );
 
-    // Process queued messages once connected
+  // 只注册一次 tabs.onUpdated 监听器
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    // 只发送给对应 tab 的 port
+    const port = ports.get(tabId);
     if (port) {
-      while (queue.length > 0) {
-        const func = queue.pop();
-        if (func) func(port);
-      }
+      handleUrlUpdate(tabId, changeInfo, tab, port);
+    }
+  });
+
+  // 处理连接和断开
+  chrome.runtime.onConnect.addListener((port) => {
+    // 获取 tab ID
+    const tabId = port.sender?.tab?.id;
+    if (tabId !== undefined) {
+      ports.set(tabId, port);
+
+      // 监听断开连接，清理 port
+      port.onDisconnect.addListener(() => {
+        ports.delete(tabId);
+      });
     }
   });
 });
@@ -57,10 +59,14 @@ function handleRequest(
   port: chrome.runtime.Port
 ) {
   if (details.url && details.url.includes("/api/timedtext")) {
-    port.postMessage({
-      type: "timedtext_url",
-      url: details.url,
-    });
+    try {
+      port.postMessage({
+        type: "timedtext_url",
+        url: details.url,
+      });
+    } catch {
+      // port 可能已断开，忽略错误
+    }
   }
 }
 
@@ -71,9 +77,13 @@ function handleUrlUpdate(
   port: chrome.runtime.Port
 ) {
   if (changeInfo.url) {
-    port.postMessage({
-      type: "url_change",
-      url: changeInfo.url,
-    });
+    try {
+      port.postMessage({
+        type: "url_change",
+        url: changeInfo.url,
+      });
+    } catch {
+      // port 可能已断开，忽略错误
+    }
   }
 }

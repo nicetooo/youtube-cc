@@ -1,5 +1,7 @@
 export function observeNodeAdd(callback: () => void) {
   let needCheck = true;
+  let isRunning = true;
+  let rafId: number | null = null;
   let observer: MutationObserver;
 
   const observe = () => {
@@ -20,22 +22,30 @@ export function observeNodeAdd(callback: () => void) {
   };
 
   function checkElement() {
-    if (!needCheck) {
-      requestAnimationFrame(checkElement);
+    // 如果已停止，不再调度下一帧
+    if (!isRunning) {
       return;
     }
-    callback();
 
-    needCheck = false;
-    requestAnimationFrame(checkElement);
+    if (needCheck) {
+      callback();
+      needCheck = false;
+    }
+
+    rafId = requestAnimationFrame(checkElement);
   }
 
   observe();
   checkElement();
 
   return () => {
-    // console.log("observer disconnected");
+    // 停止 RAF 循环
+    isRunning = false;
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+    // 断开 MutationObserver
     observer.disconnect();
-    needCheck = false;
   };
 }

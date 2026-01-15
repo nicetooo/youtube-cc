@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { waitFor } from "@/shared/utils/wait";
 
   import { getAdSelectors, SELECTORS_STORAGE_KEY } from "./ad-selectors";
@@ -13,6 +13,9 @@
   } = $props();
   let video: HTMLVideoElement | undefined = $state();
   let selectors = $state<any>(null);
+  let timeUpdateHandler: (() => void) | null = null;
+  let storageChangeHandler: ((changes: { [key: string]: chrome.storage.StorageChange }, area: string) => void) | null = null;
+  let portMessageHandler: ((message: any) => void) | null = null;
 
   const onTimeUpdate = () => {
     if (!video || !isAdSkipOn || !selectors) {
@@ -37,24 +40,30 @@
       0
     );
 
-    video.addEventListener("timeupdate", onTimeUpdate);
+    // 清理旧的监听器
+    if (timeUpdateHandler && video) {
+      video.removeEventListener("timeupdate", timeUpdateHandler);
+    }
+
+    timeUpdateHandler = onTimeUpdate;
+    video.addEventListener("timeupdate", timeUpdateHandler);
   };
 
   onMount(async () => {
     // Initial load
     selectors = await getAdSelectors();
 
-    // Listen for updates
-    chrome.storage.onChanged.addListener((changes, area) => {
+    // 保存监听器引用以便清理
+    storageChangeHandler = (changes, area) => {
       if (area === "local" && changes[SELECTORS_STORAGE_KEY]) {
         selectors = changes[SELECTORS_STORAGE_KEY].newValue;
       }
-    });
+    };
+    chrome.storage.onChanged.addListener(storageChangeHandler);
 
-    port.onMessage.addListener(function (message) {
+    portMessageHandler = (message) => {
       switch (message.type) {
         case "url_change": {
-          video?.removeEventListener("timeupdate", onTimeUpdate);
           setUp();
           break;
         }
@@ -62,9 +71,28 @@
           break;
         }
       }
-    });
+    };
+    port.onMessage.addListener(portMessageHandler);
 
     setUp();
+  });
+
+  onDestroy(() => {
+    // 清理 storage 监听器
+    if (storageChangeHandler) {
+      chrome.storage.onChanged.removeListener(storageChangeHandler);
+      storageChangeHandler = null;
+    }
+    // 清理 port 监听器
+    if (portMessageHandler) {
+      port.onMessage.removeListener(portMessageHandler);
+      portMessageHandler = null;
+    }
+    // 清理 video 事件监听器
+    if (timeUpdateHandler && video) {
+      video.removeEventListener("timeupdate", timeUpdateHandler);
+      timeUpdateHandler = null;
+    }
   });
 </script>
 
