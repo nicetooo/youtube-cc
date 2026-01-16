@@ -38,7 +38,7 @@
     <CaptionList
       isCaptionOn={$appStore.settings.caption}
       {port}
-      fontSize={$appStore.settings.captionFontSize}
+      fontSize={$appStore.settings.captionFontSize ?? 14}
       onFontSizeChange={handleFontSizeChange}
     ></CaptionList>
     <SideComment isSideComment={$appStore.settings.sideComment} {port}

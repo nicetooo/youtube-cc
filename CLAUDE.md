@@ -90,3 +90,20 @@ npm run format       # Prettier 格式化
 - 共享工具放在 `src/shared/utils/`
 - 使用 TypeScript 严格模式
 - 样式遵循现有 Tailwind 模式
+
+## 升级兼容性
+
+添加新的 settings 字段时，需要考虑升级用户的兼容性：
+
+1. **在 store 中定义默认值** (`settings.svelte.ts`)
+2. **在使用处添加空值合并** - 因为旧用户的 storage 中没有新字段，会导致值为 `undefined`
+
+```svelte
+<!-- 错误：旧用户 captionFontSize 为 undefined，会覆盖组件默认值 -->
+<Component fontSize={$appStore.settings.captionFontSize} />
+
+<!-- 正确：使用 ?? 确保有默认值 -->
+<Component fontSize={$appStore.settings.captionFontSize ?? 14} />
+```
+
+原因：storage 合并逻辑 `{...默认值, ...存储值}` 不会自动添加新字段到旧用户的存储中。
