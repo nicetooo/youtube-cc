@@ -18,6 +18,7 @@
   // 用于清理的引用
   let resizeObserver: ResizeObserver | null = null;
   let timeUpdateHandler: (() => void) | null = null;
+  let portMessageHandler: ((message: any) => void) | null = null;
 
   let originalStyles = {
     hasBackup: false,
@@ -148,6 +149,11 @@
   });
 
   onDestroy(() => {
+    // 清理 port 监听器
+    if (portMessageHandler) {
+      port.onMessage.removeListener(portMessageHandler);
+      portMessageHandler = null;
+    }
     // 清理 ResizeObserver
     if (resizeObserver) {
       resizeObserver.disconnect();
@@ -161,7 +167,7 @@
   });
 
   onMount(async () => {
-    port.onMessage.addListener(function (message) {
+    portMessageHandler = (message) => {
       switch (message.type) {
         case "url_change": {
           setUp();
@@ -171,7 +177,8 @@
           break;
         }
       }
-    });
+    };
+    port.onMessage.addListener(portMessageHandler);
 
     setUp();
   });

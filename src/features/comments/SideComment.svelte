@@ -13,6 +13,7 @@
   let captionListHeight = $state(0);
   let hasChat = $state(false);
   let disconnect: (() => void) | null = null;
+  let portMessageHandler: ((message: any) => void) | null = null;
 
   function observeMutations(node: HTMLDivElement) {
     const observer = new MutationObserver(() => {
@@ -145,7 +146,7 @@
   $inspect({ isSideComment });
 
   onMount(() => {
-    port.onMessage.addListener(function (message) {
+    portMessageHandler = (message) => {
       switch (message.type) {
         case "url_change": {
           setUp();
@@ -155,12 +156,18 @@
           break;
         }
       }
-    });
+    };
+    port.onMessage.addListener(portMessageHandler);
 
     setUp();
   });
 
   onDestroy(() => {
+    // 清理 port 监听器
+    if (portMessageHandler) {
+      port.onMessage.removeListener(portMessageHandler);
+      portMessageHandler = null;
+    }
     disconnect?.();
   });
 </script>

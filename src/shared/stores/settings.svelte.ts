@@ -53,19 +53,17 @@ appStore.subscribe(async (value) => {
 });
 
 let isSubscribed = false;
+let storageChangeHandler: ((changes: { [key: string]: chrome.storage.StorageChange }) => void) | null = null;
 
 export function subscribeStorageChange() {
   if (isSubscribed) return;
   isSubscribed = true;
 
-  // console.log("sub");
-  chrome.storage.onChanged.addListener((changes) => {
+  storageChangeHandler = (changes) => {
     const { settings } = changes;
-    // console.log("change", settings);
     if (!settings) return;
 
     if (settings && isEqual(settings.newValue, settings.oldValue)) {
-      // console.log("is equal");
       return;
     }
 
@@ -80,5 +78,14 @@ export function subscribeStorageChange() {
         };
       });
     }
-  });
+  };
+  chrome.storage.onChanged.addListener(storageChangeHandler);
+}
+
+export function unsubscribeStorageChange() {
+  if (storageChangeHandler) {
+    chrome.storage.onChanged.removeListener(storageChangeHandler);
+    storageChangeHandler = null;
+    isSubscribed = false;
+  }
 }
