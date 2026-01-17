@@ -7,11 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build outputs
 .output
+.svelte-kit
+.vercel
+dist
+
+# WXT
+.wxt
 stats.html
 stats-*.json
-.wxt
 web-ext.config.ts
 
 # Editor directories and files
@@ -24,4 +32,7 @@ web-ext.config.ts
 *.njsproj
 *.sln
 *.sw?
+
+# Environment
 .env*
+!.env.example
