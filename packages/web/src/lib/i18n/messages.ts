@@ -19,7 +19,7 @@ export const messages = {
     nav_settings: "Settings",
 
     // Home page
-    home_title: "Learn English with YouTube",
+    home_title: "Learn Languages with YouTube",
     home_subtitle:
       "Save vocabulary from videos, review with spaced repetition, and master new words effortlessly.",
     home_get_extension: "Get Extension",
@@ -111,7 +111,7 @@ export const messages = {
     nav_settings: "设置",
 
     // Home page
-    home_title: "用 YouTube 学英语",
+    home_title: "用 YouTube 学语言",
     home_subtitle: "从视频中收藏生词，用间隔重复复习，轻松掌握新词汇。",
     home_get_extension: "获取扩展",
     home_view_words: "查看生词",
@@ -199,7 +199,7 @@ export const messages = {
     nav_settings: "設定",
 
     // Home page
-    home_title: "用 YouTube 學英語",
+    home_title: "用 YouTube 學語言",
     home_subtitle: "從影片中收藏生詞，用間隔重複複習，輕鬆掌握新詞彙。",
     home_get_extension: "取得擴充",
     home_view_words: "查看生詞",
@@ -287,7 +287,7 @@ export const messages = {
     nav_settings: "設定",
 
     // Home page
-    home_title: "YouTubeで英語を学ぶ",
+    home_title: "YouTubeで言語を学ぶ",
     home_subtitle:
       "動画から単語を保存し、間隔反復で復習し、新しい単語を楽に習得。",
     home_get_extension: "拡張機能を入手",
@@ -377,7 +377,7 @@ export const messages = {
     nav_settings: "설정",
 
     // Home page
-    home_title: "YouTube로 영어 배우기",
+    home_title: "YouTube로 언어 배우기",
     home_subtitle:
       "동영상에서 단어를 저장하고, 간격 반복으로 복습하며, 새로운 단어를 쉽게 습득하세요.",
     home_get_extension: "확장 프로그램 설치",

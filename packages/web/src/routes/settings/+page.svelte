@@ -42,7 +42,8 @@
           {:else}
             <span class="text-lg font-medium">
               {authStore.user.displayName?.[0] ||
-                authStore.user.email[0].toUpperCase()}
+                authStore.user.email?.[0]?.toUpperCase() ||
+                "?"}
             </span>
           {/if}
         </div>
@@ -62,7 +63,10 @@
         </button>
       </div>
     {:else}
-      <button onclick={() => authStore.login()} class="btn btn-primary">
+      <button
+        onclick={() => authStore.loginWithGoogle()}
+        class="btn btn-primary"
+      >
         Sign in with Google
       </button>
     {/if}
