@@ -6,7 +6,12 @@
   } from "@/shared/stores/settings.svelte";
   import { i18n } from "@/shared/i18n/i18n";
   import { fade } from "svelte/transition";
-  import { signInWithGoogle, logout, onAuthChange } from "@aspect/shared";
+  import {
+    signInWithGoogle,
+    logout,
+    onAuthChange,
+    WEBSITE_USER_KEY,
+  } from "@aspect/shared";
 
   // Simplified Firebase user info type
   interface AuthUser {
@@ -22,9 +27,6 @@
   let authLoading = $state(true);
   let syncStatus = $state<"idle" | "syncing" | "success" | "error">("idle");
   let unsubscribeAuth: (() => void) | null = null;
-
-  // Storage key for website user (synced from website via content script)
-  const WEBSITE_USER_KEY = "cc_plus_website_user";
 
   onMount(async () => {
     subscribeStorageChange();

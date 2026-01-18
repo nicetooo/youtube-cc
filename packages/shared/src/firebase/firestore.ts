@@ -12,6 +12,7 @@ import {
   onSnapshot,
   serverTimestamp,
   Timestamp,
+  increment,
   type Unsubscribe,
 } from "firebase/firestore";
 import { db } from "./config";
@@ -19,15 +20,64 @@ import type { Word, UserSettings, UserStats } from "../types";
 
 // ============ Words ============
 
+/**
+ * Check if a word already exists from the same source
+ * Uses Firestore query instead of fetching all documents for better performance
+ */
+async function checkDuplicateWord(
+  wordsRef: ReturnType<typeof collection>,
+  word: Omit<Word, "id" | "createdAt">
+): Promise<boolean> {
+  // Query by textLower field for case-insensitive matching
+  const textLower = word.text.toLowerCase();
+  const q = query(wordsRef, where("textLower", "==", textLower));
+  const snapshot = await getDocs(q);
+
+  if (snapshot.empty) {
+    return false;
+  }
+
+  // Check if any matching word has the same source
+  return snapshot.docs.some((docSnap) => {
+    const existing = docSnap.data();
+
+    if (
+      word.source?.type === "youtube-caption" &&
+      existing.source?.type === "youtube-caption"
+    ) {
+      return existing.source.videoId === word.source.videoId;
+    }
+    if (
+      word.source?.type === "webpage" &&
+      existing.source?.type === "webpage"
+    ) {
+      return existing.source.url === word.source.url;
+    }
+    return false;
+  });
+}
+
 export async function addWord(
   userId: string,
-  word: Omit<Word, "id" | "createdAt">
+  word: Omit<Word, "id" | "createdAt">,
+  options: { skipDuplicateCheck?: boolean } = {}
 ): Promise<string> {
   const wordsRef = collection(db, "users", userId, "words");
+
+  // Check for duplicates (same text from same source)
+  if (!options.skipDuplicateCheck) {
+    const isDuplicate = await checkDuplicateWord(wordsRef, word);
+    if (isDuplicate) {
+      throw new Error("Word already saved from this source");
+    }
+  }
+
   const wordDoc = doc(wordsRef);
 
+  // Store textLower for efficient duplicate checking queries
   await setDoc(wordDoc, {
     ...word,
+    textLower: word.text.toLowerCase(),
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -94,8 +144,12 @@ export async function deleteWord(
   const wordRef = doc(db, "users", userId, "words", wordId);
   await deleteDoc(wordRef);
 
-  // Update user stats
-  await decrementWordCount(userId);
+  // Update user stats (don't block on failure)
+  try {
+    await decrementWordCount(userId);
+  } catch (e) {
+    console.warn("Failed to decrement word count:", e);
+  }
 }
 
 export function subscribeToWords(
@@ -160,9 +214,12 @@ export async function updateUserSettings(
   settings: Partial<UserSettings>
 ): Promise<void> {
   const userRef = doc(db, "users", userId);
-  await updateDoc(userRef, {
-    settings: settings,
-  });
+  // Use dot notation to merge settings instead of overwriting
+  const updates: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(settings)) {
+    updates[`settings.${key}`] = value;
+  }
+  await updateDoc(userRef, updates);
 }
 
 // ============ User Stats ============
@@ -185,28 +242,27 @@ export async function updateUserStats(
   });
 }
 
+/**
+ * Atomically increment word count using Firestore increment()
+ * No read required - handles concurrent updates safely
+ */
 async function incrementWordCount(userId: string): Promise<void> {
   const userRef = doc(db, "users", userId);
-  const snapshot = await getDoc(userRef);
-
-  if (snapshot.exists()) {
-    const currentStats = snapshot.data().stats as UserStats;
-    await updateDoc(userRef, {
-      "stats.totalWords": (currentStats.totalWords || 0) + 1,
-    });
-  }
+  await updateDoc(userRef, {
+    "stats.totalWords": increment(1),
+  });
 }
 
+/**
+ * Atomically decrement word count using Firestore increment()
+ * Note: This can result in negative values if data is inconsistent,
+ * but that's preferable to race conditions. UI should handle negative as 0.
+ */
 async function decrementWordCount(userId: string): Promise<void> {
   const userRef = doc(db, "users", userId);
-  const snapshot = await getDoc(userRef);
-
-  if (snapshot.exists()) {
-    const currentStats = snapshot.data().stats as UserStats;
-    await updateDoc(userRef, {
-      "stats.totalWords": Math.max(0, (currentStats.totalWords || 0) - 1),
-    });
-  }
+  await updateDoc(userRef, {
+    "stats.totalWords": increment(-1),
+  });
 }
 
 // Update streak on review

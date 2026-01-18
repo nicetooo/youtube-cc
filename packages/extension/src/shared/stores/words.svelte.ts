@@ -2,10 +2,7 @@
 // Words are stored in chrome.storage.local and synced to Firebase when user logs in
 
 import type { Word, CreateWordInput } from "@aspect/shared";
-import { createWord } from "@aspect/shared";
-
-const STORAGE_KEY = "cc_plus_words";
-const PENDING_SYNC_KEY = "cc_plus_pending_sync";
+import { createWord, WORDS_KEY, PENDING_SYNC_KEY } from "@aspect/shared";
 
 export interface LocalWordStore {
   words: Word[];
@@ -17,8 +14,8 @@ export interface LocalWordStore {
  */
 export async function getWords(): Promise<Word[]> {
   try {
-    const result = await chrome.storage.local.get(STORAGE_KEY);
-    const words = result[STORAGE_KEY] || [];
+    const result = await chrome.storage.local.get(WORDS_KEY);
+    const words = result[WORDS_KEY] || [];
     // Convert date strings back to Date objects
     return words.map((word: Word) => ({
       ...word,
@@ -62,7 +59,7 @@ export async function saveWord(input: CreateWordInput): Promise<Word> {
     }
 
     words.push(word);
-    await chrome.storage.local.set({ [STORAGE_KEY]: words });
+    await chrome.storage.local.set({ [WORDS_KEY]: words });
 
     // Add to pending sync queue
     await addToPendingSync(word.id);
@@ -94,7 +91,7 @@ export async function updateWord(
     };
 
     words[index] = updatedWord;
-    await chrome.storage.local.set({ [STORAGE_KEY]: words });
+    await chrome.storage.local.set({ [WORDS_KEY]: words });
 
     // Add to pending sync queue
     await addToPendingSync(id);
@@ -116,7 +113,7 @@ export async function deleteWord(id: string): Promise<boolean> {
 
     if (filteredWords.length === words.length) return false;
 
-    await chrome.storage.local.set({ [STORAGE_KEY]: filteredWords });
+    await chrome.storage.local.set({ [WORDS_KEY]: filteredWords });
 
     // Remove from pending sync queue (or add delete operation to sync)
     await removeFromPendingSync(id);
@@ -286,9 +283,9 @@ function handleStorageChange(
   areaName: string
 ): void {
   if (areaName !== "local") return;
-  if (!changes[STORAGE_KEY]) return;
+  if (!changes[WORDS_KEY]) return;
 
-  const newWords = (changes[STORAGE_KEY].newValue || []).map((word: Word) => ({
+  const newWords = (changes[WORDS_KEY].newValue || []).map((word: Word) => ({
     ...word,
     nextReview: new Date(word.nextReview),
     createdAt: new Date(word.createdAt),

@@ -5,15 +5,15 @@ import {
   type Locale,
   type MessageKey,
 } from "./messages";
+import { LOCALE_KEY } from "@aspect/shared";
 
-const STORAGE_KEY = "cc-plus-locale";
 const DEFAULT_LOCALE: Locale = "en";
 
 function detectLocale(): Locale {
   if (!browser) return DEFAULT_LOCALE;
 
   // Check localStorage first
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = localStorage.getItem(LOCALE_KEY);
   if (stored && isValidLocale(stored)) {
     return stored;
   }
@@ -58,7 +58,7 @@ function createI18nStore() {
   function setLocale(newLocale: Locale) {
     locale = newLocale;
     if (browser) {
-      localStorage.setItem(STORAGE_KEY, newLocale);
+      localStorage.setItem(LOCALE_KEY, newLocale);
     }
   }
 

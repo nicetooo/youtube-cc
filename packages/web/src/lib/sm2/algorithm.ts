@@ -1,6 +1,17 @@
 import type { Word, SimpleRating } from "@aspect/shared/types";
 
 /**
+ * Safely convert a Date or string to Date object
+ * Handles JSON deserialization where Date becomes string
+ */
+function toDate(date: Date | string): Date {
+  if (date instanceof Date) {
+    return date;
+  }
+  return new Date(date);
+}
+
+/**
  * SM-2 Algorithm Implementation
  *
  * The SM-2 algorithm calculates the optimal interval for reviewing items.
@@ -158,7 +169,7 @@ export function formatInterval(days: number): string {
  * Check if a word is due for review
  */
 export function isDue(word: Word): boolean {
-  return word.nextReview <= new Date();
+  return toDate(word.nextReview) <= new Date();
 }
 
 /**
@@ -173,6 +184,6 @@ export function sortByPriority(words: Word[]): Word[] {
     if (!aDue && bDue) return 1;
 
     // Then by next review date
-    return a.nextReview.getTime() - b.nextReview.getTime();
+    return toDate(a.nextReview).getTime() - toDate(b.nextReview).getTime();
   });
 }

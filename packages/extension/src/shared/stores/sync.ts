@@ -2,18 +2,18 @@
 // Syncs local words to Firebase when user is logged in
 // Uses website bridge for actual Firebase operations (since extension isn't authenticated)
 
-import { onAuthChange } from "@aspect/shared";
+import {
+  onAuthChange,
+  LAST_SYNC_KEY,
+  SYNC_USER_KEY,
+  WEBSITE_USER_KEY,
+} from "@aspect/shared";
 import type { Word } from "@aspect/shared";
 import {
   getWords as getLocalWords,
   getWordsToSync,
   clearPendingSync,
 } from "./words.svelte";
-
-const LAST_SYNC_KEY = "cc_plus_last_sync";
-const SYNC_USER_KEY = "cc_plus_sync_user";
-const WEBSITE_USER_KEY = "cc_plus_website_user";
-const WORDS_KEY = "cc_plus_words";
 
 // Website URL patterns for finding the tab
 const WEBSITE_PATTERNS = [
