@@ -16,9 +16,19 @@ import {
 
 const LAST_SYNC_KEY = "cc_plus_last_sync";
 const SYNC_USER_KEY = "cc_plus_sync_user";
+const WEBSITE_USER_KEY = "cc_plus_website_user";
 
 // Sync status
 export type SyncStatus = "idle" | "syncing" | "success" | "error";
+
+// User info from website
+interface WebsiteUser {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+  isAnonymous: boolean;
+}
 
 let currentSyncStatus: SyncStatus = "idle";
 let currentUserId: string | null = null;
@@ -235,4 +245,58 @@ export async function triggerSync(): Promise<boolean> {
 
   await syncWords(userId);
   return currentSyncStatus === "success";
+}
+
+/**
+ * Handle auth state from website (via content script bridge)
+ * This allows the extension to sync with the website's login state
+ */
+export async function handleWebsiteAuth(
+  action: "login" | "logout",
+  user?: WebsiteUser,
+  _token?: string
+): Promise<void> {
+  if (action === "login" && user) {
+    console.log("[CC Plus Sync] Website login detected:", user.email);
+
+    // Store website user info
+    await chrome.storage.local.set({ [WEBSITE_USER_KEY]: user });
+
+    // Update current user ID
+    currentUserId = user.uid;
+    await chrome.storage.local.set({ [SYNC_USER_KEY]: user.uid });
+
+    // Trigger sync
+    await syncWords(user.uid);
+
+    // Notify popup to update UI
+    chrome.runtime.sendMessage({ type: "auth-changed", user }).catch(() => {
+      // Popup might not be open, ignore error
+    });
+  } else if (action === "logout") {
+    console.log("[CC Plus Sync] Website logout detected");
+
+    // Clear website user info
+    await chrome.storage.local.remove([WEBSITE_USER_KEY, SYNC_USER_KEY]);
+    currentUserId = null;
+
+    // Notify popup to update UI
+    chrome.runtime
+      .sendMessage({ type: "auth-changed", user: null })
+      .catch(() => {
+        // Popup might not be open, ignore error
+      });
+  }
+}
+
+/**
+ * Get website user info from storage
+ */
+export async function getWebsiteUser(): Promise<WebsiteUser | null> {
+  try {
+    const result = await chrome.storage.local.get(WEBSITE_USER_KEY);
+    return result[WEBSITE_USER_KEY] || null;
+  } catch {
+    return null;
+  }
 }

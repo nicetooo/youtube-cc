@@ -23,11 +23,22 @@
   let syncStatus = $state<"idle" | "syncing" | "success" | "error">("idle");
   let unsubscribeAuth: (() => void) | null = null;
 
-  onMount(() => {
+  // Storage key for website user (synced from website via content script)
+  const WEBSITE_USER_KEY = "cc_plus_website_user";
+
+  onMount(async () => {
     subscribeStorageChange();
 
-    // Listen for auth state changes
+    // First check for website user (logged in via website)
+    const result = await chrome.storage.local.get(WEBSITE_USER_KEY);
+    if (result[WEBSITE_USER_KEY]) {
+      currentUser = result[WEBSITE_USER_KEY];
+      authLoading = false;
+    }
+
+    // Listen for auth state changes from Firebase (for popup login)
     unsubscribeAuth = onAuthChange((user) => {
+      // Only update if we don't have a website user, or if Firebase has a user
       if (user) {
         currentUser = {
           uid: user.uid,
@@ -36,15 +47,28 @@
           photoURL: user.photoURL,
           isAnonymous: user.isAnonymous,
         };
-      } else {
+      } else if (!result[WEBSITE_USER_KEY]) {
+        // Only clear if no website user
         currentUser = null;
       }
       authLoading = false;
     });
+
+    // Listen for auth changes from background (website login/logout)
+    chrome.runtime.onMessage.addListener(handleAuthMessage);
   });
+
+  // Handle auth-changed messages from background
+  function handleAuthMessage(message: { type: string; user?: AuthUser }) {
+    if (message.type === "auth-changed") {
+      currentUser = message.user || null;
+      authLoading = false;
+    }
+  }
 
   onDestroy(() => {
     unsubscribeAuth?.();
+    chrome.runtime.onMessage.removeListener(handleAuthMessage);
   });
 
   // Handle Google sign in

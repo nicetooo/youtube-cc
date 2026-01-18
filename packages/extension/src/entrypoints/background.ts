@@ -1,5 +1,9 @@
 import { updateSelectorsFromGithub } from "@/features/ads/ad-selectors";
-import { initSyncService, triggerSync } from "@/shared/stores/sync";
+import {
+  initSyncService,
+  triggerSync,
+  handleWebsiteAuth,
+} from "@/shared/stores/sync";
 
 export default defineBackground(() => {
   // 存储所有活跃的 port 连接
@@ -35,6 +39,14 @@ export default defineBackground(() => {
     if (message.type === "sync") {
       triggerSync()
         .then((success) => sendResponse({ success }))
+        .catch((err) => sendResponse({ success: false, error: err.message }));
+      return true;
+    }
+
+    // Website auth bridge - receive auth state from website
+    if (message.type === "website-auth") {
+      handleWebsiteAuth(message.action, message.user, message.token)
+        .then(() => sendResponse({ success: true }))
         .catch((err) => sendResponse({ success: false, error: err.message }));
       return true;
     }

@@ -27,7 +27,7 @@ function createAuthStore() {
     const { onAuthChange, getUserSettings, getUserStats } =
       await import("@aspect/shared/firebase");
 
-    onAuthChange((fbUser) => {
+    onAuthChange(async (fbUser) => {
       firebaseUser = fbUser;
 
       if (fbUser) {
@@ -42,6 +42,28 @@ function createAuthStore() {
           stats: null,
         };
 
+        // Broadcast auth state to extension via CustomEvent
+        try {
+          const token = await fbUser.getIdToken();
+          window.dispatchEvent(
+            new CustomEvent("ccplus-auth", {
+              detail: {
+                type: "login",
+                token,
+                user: {
+                  uid: fbUser.uid,
+                  email: fbUser.email,
+                  displayName: fbUser.displayName,
+                  photoURL: fbUser.photoURL,
+                  isAnonymous: fbUser.isAnonymous,
+                },
+              },
+            })
+          );
+        } catch (e) {
+          console.error("Failed to broadcast auth to extension:", e);
+        }
+
         // Load settings/stats in background
         Promise.all([
           getUserSettings(fbUser.uid).catch(() => null),
@@ -53,6 +75,12 @@ function createAuthStore() {
         });
       } else {
         user = null;
+        // Broadcast logout to extension
+        window.dispatchEvent(
+          new CustomEvent("ccplus-auth", {
+            detail: { type: "logout" },
+          })
+        );
       }
 
       loading = false;
