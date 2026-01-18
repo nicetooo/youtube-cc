@@ -14,6 +14,13 @@ import type { WordSource } from "@aspect/shared";
 // WXT content script definition
 export default defineContentScript({
   matches: ["http://*/*", "https://*/*"],
+  excludeMatches: [
+    // Exclude our own website to avoid CSS conflicts
+    "http://localhost:5173/*",
+    "http://localhost:5174/*",
+    "https://youtubecc.com/*",
+    "https://www.youtubecc.com/*",
+  ],
   runAt: "document_end",
 
   main() {
