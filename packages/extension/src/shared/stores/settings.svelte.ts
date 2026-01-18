@@ -1,18 +1,43 @@
 import { writable } from "svelte/store";
 import { isEqual } from "lodash-es";
 
+// Extension settings type
+export interface ExtensionSettings {
+  caption: boolean;
+  skipAd: boolean;
+  removeAds: boolean;
+  wideScreen: boolean;
+  sideComment: boolean;
+  commentSearch: boolean;
+  captionFontSize: number;
+  // Word selection / translation settings
+  wordSelection: boolean;
+  targetLanguage: string;
+}
+
+// App store state type
+export interface AppStoreState {
+  isStorageLoad: boolean;
+  settings: ExtensionSettings;
+}
+
+// Default settings
+const defaultSettings: ExtensionSettings = {
+  caption: false,
+  skipAd: false,
+  removeAds: true,
+  wideScreen: false,
+  sideComment: false,
+  commentSearch: true,
+  captionFontSize: 14,
+  wordSelection: true,
+  targetLanguage: "zh-CN",
+};
+
 /** sync store between popup & content.js */
-export const appStore = writable({
+export const appStore = writable<AppStoreState>({
   isStorageLoad: false,
-  settings: {
-    caption: false,
-    skipAd: false,
-    removeAds: true,
-    wideScreen: false,
-    sideComment: false,
-    commentSearch: true,
-    captionFontSize: 14,
-  },
+  settings: defaultSettings,
 });
 
 appStore.subscribe(async (value) => {
@@ -53,7 +78,9 @@ appStore.subscribe(async (value) => {
 });
 
 let isSubscribed = false;
-let storageChangeHandler: ((changes: { [key: string]: chrome.storage.StorageChange }) => void) | null = null;
+let storageChangeHandler:
+  | ((changes: { [key: string]: chrome.storage.StorageChange }) => void)
+  | null = null;
 
 export function subscribeStorageChange() {
   if (isSubscribed) return;

@@ -17,6 +17,16 @@ export default defineBackground(() => {
   // Run once on startup
   updateSelectorsFromGithub().catch(console.error);
 
+  // --- Translation API Handler ---
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (message.type === "translate") {
+      handleTranslate(message.text, message.targetLang)
+        .then(sendResponse)
+        .catch((err) => sendResponse({ error: err.message }));
+      return true; // Keep channel open for async response
+    }
+  });
+
   // --- Runtime Messaging Logic ---
 
   // 只注册一次 webRequest 监听器
@@ -85,5 +95,55 @@ function handleUrlUpdate(
     } catch {
       // port 可能已断开，忽略错误
     }
+  }
+}
+
+// --- Translation Handler ---
+async function handleTranslate(
+  text: string,
+  targetLang: string
+): Promise<{ translation: string; detectedLang?: string } | { error: string }> {
+  const LANG_CODE_MAP: Record<string, string> = {
+    "zh-CN": "zh-CN",
+    "zh-TW": "zh-TW",
+    en: "en",
+    ja: "ja",
+    ko: "ko",
+  };
+
+  const target = LANG_CODE_MAP[targetLang] || targetLang;
+
+  try {
+    const url = new URL("https://translate.googleapis.com/translate_a/single");
+    url.searchParams.set("client", "gtx");
+    url.searchParams.set("sl", "auto");
+    url.searchParams.set("tl", target);
+    url.searchParams.append("dt", "t");
+    url.searchParams.append("dt", "bd");
+    url.searchParams.set("dj", "1");
+    url.searchParams.set("q", text);
+
+    const response = await fetch(url.toString());
+
+    if (!response.ok) {
+      return { error: `API returned ${response.status}` };
+    }
+
+    const data = await response.json();
+
+    let translation = "";
+    if (data.sentences && Array.isArray(data.sentences)) {
+      translation = data.sentences
+        .filter((s: { trans?: string }) => s.trans)
+        .map((s: { trans: string }) => s.trans)
+        .join("");
+    }
+
+    return {
+      translation: translation || text,
+      detectedLang: data.src,
+    };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Network error" };
   }
 }

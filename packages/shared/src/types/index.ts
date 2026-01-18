@@ -1,12 +1,24 @@
+// Word source types - supports multiple origins
+export type WordSource =
+  | {
+      type: "youtube-caption";
+      videoId: string;
+      videoTitle?: string;
+      timestamp: number; // Video timestamp in seconds
+    }
+  | {
+      type: "webpage";
+      url: string;
+      pageTitle?: string;
+    };
+
 // Word/Vocabulary types for the collection feature
 export interface Word {
   id: string;
   text: string;
-  context: string; // The full subtitle line
+  context: string; // The full sentence/paragraph containing the word
   translation?: string; // Optional translation
-  videoId: string;
-  videoTitle?: string;
-  timestamp: number; // Video timestamp in seconds
+  source: WordSource; // Where the word was collected from
 
   // SM-2 spaced repetition fields
   easeFactor: number; // Default 2.5, minimum 1.3
@@ -20,6 +32,59 @@ export interface Word {
 
   createdAt: Date;
   updatedAt?: Date;
+}
+
+// Legacy Word type for migration (deprecated)
+export interface LegacyWord {
+  id: string;
+  text: string;
+  context: string;
+  translation?: string;
+  videoId: string;
+  videoTitle?: string;
+  timestamp: number;
+  easeFactor: number;
+  interval: number;
+  repetitions: number;
+  nextReview: Date;
+  status: "new" | "learning" | "mastered";
+  examples?: string[];
+  createdAt: Date;
+  updatedAt?: Date;
+}
+
+// Helper to migrate legacy word to new format
+export function migrateLegacyWord(legacy: LegacyWord): Word {
+  return {
+    id: legacy.id,
+    text: legacy.text,
+    context: legacy.context,
+    translation: legacy.translation,
+    source: {
+      type: "youtube-caption",
+      videoId: legacy.videoId,
+      videoTitle: legacy.videoTitle,
+      timestamp: legacy.timestamp,
+    },
+    easeFactor: legacy.easeFactor,
+    interval: legacy.interval,
+    repetitions: legacy.repetitions,
+    nextReview: legacy.nextReview,
+    status: legacy.status,
+    examples: legacy.examples,
+    createdAt: legacy.createdAt,
+    updatedAt: legacy.updatedAt,
+  };
+}
+
+// Check if a word is in legacy format
+export function isLegacyWord(word: unknown): word is LegacyWord {
+  return (
+    typeof word === "object" &&
+    word !== null &&
+    "videoId" in word &&
+    !("source" in word)
+  );
 }
 
 // SM-2 review quality ratings
@@ -49,6 +114,10 @@ export interface UserSettings {
   sideComment: boolean;
   commentSearch: boolean;
   captionFontSize?: number;
+
+  // Word selection settings
+  wordSelection?: boolean;
+  targetLanguage?: string;
 
   // Web settings
   theme: "light" | "dark" | "system";
@@ -80,21 +149,18 @@ export interface User {
   };
 }
 
+// Input type for creating a new word
+export type CreateWordInput = {
+  text: string;
+  context: string;
+  translation?: string;
+  source: WordSource;
+};
+
 // Helper to create a new word with default SM-2 values
-export function createWord(
-  partial: Omit<
-    Word,
-    | "id"
-    | "easeFactor"
-    | "interval"
-    | "repetitions"
-    | "nextReview"
-    | "status"
-    | "createdAt"
-  >
-): Word {
+export function createWord(input: CreateWordInput): Word {
   return {
-    ...partial,
+    ...input,
     id: crypto.randomUUID(),
     easeFactor: 2.5,
     interval: 0,
@@ -103,4 +169,46 @@ export function createWord(
     status: "new",
     createdAt: new Date(),
   };
+}
+
+// Helper to create a YouTube caption word
+export function createYouTubeWord(
+  text: string,
+  context: string,
+  videoId: string,
+  timestamp: number,
+  videoTitle?: string,
+  translation?: string
+): Word {
+  return createWord({
+    text,
+    context,
+    translation,
+    source: {
+      type: "youtube-caption",
+      videoId,
+      videoTitle,
+      timestamp,
+    },
+  });
+}
+
+// Helper to create a webpage word
+export function createWebpageWord(
+  text: string,
+  context: string,
+  url: string,
+  pageTitle?: string,
+  translation?: string
+): Word {
+  return createWord({
+    text,
+    context,
+    translation,
+    source: {
+      type: "webpage",
+      url,
+      pageTitle,
+    },
+  });
 }
