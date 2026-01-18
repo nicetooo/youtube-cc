@@ -62,21 +62,27 @@
     };
     document.addEventListener("keydown", handleKeydown);
 
-    // Close on click outside
+    // Close on click outside (use composedPath for Shadow DOM compatibility)
     const handleClickOutside = (e: MouseEvent) => {
-      if (popupEl && !popupEl.contains(e.target as Node)) {
+      if (!popupEl) return;
+
+      // composedPath() returns the actual path through Shadow DOM boundaries
+      const path = e.composedPath();
+      const isClickInside = path.includes(popupEl);
+
+      if (!isClickInside) {
         onClose();
       }
     };
-    // Delay to prevent immediate close
+    // Delay to prevent immediate close from the selection click
     setTimeout(() => {
-      document.addEventListener("click", handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }, 100);
 
     return () => {
       mediaQuery.removeEventListener("change", handleThemeChange);
       document.removeEventListener("keydown", handleKeydown);
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   });
 
