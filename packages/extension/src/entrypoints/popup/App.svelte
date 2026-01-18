@@ -31,15 +31,17 @@
 
     // First check for website user (logged in via website)
     const result = await chrome.storage.local.get(WEBSITE_USER_KEY);
-    if (result[WEBSITE_USER_KEY]) {
-      currentUser = result[WEBSITE_USER_KEY];
+    const websiteUser = result[WEBSITE_USER_KEY] as AuthUser | undefined;
+
+    if (websiteUser) {
+      currentUser = websiteUser;
       authLoading = false;
     }
 
     // Listen for auth state changes from Firebase (for popup login)
-    unsubscribeAuth = onAuthChange((user) => {
-      // Only update if we don't have a website user, or if Firebase has a user
+    unsubscribeAuth = onAuthChange(async (user) => {
       if (user) {
+        // Firebase user takes priority when actively logged in
         currentUser = {
           uid: user.uid,
           email: user.email,
@@ -47,15 +49,23 @@
           photoURL: user.photoURL,
           isAnonymous: user.isAnonymous,
         };
-      } else if (!result[WEBSITE_USER_KEY]) {
-        // Only clear if no website user
-        currentUser = null;
+      } else {
+        // Firebase has no user - check storage for website user
+        const stored = await chrome.storage.local.get(WEBSITE_USER_KEY);
+        if (stored[WEBSITE_USER_KEY]) {
+          currentUser = stored[WEBSITE_USER_KEY];
+        } else {
+          currentUser = null;
+        }
       }
       authLoading = false;
     });
 
     // Listen for auth changes from background (website login/logout)
     chrome.runtime.onMessage.addListener(handleAuthMessage);
+
+    // Listen for storage changes (website auth updates)
+    chrome.storage.onChanged.addListener(handleStorageChange);
   });
 
   // Handle auth-changed messages from background
@@ -66,9 +76,35 @@
     }
   }
 
+  // Handle storage changes (for website auth updates)
+  function handleStorageChange(
+    changes: { [key: string]: chrome.storage.StorageChange },
+    areaName: string
+  ) {
+    if (areaName === "local" && changes[WEBSITE_USER_KEY]) {
+      const newUser = changes[WEBSITE_USER_KEY].newValue as
+        | AuthUser
+        | undefined;
+      if (newUser) {
+        currentUser = newUser;
+      } else {
+        // Website user was removed, check if we have Firebase user
+        // If not, clear current user
+        if (
+          !currentUser ||
+          currentUser.uid === changes[WEBSITE_USER_KEY].oldValue?.uid
+        ) {
+          currentUser = null;
+        }
+      }
+      authLoading = false;
+    }
+  }
+
   onDestroy(() => {
     unsubscribeAuth?.();
     chrome.runtime.onMessage.removeListener(handleAuthMessage);
+    chrome.storage.onChanged.removeListener(handleStorageChange);
   });
 
   // Handle Google sign in
@@ -498,8 +534,8 @@
               class="w-5 h-5 border-2 border-[var(--cc-text-muted)] border-t-transparent rounded-full animate-spin"
             ></div>
           </div>
-        {:else if currentUser && !currentUser.isAnonymous}
-          <!-- Logged in state -->
+        {:else if currentUser}
+          <!-- Logged in state (includes anonymous website users for sync) -->
           <div
             class="w-full p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)]"
           >

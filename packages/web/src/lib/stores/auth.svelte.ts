@@ -42,24 +42,28 @@ function createAuthStore() {
           stats: null,
         };
 
-        // Broadcast auth state to extension via CustomEvent
+        // Broadcast auth state to extension via postMessage (works across worlds)
         if (browser) {
           try {
             const token = await fbUser.getIdToken();
-            window.dispatchEvent(
-              new CustomEvent("ccplus-auth", {
-                detail: {
-                  type: "login",
-                  token,
-                  user: {
-                    uid: fbUser.uid,
-                    email: fbUser.email,
-                    displayName: fbUser.displayName,
-                    photoURL: fbUser.photoURL,
-                    isAnonymous: fbUser.isAnonymous,
-                  },
+            console.log(
+              "[CC Plus Web] Broadcasting login to extension:",
+              fbUser.email
+            );
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "login",
+                token,
+                user: {
+                  uid: fbUser.uid,
+                  email: fbUser.email,
+                  displayName: fbUser.displayName,
+                  photoURL: fbUser.photoURL,
+                  isAnonymous: fbUser.isAnonymous,
                 },
-              })
+              },
+              "*"
             );
           } catch (e) {
             console.error("Failed to broadcast auth to extension:", e);
@@ -79,15 +83,41 @@ function createAuthStore() {
         user = null;
         // Broadcast logout to extension
         if (browser) {
-          window.dispatchEvent(
-            new CustomEvent("ccplus-auth", {
-              detail: { type: "logout" },
-            })
-          );
+          window.postMessage({ source: "ccplus-web", type: "logout" }, "*");
         }
       }
 
       loading = false;
+    });
+
+    // Listen for auth state request from extension via postMessage
+    window.addEventListener("message", async (event) => {
+      if (event.data?.source !== "ccplus-extension") return;
+      if (event.data?.type !== "auth-request") return;
+
+      console.log("[CC Plus Web] Extension requested auth state");
+      if (firebaseUser) {
+        try {
+          const token = await firebaseUser.getIdToken();
+          window.postMessage(
+            {
+              source: "ccplus-web",
+              type: "login",
+              token,
+              user: {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                displayName: firebaseUser.displayName,
+                photoURL: firebaseUser.photoURL,
+                isAnonymous: firebaseUser.isAnonymous,
+              },
+            },
+            "*"
+          );
+        } catch (e) {
+          console.error("Failed to broadcast auth to extension:", e);
+        }
+      }
     });
   }
 
