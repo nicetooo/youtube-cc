@@ -1,4 +1,5 @@
 import { updateSelectorsFromGithub } from "@/features/ads/ad-selectors";
+import { initSyncService, triggerSync } from "@/shared/stores/sync";
 
 export default defineBackground(() => {
   // 存储所有活跃的 port 连接
@@ -17,13 +18,25 @@ export default defineBackground(() => {
   // Run once on startup
   updateSelectorsFromGithub().catch(console.error);
 
-  // --- Translation API Handler ---
+  // --- Firebase Sync Service ---
+  initSyncService();
+
+  // --- Message Handlers ---
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    // Translation handler
     if (message.type === "translate") {
       handleTranslate(message.text, message.targetLang)
         .then(sendResponse)
         .catch((err) => sendResponse({ error: err.message }));
       return true; // Keep channel open for async response
+    }
+
+    // Manual sync trigger
+    if (message.type === "sync") {
+      triggerSync()
+        .then((success) => sendResponse({ success }))
+        .catch((err) => sendResponse({ success: false, error: err.message }));
+      return true;
     }
   });
 
