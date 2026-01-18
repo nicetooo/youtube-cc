@@ -128,3 +128,4 @@ async function ensureUserDocument(user: User) {
 }
 
 export { auth };
+export type { User as FirebaseUser } from "firebase/auth";

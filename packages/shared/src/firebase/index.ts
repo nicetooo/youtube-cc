@@ -13,6 +13,7 @@ export {
   resetPassword,
   onAuthChange,
   getCurrentUser,
+  type FirebaseUser,
 } from "./auth";
 
 // Firestore functions
