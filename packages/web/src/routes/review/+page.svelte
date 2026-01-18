@@ -3,7 +3,7 @@
   import { wordsStore } from "$lib/stores/words.svelte";
   import { getIntervalPreview } from "$lib/sm2/algorithm";
   import { i18n } from "$lib/i18n/index.svelte";
-  import type { SimpleRating } from "@aspect/shared/types";
+  import type { SimpleRating, Word } from "@aspect/shared/types";
 
   let currentIndex = $state(0);
   let showAnswer = $state(false);
@@ -16,6 +16,20 @@
   const intervalPreview = $derived(
     currentWord ? getIntervalPreview(currentWord) : null
   );
+
+  // Helper to get source link
+  function getSourceLink(word: Word): string | null {
+    if (!word.source) return null;
+    if (word.source.type === "youtube-caption") {
+      return `https://www.youtube.com/watch?v=${word.source.videoId}&t=${Math.floor(word.source.timestamp)}s`;
+    } else if (word.source.type === "webpage") {
+      return word.source.url;
+    }
+    return null;
+  }
+
+  // Check if source is YouTube
+  const isYouTube = $derived(currentWord?.source?.type === "youtube-caption");
 
   function handleRating(rating: SimpleRating) {
     if (!currentWord) return;
@@ -236,29 +250,51 @@
       {/if}
     </div>
 
-    <!-- Video link -->
-    <div class="mt-4 text-center">
-      <a
-        href="https://www.youtube.com/watch?v={currentWord.videoId}&t={Math.floor(
-          currentWord.timestamp
-        )}s"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-sm text-tertiary hover:text-secondary transition-colors inline-flex items-center gap-1"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3" /></svg
+    <!-- Source link -->
+    {#if getSourceLink(currentWord)}
+      <div class="mt-4 text-center">
+        <a
+          href={getSourceLink(currentWord)}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm text-tertiary hover:text-secondary transition-colors inline-flex items-center gap-1"
         >
-        Watch in video
-      </a>
-    </div>
+          {#if isYouTube}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><polygon points="6 3 20 12 6 21 6 3" /></svg
+            >
+            Watch in video
+          {:else}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+              />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Open source page
+          {/if}
+        </a>
+      </div>
+    {/if}
   {/if}
 </div>

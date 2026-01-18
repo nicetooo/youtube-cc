@@ -53,7 +53,19 @@ function createWordsStore() {
     let result = words;
 
     if (selectedVideoId) {
-      result = result.filter((w) => w.videoId === selectedVideoId);
+      result = result.filter((w) => {
+        if (!w.source) return false;
+        if (w.source.type === "youtube-caption") {
+          return w.source.videoId === selectedVideoId;
+        } else {
+          try {
+            const url = new URL(w.source.url);
+            return url.hostname === selectedVideoId;
+          } catch {
+            return w.source.url === selectedVideoId;
+          }
+        }
+      });
     }
 
     if (searchQuery.trim()) {
@@ -70,25 +82,40 @@ function createWordsStore() {
   });
 
   const videos = $derived(() => {
-    const videoMap = new Map<
+    const sourceMap = new Map<
       string,
       { id: string; title: string; wordCount: number }
     >();
 
     for (const word of words) {
-      const existing = videoMap.get(word.videoId);
+      if (!word.source) continue;
+
+      let id: string;
+      let title: string;
+
+      if (word.source.type === "youtube-caption") {
+        id = word.source.videoId;
+        title = word.source.videoTitle || "YouTube Video";
+      } else {
+        try {
+          const url = new URL(word.source.url);
+          id = url.hostname;
+          title = word.source.pageTitle || url.hostname;
+        } catch {
+          id = word.source.url;
+          title = word.source.pageTitle || "Webpage";
+        }
+      }
+
+      const existing = sourceMap.get(id);
       if (existing) {
         existing.wordCount++;
       } else {
-        videoMap.set(word.videoId, {
-          id: word.videoId,
-          title: word.videoTitle || word.videoId,
-          wordCount: 1,
-        });
+        sourceMap.set(id, { id, title, wordCount: 1 });
       }
     }
 
-    return Array.from(videoMap.values()).sort(
+    return Array.from(sourceMap.values()).sort(
       (a, b) => b.wordCount - a.wordCount
     );
   });

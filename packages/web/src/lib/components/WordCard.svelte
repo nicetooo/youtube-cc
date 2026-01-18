@@ -10,6 +10,10 @@
 
   let expanded = $state(false);
 
+  // Check source type
+  const isYouTube = $derived(word.source?.type === "youtube-caption");
+  const isWebpage = $derived(word.source?.type === "webpage");
+
   function formatTimestamp(seconds: number): string {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -20,8 +24,38 @@
     return `${m}:${s.toString().padStart(2, "0")}`;
   }
 
-  function getYouTubeLink(videoId: string, timestamp: number): string {
-    return `https://www.youtube.com/watch?v=${videoId}&t=${Math.floor(timestamp)}s`;
+  function getSourceLink(): string | null {
+    if (!word.source) return null;
+
+    if (word.source.type === "youtube-caption") {
+      const { videoId, timestamp } = word.source;
+      return `https://www.youtube.com/watch?v=${videoId}&t=${Math.floor(timestamp)}s`;
+    } else if (word.source.type === "webpage") {
+      return word.source.url;
+    }
+    return null;
+  }
+
+  function getSourceTitle(): string {
+    if (!word.source) return "Unknown source";
+
+    if (word.source.type === "youtube-caption") {
+      return word.source.videoTitle || "YouTube Video";
+    } else if (word.source.type === "webpage") {
+      // Show page title or extract host from URL
+      if (word.source.pageTitle) return word.source.pageTitle;
+      try {
+        const url = new URL(word.source.url);
+        return url.hostname;
+      } catch {
+        return "Webpage";
+      }
+    }
+    return "Unknown source";
+  }
+
+  function getSourceIcon(): "youtube" | "webpage" {
+    return isYouTube ? "youtube" : "webpage";
   }
 
   function getStatusBadgeClass(status: Word["status"]): string {
@@ -65,23 +99,49 @@
     <div
       class="ml-auto flex items-center shrink-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
     >
-      <a
-        href={getYouTubeLink(word.videoId, word.timestamp)}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="p-1.5 rounded hover:bg-tertiary transition-colors"
-        title="Watch at {formatTimestamp(word.timestamp)}"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"><polygon points="6 3 20 12 6 21 6 3" /></svg
+      {#if getSourceLink()}
+        <a
+          href={getSourceLink()}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="p-1.5 rounded hover:bg-tertiary transition-colors"
+          title={isYouTube && word.source?.type === "youtube-caption"
+            ? `Watch at ${formatTimestamp(word.source.timestamp)}`
+            : "Open source page"}
         >
-      </a>
+          {#if isYouTube}
+            <!-- Play icon for YouTube -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"><polygon points="6 3 20 12 6 21 6 3" /></svg
+            >
+          {:else}
+            <!-- External link icon for webpage -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+              />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          {/if}
+        </a>
+      {/if}
       {#if onDelete}
         <button
           onclick={() => onDelete?.(word.id)}
@@ -109,12 +169,46 @@
   <p class="text-sm text-secondary line-clamp-2 mb-2">"{word.context}"</p>
 
   <!-- Meta -->
-  <div class="text-xs text-tertiary">
+  <div class="text-xs text-tertiary flex items-center gap-1">
+    {#if isYouTube}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="text-red-500 shrink-0"
+      >
+        <path
+          d="M23.5 6.2c-.3-1-1-1.8-2-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.5.5c-1 .3-1.7 1.1-2 2.1-.5 1.9-.5 5.8-.5 5.8s0 3.9.5 5.8c.3 1 1 1.8 2 2.1 1.9.5 9.5.5 9.5.5s7.6 0 9.5-.5c1-.3 1.7-1.1 2-2.1.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.7zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"
+        />
+      </svg>
+    {:else}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        class="shrink-0"
+      >
+        <circle cx="12" cy="12" r="10" /><line
+          x1="2"
+          y1="12"
+          x2="22"
+          y2="12"
+        /><path
+          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+        />
+      </svg>
+    {/if}
     <span
       class="truncate inline-block max-w-[180px] sm:max-w-[250px] align-bottom"
-      title={word.videoTitle}
+      title={getSourceTitle()}
     >
-      {word.videoTitle || "Unknown video"}
+      {getSourceTitle()}
     </span>
     <span class="mx-1">·</span>
     <span>{formatDate(word.createdAt)}</span>

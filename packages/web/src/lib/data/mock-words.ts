@@ -20,9 +20,12 @@ export const mockWords: Word[] = [
     text: "magnificent",
     context: "This is a magnificent view of the city skyline at sunset.",
     translation: "壮丽的，宏伟的",
-    videoId: "abc123",
-    videoTitle: "English Listening Practice - City Life",
-    timestamp: 125,
+    source: {
+      type: "youtube-caption",
+      videoId: "abc123",
+      videoTitle: "English Listening Practice - City Life",
+      timestamp: 125,
+    },
     easeFactor: 2.5,
     interval: 0,
     repetitions: 0,
@@ -35,9 +38,12 @@ export const mockWords: Word[] = [
     text: "overwhelming",
     context: "The response from the community was overwhelming.",
     translation: "压倒性的，难以抗拒的",
-    videoId: "abc123",
-    videoTitle: "English Listening Practice - City Life",
-    timestamp: 245,
+    source: {
+      type: "youtube-caption",
+      videoId: "abc123",
+      videoTitle: "English Listening Practice - City Life",
+      timestamp: 245,
+    },
     easeFactor: 2.5,
     interval: 0,
     repetitions: 0,
@@ -50,9 +56,12 @@ export const mockWords: Word[] = [
     text: "serendipity",
     context: "It was pure serendipity that we met at the coffee shop.",
     translation: "意外发现美好事物的运气",
-    videoId: "def456",
-    videoTitle: "TED Talk: The Power of Luck",
-    timestamp: 89,
+    source: {
+      type: "youtube-caption",
+      videoId: "def456",
+      videoTitle: "TED Talk: The Power of Luck",
+      timestamp: 89,
+    },
     easeFactor: 2.5,
     interval: 0,
     repetitions: 0,
@@ -67,9 +76,12 @@ export const mockWords: Word[] = [
     text: "ephemeral",
     context: "Social media fame is often ephemeral.",
     translation: "短暂的，转瞬即逝的",
-    videoId: "def456",
-    videoTitle: "TED Talk: The Power of Luck",
-    timestamp: 312,
+    source: {
+      type: "youtube-caption",
+      videoId: "def456",
+      videoTitle: "TED Talk: The Power of Luck",
+      timestamp: 312,
+    },
     easeFactor: 2.5,
     interval: 1,
     repetitions: 1,
@@ -82,9 +94,12 @@ export const mockWords: Word[] = [
     text: "meticulous",
     context: "She was meticulous in her research methodology.",
     translation: "一丝不苟的，细致的",
-    videoId: "ghi789",
-    videoTitle: "BBC Learning English - Academic Writing",
-    timestamp: 156,
+    source: {
+      type: "youtube-caption",
+      videoId: "ghi789",
+      videoTitle: "BBC Learning English - Academic Writing",
+      timestamp: 156,
+    },
     easeFactor: 2.6,
     interval: 3,
     repetitions: 2,
@@ -97,9 +112,11 @@ export const mockWords: Word[] = [
     text: "ubiquitous",
     context: "Smartphones have become ubiquitous in modern society.",
     translation: "无处不在的",
-    videoId: "ghi789",
-    videoTitle: "BBC Learning English - Academic Writing",
-    timestamp: 423,
+    source: {
+      type: "webpage",
+      url: "https://example.com/article",
+      pageTitle: "Tech Trends 2024",
+    },
     easeFactor: 2.4,
     interval: 2,
     repetitions: 2,
@@ -114,9 +131,12 @@ export const mockWords: Word[] = [
     text: "pragmatic",
     context: "We need a pragmatic approach to solve this problem.",
     translation: "务实的，实用主义的",
-    videoId: "jkl012",
-    videoTitle: "Business English Vocabulary",
-    timestamp: 67,
+    source: {
+      type: "youtube-caption",
+      videoId: "jkl012",
+      videoTitle: "Business English Vocabulary",
+      timestamp: 67,
+    },
     easeFactor: 2.7,
     interval: 21,
     repetitions: 5,
@@ -134,9 +154,12 @@ export const mockWords: Word[] = [
     text: "eloquent",
     context: "She gave an eloquent speech about climate change.",
     translation: "雄辩的，有口才的",
-    videoId: "jkl012",
-    videoTitle: "Business English Vocabulary",
-    timestamp: 234,
+    source: {
+      type: "youtube-caption",
+      videoId: "jkl012",
+      videoTitle: "Business English Vocabulary",
+      timestamp: 234,
+    },
     easeFactor: 2.8,
     interval: 30,
     repetitions: 6,
@@ -149,9 +172,11 @@ export const mockWords: Word[] = [
     text: "resilient",
     context: "The most successful people are incredibly resilient.",
     translation: "有韧性的，能快速恢复的",
-    videoId: "mno345",
-    videoTitle: "Motivational Speech Collection",
-    timestamp: 512,
+    source: {
+      type: "webpage",
+      url: "https://medium.com/success-stories",
+      pageTitle: "Success Stories",
+    },
     easeFactor: 2.6,
     interval: 14,
     repetitions: 4,
@@ -166,9 +191,12 @@ export const mockWords: Word[] = [
     text: "ambiguous",
     context: "The instructions were ambiguous and hard to follow.",
     translation: "模棱两可的，含糊的",
-    videoId: "mno345",
-    videoTitle: "Motivational Speech Collection",
-    timestamp: 178,
+    source: {
+      type: "youtube-caption",
+      videoId: "mno345",
+      videoTitle: "Motivational Speech Collection",
+      timestamp: 178,
+    },
     easeFactor: 2.5,
     interval: 0,
     repetitions: 0,
@@ -181,9 +209,12 @@ export const mockWords: Word[] = [
     text: "conscientious",
     context: "He is a conscientious worker who always meets deadlines.",
     translation: "认真负责的，勤勉的",
-    videoId: "pqr678",
-    videoTitle: "IELTS Vocabulary Masterclass",
-    timestamp: 89,
+    source: {
+      type: "youtube-caption",
+      videoId: "pqr678",
+      videoTitle: "IELTS Vocabulary Masterclass",
+      timestamp: 89,
+    },
     easeFactor: 2.3,
     interval: 1,
     repetitions: 1,
@@ -196,9 +227,11 @@ export const mockWords: Word[] = [
     text: "indispensable",
     context: "Good communication skills are indispensable in business.",
     translation: "不可或缺的，必需的",
-    videoId: "pqr678",
-    videoTitle: "IELTS Vocabulary Masterclass",
-    timestamp: 267,
+    source: {
+      type: "webpage",
+      url: "https://hbr.org/communication",
+      pageTitle: "Harvard Business Review",
+    },
     easeFactor: 2.5,
     interval: 0,
     repetitions: 0,
@@ -208,27 +241,42 @@ export const mockWords: Word[] = [
   },
 ];
 
-// Get unique videos from words
-export function getVideos(words: Word[]) {
-  const videoMap = new Map<
+// Get unique sources from words (for filtering)
+export function getSources(words: Word[]) {
+  const sourceMap = new Map<
     string,
     { id: string; title: string; wordCount: number }
   >();
 
   words.forEach((word) => {
-    const existing = videoMap.get(word.videoId);
+    if (!word.source) return;
+
+    let id: string;
+    let title: string;
+
+    if (word.source.type === "youtube-caption") {
+      id = word.source.videoId;
+      title = word.source.videoTitle || "YouTube Video";
+    } else {
+      try {
+        const url = new URL(word.source.url);
+        id = url.hostname;
+        title = word.source.pageTitle || url.hostname;
+      } catch {
+        id = word.source.url;
+        title = word.source.pageTitle || "Webpage";
+      }
+    }
+
+    const existing = sourceMap.get(id);
     if (existing) {
       existing.wordCount++;
     } else {
-      videoMap.set(word.videoId, {
-        id: word.videoId,
-        title: word.videoTitle || "Unknown Video",
-        wordCount: 1,
-      });
+      sourceMap.set(id, { id, title, wordCount: 1 });
     }
   });
 
-  return Array.from(videoMap.values());
+  return Array.from(sourceMap.values());
 }
 
 // Get words due for review
