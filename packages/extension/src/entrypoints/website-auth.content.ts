@@ -34,32 +34,5 @@ export default defineContentScript({
         });
       }
     }) as EventListener);
-
-    // Also check if there's an existing auth state when script loads
-    // This is done by injecting a script that reads Firebase auth
-    injectAuthChecker();
   },
 });
-
-// Inject a script to check current auth state
-function injectAuthChecker() {
-  const script = document.createElement("script");
-  script.textContent = `
-    (function() {
-      // Wait for Firebase to be ready, then check auth state
-      const checkAuth = () => {
-        if (window.__FIREBASE_AUTH_USER__) {
-          window.dispatchEvent(new CustomEvent('ccplus-auth', {
-            detail: window.__FIREBASE_AUTH_USER__
-          }));
-        }
-      };
-      
-      // Check after a short delay to allow Firebase to initialize
-      setTimeout(checkAuth, 1000);
-      setTimeout(checkAuth, 3000);
-    })();
-  `;
-  document.documentElement.appendChild(script);
-  script.remove();
-}

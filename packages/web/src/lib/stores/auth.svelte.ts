@@ -43,25 +43,27 @@ function createAuthStore() {
         };
 
         // Broadcast auth state to extension via CustomEvent
-        try {
-          const token = await fbUser.getIdToken();
-          window.dispatchEvent(
-            new CustomEvent("ccplus-auth", {
-              detail: {
-                type: "login",
-                token,
-                user: {
-                  uid: fbUser.uid,
-                  email: fbUser.email,
-                  displayName: fbUser.displayName,
-                  photoURL: fbUser.photoURL,
-                  isAnonymous: fbUser.isAnonymous,
+        if (browser) {
+          try {
+            const token = await fbUser.getIdToken();
+            window.dispatchEvent(
+              new CustomEvent("ccplus-auth", {
+                detail: {
+                  type: "login",
+                  token,
+                  user: {
+                    uid: fbUser.uid,
+                    email: fbUser.email,
+                    displayName: fbUser.displayName,
+                    photoURL: fbUser.photoURL,
+                    isAnonymous: fbUser.isAnonymous,
+                  },
                 },
-              },
-            })
-          );
-        } catch (e) {
-          console.error("Failed to broadcast auth to extension:", e);
+              })
+            );
+          } catch (e) {
+            console.error("Failed to broadcast auth to extension:", e);
+          }
         }
 
         // Load settings/stats in background
@@ -76,11 +78,13 @@ function createAuthStore() {
       } else {
         user = null;
         // Broadcast logout to extension
-        window.dispatchEvent(
-          new CustomEvent("ccplus-auth", {
-            detail: { type: "logout" },
-          })
-        );
+        if (browser) {
+          window.dispatchEvent(
+            new CustomEvent("ccplus-auth", {
+              detail: { type: "logout" },
+            })
+          );
+        }
       }
 
       loading = false;
