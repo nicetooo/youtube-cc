@@ -125,13 +125,17 @@
     }
   }
 
-  // Handle manual sync
+  // Handle manual sync (forceAll=true to upload all local words, not just pending)
   async function handleSync() {
     if (syncStatus === "syncing") return;
 
     syncStatus = "syncing";
     try {
-      const response = await chrome.runtime.sendMessage({ type: "sync" });
+      // Force sync all local words (not just pending) to ensure everything is uploaded
+      const response = await chrome.runtime.sendMessage({
+        type: "sync",
+        forceAll: true,
+      });
       syncStatus = response?.success ? "success" : "error";
 
       // Reset status after 2 seconds

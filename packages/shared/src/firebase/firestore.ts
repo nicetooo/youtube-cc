@@ -32,8 +32,12 @@ export async function addWord(
     updatedAt: serverTimestamp(),
   });
 
-  // Update user stats
-  await incrementWordCount(userId);
+  // Update user stats (don't block on failure)
+  try {
+    await incrementWordCount(userId);
+  } catch (e) {
+    console.warn("Failed to increment word count:", e);
+  }
 
   return wordDoc.id;
 }

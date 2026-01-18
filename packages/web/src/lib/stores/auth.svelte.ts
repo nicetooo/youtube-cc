@@ -90,32 +90,127 @@ function createAuthStore() {
       loading = false;
     });
 
-    // Listen for auth state request from extension via postMessage
+    // Listen for requests from extension via postMessage
     window.addEventListener("message", async (event) => {
       if (event.data?.source !== "ccplus-extension") return;
-      if (event.data?.type !== "auth-request") return;
 
-      console.log("[CC Plus Web] Extension requested auth state");
-      if (firebaseUser) {
-        try {
-          const token = await firebaseUser.getIdToken();
+      // Handle auth state request
+      if (event.data?.type === "auth-request") {
+        console.log("[CC Plus Web] Extension requested auth state");
+        if (firebaseUser) {
+          try {
+            const token = await firebaseUser.getIdToken();
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "login",
+                token,
+                user: {
+                  uid: firebaseUser.uid,
+                  email: firebaseUser.email,
+                  displayName: firebaseUser.displayName,
+                  photoURL: firebaseUser.photoURL,
+                  isAnonymous: firebaseUser.isAnonymous,
+                },
+              },
+              "*"
+            );
+          } catch (e) {
+            console.error("Failed to broadcast auth to extension:", e);
+          }
+        }
+      }
+
+      // Handle fetch-words request
+      if (event.data?.type === "fetch-words") {
+        console.log("[CC Plus Web] Extension requested words");
+        if (firebaseUser) {
+          try {
+            const { getWords } = await import("@aspect/shared/firebase");
+            const words = await getWords(firebaseUser.uid);
+            console.log(
+              "[CC Plus Web] Sending",
+              words.length,
+              "words to extension"
+            );
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "words-response",
+                words,
+                success: true,
+              },
+              "*"
+            );
+          } catch (e) {
+            console.error("Failed to fetch words for extension:", e);
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "words-response",
+                words: [],
+                success: false,
+                error: (e as Error).message,
+              },
+              "*"
+            );
+          }
+        } else {
           window.postMessage(
             {
               source: "ccplus-web",
-              type: "login",
-              token,
-              user: {
-                uid: firebaseUser.uid,
-                email: firebaseUser.email,
-                displayName: firebaseUser.displayName,
-                photoURL: firebaseUser.photoURL,
-                isAnonymous: firebaseUser.isAnonymous,
-              },
+              type: "words-response",
+              words: [],
+              success: false,
+              error: "Not logged in",
             },
             "*"
           );
-        } catch (e) {
-          console.error("Failed to broadcast auth to extension:", e);
+        }
+      }
+
+      // Handle upload-word request
+      if (event.data?.type === "upload-word" && event.data?.word) {
+        console.log(
+          "[CC Plus Web] Extension uploading word:",
+          event.data.word.text,
+          "for user:",
+          firebaseUser?.uid
+        );
+        if (firebaseUser) {
+          try {
+            const { addWord } = await import("@aspect/shared/firebase");
+            // Convert date strings back to Date objects for Firestore
+            const wordData = {
+              ...event.data.word,
+              nextReview: event.data.word.nextReview
+                ? new Date(event.data.word.nextReview)
+                : new Date(),
+            };
+            console.log("[CC Plus Web] Adding word to Firebase:", wordData);
+            const wordId = await addWord(firebaseUser.uid, wordData);
+            console.log("[CC Plus Web] Word added successfully, id:", wordId);
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "upload-word-response",
+                success: true,
+                wordId,
+              },
+              "*"
+            );
+          } catch (e) {
+            console.error("[CC Plus Web] Failed to upload word:", e);
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "upload-word-response",
+                success: false,
+                error: (e as Error).message,
+              },
+              "*"
+            );
+          }
         }
       }
     });

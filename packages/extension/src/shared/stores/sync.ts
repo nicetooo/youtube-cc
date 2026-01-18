@@ -1,22 +1,27 @@
 // Firebase sync service for words
 // Syncs local words to Firebase when user is logged in
+// Uses website bridge for actual Firebase operations (since extension isn't authenticated)
 
-import {
-  onAuthChange,
-  addWord,
-  getWords as getFirebaseWords,
-} from "@aspect/shared";
+import { onAuthChange } from "@aspect/shared";
 import type { Word } from "@aspect/shared";
 import {
   getWords as getLocalWords,
   getWordsToSync,
   clearPendingSync,
-  saveWord,
 } from "./words.svelte";
 
 const LAST_SYNC_KEY = "cc_plus_last_sync";
 const SYNC_USER_KEY = "cc_plus_sync_user";
 const WEBSITE_USER_KEY = "cc_plus_website_user";
+const WORDS_KEY = "cc_plus_words";
+
+// Website URL patterns for finding the tab
+const WEBSITE_PATTERNS = [
+  "http://localhost:5173/*",
+  "http://localhost:5174/*",
+  "https://youtubecc.com/*",
+  "https://www.youtubecc.com/*",
+];
 
 // Sync status
 export type SyncStatus = "idle" | "syncing" | "success" | "error";
@@ -80,19 +85,27 @@ export async function getCurrentUserId(): Promise<string | null> {
 /**
  * Sync words between local storage and Firebase
  * @param userId - Firebase user ID
+ * @param forceUploadAll - If true, upload all local words (not just pending)
  */
-export async function syncWords(userId: string): Promise<void> {
+export async function syncWords(
+  userId: string,
+  forceUploadAll = false
+): Promise<void> {
   if (currentSyncStatus === "syncing") {
     console.log("[CC Plus Sync] Sync already in progress");
     return;
   }
 
-  console.log("[CC Plus Sync] Starting sync for user:", userId);
+  console.log(
+    "[CC Plus Sync] Starting sync for user:",
+    userId,
+    forceUploadAll ? "(force all)" : ""
+  );
   currentSyncStatus = "syncing";
 
   try {
-    // 1. Upload pending local words to Firebase
-    await uploadPendingWords(userId);
+    // 1. Upload local words to Firebase
+    await uploadPendingWords(userId, forceUploadAll);
 
     // 2. Download words from Firebase that we don't have locally
     await downloadNewWords(userId);
@@ -109,13 +122,58 @@ export async function syncWords(userId: string): Promise<void> {
 }
 
 /**
- * Upload pending local words to Firebase
+ * Request word upload via website bridge
  */
-async function uploadPendingWords(userId: string): Promise<void> {
-  const wordsToSync = await getWordsToSync();
+async function uploadWordToWebsite(
+  word: Omit<Word, "id" | "createdAt">
+): Promise<boolean> {
+  const tab = await findWebsiteTab();
+  if (!tab || !tab.id) {
+    console.warn("[CC Plus Sync] Website tab not found for upload");
+    return false;
+  }
+
+  return new Promise((resolve) => {
+    // Set timeout - don't block on upload failures (10 seconds)
+    const timeout = setTimeout(() => {
+      console.warn("[CC Plus Sync] Upload timeout for word");
+      resolve(false);
+    }, 10000);
+
+    // Listen for response
+    const handler = (message: { type: string; success?: boolean }) => {
+      if (message.type === "website-upload-response") {
+        clearTimeout(timeout);
+        chrome.runtime.onMessage.removeListener(handler);
+        resolve(message.success ?? false);
+      }
+    };
+    chrome.runtime.onMessage.addListener(handler);
+
+    // Send request to content script
+    chrome.tabs
+      .sendMessage(tab.id!, { type: "upload-word", word })
+      .catch(() => {
+        clearTimeout(timeout);
+        chrome.runtime.onMessage.removeListener(handler);
+        resolve(false);
+      });
+  });
+}
+
+/**
+ * Upload pending local words to Firebase via website bridge
+ * If forceAll is true, uploads ALL local words (not just pending)
+ */
+async function uploadPendingWords(
+  _userId: string,
+  forceAll = false
+): Promise<void> {
+  // Get words to upload - either pending only or all local words
+  const wordsToSync = forceAll ? await getLocalWords() : await getWordsToSync();
 
   if (wordsToSync.length === 0) {
-    console.log("[CC Plus Sync] No pending words to upload");
+    console.log("[CC Plus Sync] No words to upload");
     return;
   }
 
@@ -125,6 +183,7 @@ async function uploadPendingWords(userId: string): Promise<void> {
     "words to Firebase"
   );
 
+  let successCount = 0;
   for (const word of wordsToSync) {
     try {
       // Convert local word format to Firebase format
@@ -141,56 +200,148 @@ async function uploadPendingWords(userId: string): Promise<void> {
         examples: word.examples,
       };
 
-      await addWord(userId, firebaseWord);
-      console.log("[CC Plus Sync] Uploaded word:", word.text);
+      const success = await uploadWordToWebsite(firebaseWord);
+      if (success) {
+        console.log("[CC Plus Sync] Uploaded word:", word.text);
+        successCount++;
+      } else {
+        console.warn("[CC Plus Sync] Failed to upload word:", word.text);
+      }
     } catch (error) {
       console.error("[CC Plus Sync] Failed to upload word:", word.text, error);
       // Continue with other words even if one fails
     }
   }
 
-  // Clear pending sync queue after successful upload
-  await clearPendingSync();
+  // Clear pending sync queue after upload attempts
+  if (successCount > 0) {
+    await clearPendingSync();
+  }
 }
 
 /**
- * Download words from Firebase that we don't have locally
+ * Find a tab with the website open
  */
-async function downloadNewWords(userId: string): Promise<void> {
-  const firebaseWords = await getFirebaseWords(userId);
-  const localWords = await getLocalWords();
+async function findWebsiteTab(): Promise<chrome.tabs.Tab | null> {
+  for (const pattern of WEBSITE_PATTERNS) {
+    const tabs = await chrome.tabs.query({ url: pattern });
+    if (tabs.length > 0) {
+      return tabs[0];
+    }
+  }
+  return null;
+}
 
-  // Create a set of local word texts for quick lookup
-  const localWordTexts = new Set(localWords.map((w) => w.text.toLowerCase()));
+/**
+ * Pending words response handler
+ */
+let pendingWordsResolve: ((words: Word[]) => void) | null = null;
+let pendingWordsReject: ((error: Error) => void) | null = null;
 
-  // Find words that exist in Firebase but not locally
-  const newWords = firebaseWords.filter(
-    (fw) => !localWordTexts.has(fw.text.toLowerCase())
-  );
+/**
+ * Handle words response from website (called by background script)
+ */
+export function handleWebsiteWordsResponse(
+  words: Word[],
+  success: boolean,
+  error?: string
+): void {
+  if (success && pendingWordsResolve) {
+    pendingWordsResolve(words);
+  } else if (!success && pendingWordsReject) {
+    pendingWordsReject(new Error(error || "Failed to fetch words"));
+  }
+  pendingWordsResolve = null;
+  pendingWordsReject = null;
+}
 
-  if (newWords.length === 0) {
-    console.log("[CC Plus Sync] No new words to download");
-    return;
+/**
+ * Request words from website via content script bridge
+ */
+async function requestWordsFromWebsite(): Promise<Word[]> {
+  const tab = await findWebsiteTab();
+  if (!tab || !tab.id) {
+    throw new Error("Website tab not found. Please open the CC Plus website.");
   }
 
-  console.log(
-    "[CC Plus Sync] Downloading",
-    newWords.length,
-    "words from Firebase"
-  );
+  return new Promise((resolve, reject) => {
+    pendingWordsResolve = resolve;
+    pendingWordsReject = reject;
 
-  for (const word of newWords) {
-    try {
-      // Save to local storage without adding to pending sync
-      await saveWordToLocalOnly(word);
-      console.log("[CC Plus Sync] Downloaded word:", word.text);
-    } catch (error) {
-      console.error(
-        "[CC Plus Sync] Failed to download word:",
-        word.text,
-        error
-      );
+    // Set timeout
+    const timeout = setTimeout(() => {
+      pendingWordsResolve = null;
+      pendingWordsReject = null;
+      reject(new Error("Timeout waiting for words from website"));
+    }, 10000);
+
+    // Send request to content script
+    chrome.tabs.sendMessage(tab.id!, { type: "fetch-words" }).catch((err) => {
+      clearTimeout(timeout);
+      pendingWordsResolve = null;
+      pendingWordsReject = null;
+      reject(err);
+    });
+
+    // Clear timeout on resolve/reject
+    const originalResolve = pendingWordsResolve;
+    const originalReject = pendingWordsReject;
+    pendingWordsResolve = (words) => {
+      clearTimeout(timeout);
+      originalResolve?.(words);
+    };
+    pendingWordsReject = (error) => {
+      clearTimeout(timeout);
+      originalReject?.(error);
+    };
+  });
+}
+
+/**
+ * Download words from Firebase via website bridge
+ */
+async function downloadNewWords(_userId: string): Promise<void> {
+  console.log("[CC Plus Sync] Requesting words from website...");
+
+  try {
+    const firebaseWords = await requestWordsFromWebsite();
+    const localWords = await getLocalWords();
+
+    // Create a set of local word texts for quick lookup
+    const localWordTexts = new Set(localWords.map((w) => w.text.toLowerCase()));
+
+    // Find words that exist in Firebase but not locally
+    const newWords = firebaseWords.filter(
+      (fw) => !localWordTexts.has(fw.text.toLowerCase())
+    );
+
+    if (newWords.length === 0) {
+      console.log("[CC Plus Sync] No new words to download");
+      return;
     }
+
+    console.log(
+      "[CC Plus Sync] Downloading",
+      newWords.length,
+      "words from Firebase"
+    );
+
+    for (const word of newWords) {
+      try {
+        // Save to local storage without adding to pending sync
+        await saveWordToLocalOnly(word);
+        console.log("[CC Plus Sync] Downloaded word:", word.text);
+      } catch (error) {
+        console.error(
+          "[CC Plus Sync] Failed to download word:",
+          word.text,
+          error
+        );
+      }
+    }
+  } catch (error) {
+    console.error("[CC Plus Sync] Failed to download words:", error);
+    throw error;
   }
 }
 
@@ -234,8 +385,9 @@ export async function getLastSyncTime(): Promise<number | null> {
 
 /**
  * Manual sync trigger - can be called from popup or content script
+ * @param forceUploadAll - If true, upload all local words (not just pending)
  */
-export async function triggerSync(): Promise<boolean> {
+export async function triggerSync(forceUploadAll = false): Promise<boolean> {
   const userId = await getCurrentUserId();
 
   if (!userId) {
@@ -243,7 +395,7 @@ export async function triggerSync(): Promise<boolean> {
     return false;
   }
 
-  await syncWords(userId);
+  await syncWords(userId, forceUploadAll);
   return currentSyncStatus === "success";
 }
 

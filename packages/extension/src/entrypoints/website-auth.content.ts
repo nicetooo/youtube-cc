@@ -1,10 +1,12 @@
-// Content script that runs on CC Plus website to sync auth state
+// Content script that runs on CC Plus website to sync auth state and data
 // This allows the extension to detect when user logs in on the website
+// and to fetch/upload words through the authenticated website
 //
 // Architecture:
 // - Website posts message via window.postMessage (works across worlds)
 // - Content script listens on window "message" event
 // - Content script sends message to background via chrome.runtime
+// - Background can request data fetch through this content script
 
 export default defineContentScript({
   matches: [
@@ -16,7 +18,7 @@ export default defineContentScript({
   runAt: "document_idle",
 
   main() {
-    console.log("[CC Plus] Website auth bridge initialized");
+    console.log("[CC Plus] Website bridge initialized");
 
     // Listen for postMessage from website (works across worlds)
     window.addEventListener("message", (event) => {
@@ -38,7 +40,59 @@ export default defineContentScript({
           type: "website-auth",
           action: "logout",
         });
+      } else if (data.type === "words-response") {
+        // Forward words response to background
+        console.log(
+          "[CC Plus] Received words from website:",
+          data.words?.length
+        );
+        chrome.runtime.sendMessage({
+          type: "website-words-response",
+          words: data.words,
+          success: data.success,
+          error: data.error,
+        });
+      } else if (data.type === "upload-word-response") {
+        // Forward upload response to background
+        console.log(
+          "[CC Plus Content] Word upload result:",
+          data.success,
+          data.error || ""
+        );
+        chrome.runtime.sendMessage({
+          type: "website-upload-response",
+          success: data.success,
+          wordId: data.wordId,
+          error: data.error,
+        });
       }
+    });
+
+    // Listen for requests from background script
+    chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (message.type === "fetch-words") {
+        console.log("[CC Plus Content] Requesting words from website");
+        window.postMessage(
+          { source: "ccplus-extension", type: "fetch-words" },
+          "*"
+        );
+        sendResponse({ success: true });
+      } else if (message.type === "upload-word") {
+        console.log(
+          "[CC Plus Content] Forwarding word upload to website:",
+          message.word?.text
+        );
+        window.postMessage(
+          {
+            source: "ccplus-extension",
+            type: "upload-word",
+            word: message.word,
+          },
+          "*"
+        );
+        sendResponse({ success: true });
+      }
+      return false;
     });
 
     // Request current auth state from website (with retry for timing issues)

@@ -3,6 +3,7 @@ import {
   initSyncService,
   triggerSync,
   handleWebsiteAuth,
+  handleWebsiteWordsResponse,
 } from "@/shared/stores/sync";
 
 export default defineBackground(() => {
@@ -35,9 +36,10 @@ export default defineBackground(() => {
       return true; // Keep channel open for async response
     }
 
-    // Manual sync trigger
+    // Manual sync trigger (forceAll uploads all local words, not just pending)
     if (message.type === "sync") {
-      triggerSync()
+      const forceAll = message.forceAll === true;
+      triggerSync(forceAll)
         .then((success) => sendResponse({ success }))
         .catch((err) => sendResponse({ success: false, error: err.message }));
       return true;
@@ -49,6 +51,20 @@ export default defineBackground(() => {
         .then(() => sendResponse({ success: true }))
         .catch((err) => sendResponse({ success: false, error: err.message }));
       return true;
+    }
+
+    // Website words response - from content script bridge
+    if (message.type === "website-words-response") {
+      handleWebsiteWordsResponse(message.words, message.success, message.error);
+      return false;
+    }
+
+    // Website upload response - from content script bridge
+    if (message.type === "website-upload-response") {
+      // This is handled by the pending promise in uploadWordToWebsite
+      // Just log for debugging
+      console.log("[CC Plus] Upload response:", message.success);
+      return false;
     }
   });
 
