@@ -1,4 +1,5 @@
-import "~/assets/tailwind.css";
+// Import CSS as string for Shadow DOM injection
+import tailwindStyles from "~/assets/tailwind.css?inline";
 import { mount, unmount } from "svelte";
 import SelectionPopup from "@/features/word-selection/SelectionPopup.svelte";
 import {
@@ -14,18 +15,15 @@ import type { WordSource } from "@aspect/shared";
 // WXT content script definition
 export default defineContentScript({
   matches: ["http://*/*", "https://*/*"],
-  excludeMatches: [
-    // Exclude our own website to avoid CSS conflicts
-    "http://localhost:5173/*",
-    "http://localhost:5174/*",
-    "https://youtubecc.com/*",
-    "https://www.youtubecc.com/*",
-  ],
+  // No need to exclude websites anymore - Shadow DOM isolates CSS completely
   runAt: "document_end",
+  // Don't inject CSS globally - we'll inject it into Shadow DOM
+  cssInjectionMode: "manual",
 
   main() {
     let popupInstance: ReturnType<typeof mount> | null = null;
-    let popupContainer: HTMLDivElement | null = null;
+    let shadowHost: HTMLDivElement | null = null;
+    let shadowRoot: ShadowRoot | null = null;
     let isEnabled = true;
     let targetLanguage = "zh-CN";
 
@@ -60,11 +58,14 @@ export default defineContentScript({
       });
     }
 
-    // Create popup container
-    function createPopupContainer(): HTMLDivElement {
-      const container = document.createElement("div");
-      container.id = "cc-plus-selection-popup-container";
-      container.style.cssText = `
+    // Create Shadow DOM container for CSS isolation
+    function createShadowContainer(): {
+      host: HTMLDivElement;
+      root: ShadowRoot;
+    } {
+      const host = document.createElement("div");
+      host.id = "cc-plus-selection-popup-host";
+      host.style.cssText = `
         position: fixed;
         top: 0;
         left: 0;
@@ -73,8 +74,17 @@ export default defineContentScript({
         z-index: 2147483647;
         pointer-events: none;
       `;
-      document.body.appendChild(container);
-      return container;
+      document.body.appendChild(host);
+
+      // Create shadow root for CSS isolation
+      const root = host.attachShadow({ mode: "open" });
+
+      // Inject CSS into shadow DOM
+      const style = document.createElement("style");
+      style.textContent = tailwindStyles;
+      root.appendChild(style);
+
+      return { host, root };
     }
 
     // Close popup
@@ -82,6 +92,15 @@ export default defineContentScript({
       if (popupInstance) {
         unmount(popupInstance);
         popupInstance = null;
+      }
+      // Clear shadow root content except styles
+      if (shadowRoot) {
+        const children = Array.from(shadowRoot.children);
+        children.forEach((child) => {
+          if (child.tagName !== "STYLE") {
+            child.remove();
+          }
+        });
       }
     }
 
@@ -95,17 +114,19 @@ export default defineContentScript({
       // Close existing popup
       closePopup();
 
-      // Ensure container exists
-      if (!popupContainer) {
-        popupContainer = createPopupContainer();
+      // Ensure shadow container exists
+      if (!shadowHost || !shadowRoot) {
+        const container = createShadowContainer();
+        shadowHost = container.host;
+        shadowRoot = container.root;
       }
 
-      // Create wrapper element for popup
+      // Create wrapper element for popup inside shadow DOM
       const wrapper = document.createElement("div");
       wrapper.style.pointerEvents = "auto";
-      popupContainer.appendChild(wrapper);
+      shadowRoot.appendChild(wrapper);
 
-      // Mount popup component
+      // Mount popup component into shadow DOM
       popupInstance = mount(SelectionPopup, {
         target: wrapper,
         props: {
@@ -116,7 +137,6 @@ export default defineContentScript({
           position,
           onClose: () => {
             closePopup();
-            wrapper.remove();
           },
         },
       });
@@ -210,9 +230,9 @@ export default defineContentScript({
 
       // Listen for mouseup to detect selection
       document.addEventListener("mouseup", (e) => {
-        // Don't trigger if clicking inside the popup
+        // Don't trigger if clicking inside the popup host
         const target = e.target as Element;
-        if (target.closest("#cc-plus-selection-popup-container")) {
+        if (target.closest("#cc-plus-selection-popup-host")) {
           return;
         }
 
@@ -232,10 +252,7 @@ export default defineContentScript({
       // Close popup when clicking outside
       document.addEventListener("mousedown", (e) => {
         const target = e.target as Element;
-        if (
-          popupContainer &&
-          !target.closest("#cc-plus-selection-popup-container")
-        ) {
+        if (shadowHost && !target.closest("#cc-plus-selection-popup-host")) {
           // Don't close immediately, let the popup's click handler work first
           setTimeout(() => {
             const selection = window.getSelection();
