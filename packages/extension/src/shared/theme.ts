@@ -60,7 +60,7 @@ export const theme = {
   },
 } as const;
 
-export type Theme = typeof theme.dark;
+export type Theme = (typeof theme)["dark"] | (typeof theme)["light"];
 export type ThemeMode = "dark" | "light";
 
 // Helper to get current system theme

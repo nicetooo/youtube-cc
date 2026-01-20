@@ -13,7 +13,8 @@
   // Sync words store with auth state
   $effect(() => {
     const userId = authStore.user?.uid ?? null;
-    wordsStore.setUser(userId);
+    const isAnonymous = authStore.user?.isAnonymous ?? false;
+    wordsStore.setUser(userId, isAnonymous);
   });
 </script>
 

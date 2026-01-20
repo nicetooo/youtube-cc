@@ -606,6 +606,36 @@
             </div>
           {/if}
         </div>
+
+        <!-- View Words Button -->
+        <button
+          on:click={() =>
+            chrome.tabs.create({ url: "http://localhost:5188/words" })}
+          class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
+        >
+          <div class="flex flex-col text-left">
+            <span
+              class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
+              >{i18n("view_words")}</span
+            >
+            <span class="text-xs text-[var(--cc-text-muted)]"
+              >{i18n("view_words_sub")}</span
+            >
+          </div>
+          <svg
+            class="w-5 h-5 text-[var(--cc-text-muted)] group-hover:text-[var(--cc-text)] transition-colors"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+            />
+          </svg>
+        </button>
       </div>
     </section>
 

@@ -17,8 +17,7 @@ import {
 
 // Website URL patterns for finding the tab
 const WEBSITE_PATTERNS = [
-  "http://localhost:5173/*",
-  "http://localhost:5174/*",
+  "http://localhost:5188/*",
   "https://youtubecc.com/*",
   "https://www.youtubecc.com/*",
 ];
@@ -36,7 +35,6 @@ interface WebsiteUser {
 }
 
 let currentSyncStatus: SyncStatus = "idle";
-let currentUserId: string | null = null;
 
 /**
  * Get current sync status
@@ -55,7 +53,6 @@ export function initSyncService(): void {
   onAuthChange(async (user) => {
     if (user) {
       console.log("[CC Plus Sync] User logged in:", user.uid);
-      currentUserId = user.uid;
 
       // Save user ID to storage for content scripts
       await chrome.storage.local.set({ [SYNC_USER_KEY]: user.uid });
@@ -64,7 +61,6 @@ export function initSyncService(): void {
       await syncWords(user.uid);
     } else {
       console.log("[CC Plus Sync] User logged out");
-      currentUserId = null;
       await chrome.storage.local.remove(SYNC_USER_KEY);
     }
   });
@@ -414,12 +410,16 @@ export async function handleWebsiteAuth(
     // Store website user info
     await chrome.storage.local.set({ [WEBSITE_USER_KEY]: user });
 
-    // Update current user ID
-    currentUserId = user.uid;
+    // Save user ID to storage
     await chrome.storage.local.set({ [SYNC_USER_KEY]: user.uid });
 
-    // Trigger sync
-    await syncWords(user.uid);
+    // Only sync to Firebase for non-anonymous users
+    if (!user.isAnonymous) {
+      console.log("[CC Plus Sync] Non-anonymous user, triggering sync...");
+      await syncWords(user.uid);
+    } else {
+      console.log("[CC Plus Sync] Anonymous user, skipping Firebase sync");
+    }
 
     // Notify popup to update UI
     chrome.runtime.sendMessage({ type: "auth-changed", user }).catch(() => {
@@ -430,7 +430,6 @@ export async function handleWebsiteAuth(
 
     // Clear website user info
     await chrome.storage.local.remove([WEBSITE_USER_KEY, SYNC_USER_KEY]);
-    currentUserId = null;
 
     // Notify popup to update UI
     chrome.runtime

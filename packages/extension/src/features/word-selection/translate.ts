@@ -12,15 +12,6 @@ export interface TranslateError {
   code: "NETWORK_ERROR" | "API_ERROR" | "EMPTY_TEXT";
 }
 
-// Language code mapping for Google Translate
-const LANG_CODE_MAP: Record<string, string> = {
-  "zh-CN": "zh-CN",
-  "zh-TW": "zh-TW",
-  en: "en",
-  ja: "ja",
-  ko: "ko",
-};
-
 /**
  * Translate text using Google Translate API via background script
  * @param text - Text to translate

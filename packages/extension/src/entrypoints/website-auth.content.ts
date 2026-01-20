@@ -10,8 +10,7 @@
 
 export default defineContentScript({
   matches: [
-    "http://localhost:5173/*",
-    "http://localhost:5174/*",
+    "http://localhost:5188/*",
     "https://youtubecc.com/*",
     "https://www.youtubecc.com/*",
   ],
@@ -65,6 +64,49 @@ export default defineContentScript({
           wordId: data.wordId,
           error: data.error,
         });
+      } else if (data.type === "ping") {
+        // Handle ping request (for extension detection)
+        console.log("[CC Plus Content] Received ping from website");
+        window.postMessage({ source: "ccplus-extension", type: "pong" }, "*");
+      } else if (data.type === "request-extension-words") {
+        // Handle request for extension's local words
+        console.log("[CC Plus Content] Website requesting extension words");
+        (async () => {
+          try {
+            const WORDS_KEY = "cc_plus_words";
+            const result = await chrome.storage.local.get(WORDS_KEY);
+            const words = result[WORDS_KEY] || [];
+            console.log(
+              "[CC Plus Content] Sending",
+              words.length,
+              "words to website"
+            );
+            window.postMessage(
+              {
+                source: "ccplus-extension",
+                type: "extension-words-response",
+                words,
+                success: true,
+              },
+              "*"
+            );
+          } catch (e) {
+            console.error(
+              "[CC Plus Content] Failed to get extension words:",
+              e
+            );
+            window.postMessage(
+              {
+                source: "ccplus-extension",
+                type: "extension-words-response",
+                words: [],
+                success: false,
+                error: (e as Error).message,
+              },
+              "*"
+            );
+          }
+        })();
       }
     });
 

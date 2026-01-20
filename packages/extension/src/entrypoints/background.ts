@@ -66,6 +66,9 @@ export default defineBackground(() => {
       console.log("[CC Plus] Upload response:", message.success);
       return false;
     }
+
+    // Default: don't keep channel open
+    return false;
   });
 
   // --- Runtime Messaging Logic ---

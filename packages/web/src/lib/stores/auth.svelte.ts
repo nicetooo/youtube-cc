@@ -79,15 +79,27 @@ function createAuthStore() {
             user = { ...user, settings, stats };
           }
         });
+
+        loading = false;
       } else {
         user = null;
         // Broadcast logout to extension
         if (browser) {
           window.postMessage({ source: "ccplus-web", type: "logout" }, "*");
         }
-      }
 
-      loading = false;
+        // Auto sign in anonymously if no user
+        loading = true;
+        try {
+          const { signInAnon } = await import("@aspect/shared/firebase");
+          console.log("[CC Plus Web] Auto signing in anonymously...");
+          await signInAnon();
+          // onAuthChange will be called again with the new user
+        } catch (e) {
+          console.error("Failed to auto sign in anonymously:", e);
+          loading = false;
+        }
+      }
     });
 
     // Listen for requests from extension via postMessage
@@ -219,6 +231,11 @@ function createAuthStore() {
   // Auto-init on browser
   if (browser) {
     init();
+
+    // Initialize extension sync (detect extension and sync words to IndexedDB)
+    import("./extension-sync.svelte").then(({ initExtensionSync }) => {
+      initExtensionSync();
+    });
   }
 
   // Login methods
