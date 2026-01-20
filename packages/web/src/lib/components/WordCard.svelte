@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { Word } from "@aspect/shared/types";
   import { speak } from "$lib/utils/speak";
+  import { fetchWordExamples } from "$lib/utils/dictionary";
+  import { wordsStore } from "$lib/stores/words.svelte";
 
   interface Props {
     word: Word;
@@ -15,6 +17,29 @@
   }
 
   let expanded = $state(false);
+  let fetchingExamples = $state(false);
+  let fetchError = $state("");
+
+  async function handleFetchExamples() {
+    if (fetchingExamples) return;
+
+    fetchingExamples = true;
+    fetchError = "";
+
+    try {
+      const examples = await fetchWordExamples(word.text);
+      if (examples.length > 0) {
+        await wordsStore.updateWord(word.id, { examples });
+      } else {
+        fetchError = "No examples found";
+      }
+    } catch (e) {
+      console.error("[WordCard] Failed to fetch examples:", e);
+      fetchError = "Failed to fetch";
+    } finally {
+      fetchingExamples = false;
+    }
+  }
 
   // Check source type
   const isYouTube = $derived(word.source?.type === "youtube-caption");
@@ -262,21 +287,47 @@
           </ul>
         </div>
       {:else}
-        <button class="btn btn-ghost text-sm">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            ><path
-              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-            /></svg
+        <div class="flex items-center gap-2">
+          <button
+            class="btn btn-ghost text-sm"
+            onclick={handleFetchExamples}
+            disabled={fetchingExamples}
           >
-          Generate examples
-        </button>
+            {#if fetchingExamples}
+              <svg
+                class="animate-spin"
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+              </svg>
+              Fetching...
+            {:else}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"
+                />
+              </svg>
+              Fetch examples
+            {/if}
+          </button>
+          {#if fetchError}
+            <span class="text-xs text-[var(--error)]">{fetchError}</span>
+          {/if}
+        </div>
       {/if}
     </div>
   {/if}
