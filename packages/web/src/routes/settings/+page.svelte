@@ -28,7 +28,7 @@
     <h2 class="text-sm font-medium text-secondary mb-4">
       {i18n.t("settings_account")}
     </h2>
-    {#if authStore.user}
+    {#if authStore.user && !authStore.isAnonymous}
       <div class="flex items-center gap-4">
         <div
           class="w-12 h-12 rounded-full bg-tertiary flex items-center justify-center"
@@ -63,11 +63,14 @@
         </button>
       </div>
     {:else}
+      <div class="text-sm text-secondary mb-3">
+        {i18n.t("settings_login_hint")}
+      </div>
       <button
         onclick={() => authStore.loginWithGoogle()}
         class="btn btn-primary"
       >
-        Sign in with Google
+        {i18n.t("settings_google_login")}
       </button>
     {/if}
   </section>
@@ -109,24 +112,28 @@
     </div>
   </section>
 
-  <!-- Sync section -->
-  <section class="card mb-6">
-    <h2 class="text-sm font-medium text-secondary mb-4">
-      {i18n.t("settings_sync")}
-    </h2>
-    <div class="flex items-center justify-between">
-      <div>
-        <div class="font-medium">{i18n.t("settings_sync_enabled")}</div>
-        <div class="text-sm text-secondary">{i18n.t("settings_sync_desc")}</div>
+  <!-- Sync section (only for logged in users) -->
+  {#if !authStore.isAnonymous}
+    <section class="card mb-6">
+      <h2 class="text-sm font-medium text-secondary mb-4">
+        {i18n.t("settings_sync")}
+      </h2>
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="font-medium">{i18n.t("settings_sync_enabled")}</div>
+          <div class="text-sm text-secondary">
+            {i18n.t("settings_sync_desc")}
+          </div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" checked class="sr-only peer" />
+          <div
+            class="w-11 h-6 bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"
+          ></div>
+        </label>
       </div>
-      <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" checked class="sr-only peer" />
-        <div
-          class="w-11 h-6 bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"
-        ></div>
-      </label>
-    </div>
-  </section>
+    </section>
+  {/if}
 
   <!-- Danger zone -->
   <section class="card border-[var(--error)]/30">

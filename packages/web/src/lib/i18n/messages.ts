@@ -87,6 +87,8 @@ export const messages = {
     settings_sync_enabled: "Sync Enabled",
     settings_sync_desc: "Sync vocabulary between extension and website",
     settings_logout: "Log Out",
+    settings_login_hint: "Sign in to sync your vocabulary across devices",
+    settings_google_login: "Sign in with Google",
 
     // Word card
     word_context: "Context",
@@ -175,6 +177,8 @@ export const messages = {
     settings_sync_enabled: "启用同步",
     settings_sync_desc: "在扩展和网站之间同步生词",
     settings_logout: "退出登录",
+    settings_login_hint: "登录以在设备间同步生词",
+    settings_google_login: "使用 Google 登录",
 
     // Word card
     word_context: "上下文",
@@ -263,6 +267,8 @@ export const messages = {
     settings_sync_enabled: "啟用同步",
     settings_sync_desc: "在擴充和網站之間同步生詞",
     settings_logout: "登出",
+    settings_login_hint: "登入以在裝置間同步生詞",
+    settings_google_login: "使用 Google 登入",
 
     // Word card
     word_context: "上下文",
@@ -353,6 +359,8 @@ export const messages = {
     settings_sync_enabled: "同期を有効化",
     settings_sync_desc: "拡張機能とウェブサイト間で単語を同期",
     settings_logout: "ログアウト",
+    settings_login_hint: "デバイス間で単語を同期するにはログイン",
+    settings_google_login: "Googleでログイン",
 
     // Word card
     word_context: "文脈",
@@ -442,6 +450,8 @@ export const messages = {
     settings_sync_enabled: "동기화 활성화",
     settings_sync_desc: "확장 프로그램과 웹사이트 간에 단어 동기화",
     settings_logout: "로그아웃",
+    settings_login_hint: "기기 간 단어 동기화를 위해 로그인",
+    settings_google_login: "Google로 로그인",
 
     // Word card
     word_context: "문맥",

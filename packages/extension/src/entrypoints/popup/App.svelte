@@ -660,8 +660,8 @@
               class="w-5 h-5 border-2 border-[var(--cc-text-muted)] border-t-transparent rounded-full animate-spin"
             ></div>
           </div>
-        {:else if currentUser}
-          <!-- Logged in state (includes anonymous website users for sync) -->
+        {:else if currentUser && !currentUser.isAnonymous}
+          <!-- Logged in state (non-anonymous users only) -->
           <div
             class="w-full p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)]"
           >
@@ -684,7 +684,7 @@
               {/if}
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-[var(--cc-text)] truncate">
-                  {currentUser.displayName || i18n("anonymous")}
+                  {currentUser.displayName || currentUser.email || "User"}
                 </p>
                 <p class="text-xs text-[var(--cc-text-muted)] truncate">
                   {currentUser.email || ""}
