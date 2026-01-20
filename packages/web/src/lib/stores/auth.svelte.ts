@@ -233,9 +233,20 @@ function createAuthStore() {
     init();
 
     // Initialize extension sync (detect extension and sync words to IndexedDB)
-    import("./extension-sync.svelte").then(({ initExtensionSync }) => {
-      initExtensionSync();
-    });
+    import("./extension-sync.svelte").then(
+      ({ initExtensionSync, onExtensionSyncComplete }) => {
+        // When extension sync completes, refresh the words store
+        onExtensionSyncComplete(() => {
+          import("./words.svelte").then(({ wordsStore }) => {
+            console.log(
+              "[CC Plus Web] Extension sync complete, refreshing words..."
+            );
+            wordsStore.refresh();
+          });
+        });
+        initExtensionSync();
+      }
+    );
   }
 
   // Login methods

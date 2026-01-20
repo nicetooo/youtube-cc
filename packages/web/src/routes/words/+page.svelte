@@ -2,6 +2,17 @@
   import { wordsStore } from "$lib/stores/words.svelte";
   import WordCard from "$lib/components/WordCard.svelte";
   import { i18n } from "$lib/i18n/index.svelte";
+  import { getExtensionSyncState } from "$lib/stores/extension-sync.svelte";
+
+  // Debug: log words store state
+  const syncState = getExtensionSyncState();
+  $effect(() => {
+    console.log("[WordsPage] words count:", wordsStore.words.length);
+    console.log("[WordsPage] filtered count:", wordsStore.filtered.length);
+    console.log("[WordsPage] loading:", wordsStore.loading);
+    console.log("[WordsPage] extension detected:", syncState.extensionDetected);
+    console.log("[WordsPage] extension sync result:", syncState.lastSyncResult);
+  });
 
   // Debounced search
   let searchInput = $state("");

@@ -76,10 +76,12 @@ export default defineContentScript({
             const WORDS_KEY = "cc_plus_words";
             const result = await chrome.storage.local.get(WORDS_KEY);
             const words = result[WORDS_KEY] || [];
+            console.log("[CC Plus Content] Storage result:", result);
             console.log(
               "[CC Plus Content] Sending",
               words.length,
-              "words to website"
+              "words to website:",
+              words.map((w: { text: string }) => w.text)
             );
             window.postMessage(
               {
@@ -149,5 +151,13 @@ export default defineContentScript({
     setTimeout(requestAuthState, 500);
     setTimeout(requestAuthState, 1500);
     setTimeout(requestAuthState, 3000);
+
+    // Proactively notify the website that extension is ready
+    // This helps if the website's ping was sent before this script initialized
+    console.log("[CC Plus] Sending extension-ready notification");
+    window.postMessage(
+      { source: "ccplus-extension", type: "extension-ready" },
+      "*"
+    );
   },
 });

@@ -114,6 +114,33 @@ export async function getWord(id: string): Promise<Word | null> {
 }
 
 /**
+ * Safely convert a date value to ISO string
+ */
+function toISOStringSafe(value: unknown): string {
+  if (!value) return new Date().toISOString();
+
+  if (value instanceof Date) {
+    return isNaN(value.getTime())
+      ? new Date().toISOString()
+      : value.toISOString();
+  }
+
+  if (typeof value === "string") {
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? new Date().toISOString() : value;
+  }
+
+  if (typeof value === "number") {
+    const date = new Date(value);
+    return isNaN(date.getTime())
+      ? new Date().toISOString()
+      : date.toISOString();
+  }
+
+  return new Date().toISOString();
+}
+
+/**
  * Add or update a single word
  */
 export async function putWord(word: Word): Promise<void> {
@@ -123,22 +150,12 @@ export async function putWord(word: Word): Promise<void> {
     const transaction = db.transaction(STORE_NAME, "readwrite");
     const store = transaction.objectStore(STORE_NAME);
 
-    // Convert dates to ISO strings for storage
+    // Convert dates to ISO strings for storage (with safe handling)
     const wordToStore = {
       ...word,
-      nextReview:
-        word.nextReview instanceof Date
-          ? word.nextReview.toISOString()
-          : word.nextReview,
-      createdAt:
-        word.createdAt instanceof Date
-          ? word.createdAt.toISOString()
-          : word.createdAt,
-      updatedAt: word.updatedAt
-        ? word.updatedAt instanceof Date
-          ? word.updatedAt.toISOString()
-          : word.updatedAt
-        : undefined,
+      nextReview: toISOStringSafe(word.nextReview),
+      createdAt: toISOStringSafe(word.createdAt),
+      updatedAt: word.updatedAt ? toISOStringSafe(word.updatedAt) : undefined,
     };
 
     const request = store.put(wordToStore);
@@ -169,19 +186,9 @@ export async function putWords(words: Word[]): Promise<void> {
     for (const word of words) {
       const wordToStore = {
         ...word,
-        nextReview:
-          word.nextReview instanceof Date
-            ? word.nextReview.toISOString()
-            : word.nextReview,
-        createdAt:
-          word.createdAt instanceof Date
-            ? word.createdAt.toISOString()
-            : word.createdAt,
-        updatedAt: word.updatedAt
-          ? word.updatedAt instanceof Date
-            ? word.updatedAt.toISOString()
-            : word.updatedAt
-          : undefined,
+        nextReview: toISOStringSafe(word.nextReview),
+        createdAt: toISOStringSafe(word.createdAt),
+        updatedAt: word.updatedAt ? toISOStringSafe(word.updatedAt) : undefined,
       };
 
       const request = store.put(wordToStore);
@@ -274,7 +281,15 @@ export async function syncFromExtension(extensionWords: Word[]): Promise<{
   updated: number;
   skipped: number;
 }> {
+  console.log(
+    "[IndexedDB] syncFromExtension called with",
+    extensionWords.length,
+    "words"
+  );
+
   const localWords = await getAllWords();
+  console.log("[IndexedDB] Local words count:", localWords.length);
+
   const localWordIds = new Set(localWords.map((w) => w.id));
   const localWordTexts = new Map(
     localWords.map((w) => [w.text.toLowerCase(), w])
@@ -289,6 +304,7 @@ export async function syncFromExtension(extensionWords: Word[]): Promise<{
   for (const extWord of extensionWords) {
     // Check if word exists by ID
     if (localWordIds.has(extWord.id)) {
+      console.log("[IndexedDB] Skipping (by ID):", extWord.text);
       skipped++;
       continue;
     }
@@ -296,16 +312,19 @@ export async function syncFromExtension(extensionWords: Word[]): Promise<{
     // Check if word exists by text (different ID but same word)
     const existingByText = localWordTexts.get(extWord.text.toLowerCase());
     if (existingByText) {
+      console.log("[IndexedDB] Skipping (by text):", extWord.text);
       // Could merge/update here if needed
       skipped++;
       continue;
     }
 
+    console.log("[IndexedDB] Adding word:", extWord.text);
     wordsToAdd.push(extWord);
     added++;
   }
 
   if (wordsToAdd.length > 0) {
+    console.log("[IndexedDB] Putting", wordsToAdd.length, "words to IndexedDB");
     await putWords(wordsToAdd);
   }
 

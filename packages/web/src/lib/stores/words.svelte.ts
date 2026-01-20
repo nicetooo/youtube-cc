@@ -121,13 +121,13 @@ function createWordsStore() {
 
   // Refresh words from IndexedDB and optionally sync with Firebase
   async function refresh() {
-    if (!currentUserId) return;
-
+    // Always try to refresh from IndexedDB, even without userId
+    // This allows extension sync to populate words before user is set
     loading = true;
     try {
       words = await getIndexedDBWords();
-      // Trigger background sync for logged in users
-      if (!isAnonymous) {
+      // Trigger background sync for logged in non-anonymous users
+      if (currentUserId && !isAnonymous) {
         syncWithFirebase(currentUserId);
       }
     } catch (e) {
