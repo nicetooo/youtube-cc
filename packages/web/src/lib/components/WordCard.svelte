@@ -118,18 +118,24 @@
   }
 </script>
 
-<div class="card hover:border-[var(--accent)] transition-colors group">
+<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+<div
+  class="card hover:border-[var(--accent)] transition-colors group cursor-pointer"
+  onclick={() => (expanded = !expanded)}
+>
   <!-- Header: Word + Status + Actions -->
   <div class="flex items-center gap-2 mb-2">
-    <button
-      onclick={() => (expanded = !expanded)}
+    <span
       class="text-lg font-semibold hover:text-accent transition-colors text-left"
     >
       {word.text}
-    </button>
+    </span>
     <!-- Speak button -->
     <button
-      onclick={handleSpeak}
+      onclick={(e) => {
+        e.stopPropagation();
+        handleSpeak();
+      }}
       class="p-1 rounded hover:bg-tertiary transition-colors text-secondary hover:text-accent"
       title="Pronounce"
     >
@@ -158,6 +164,7 @@
       class="ml-auto flex items-center shrink-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
     >
       {#if getSourceLink()}
+        <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
         <a
           href={getSourceLink()}
           target="_blank"
@@ -166,6 +173,7 @@
           title={isYouTube && word.source?.type === "youtube-caption"
             ? `Watch at ${formatTimestamp(word.source.timestamp)}`
             : "Open source page"}
+          onclick={(e) => e.stopPropagation()}
         >
           {#if isYouTube}
             <!-- Play icon for YouTube -->
@@ -202,7 +210,10 @@
       {/if}
       {#if onDelete}
         <button
-          onclick={() => onDelete?.(word.id)}
+          onclick={(e) => {
+            e.stopPropagation();
+            onDelete?.(word.id);
+          }}
           class="p-1.5 rounded hover:bg-tertiary hover:text-[var(--error)] transition-colors"
           title="Delete"
         >
@@ -295,7 +306,10 @@
         <div class="flex items-center gap-2">
           <button
             class="btn btn-ghost text-sm"
-            onclick={handleFetchExamples}
+            onclick={(e) => {
+              e.stopPropagation();
+              handleFetchExamples();
+            }}
             disabled={fetchingExamples}
           >
             {#if fetchingExamples}
