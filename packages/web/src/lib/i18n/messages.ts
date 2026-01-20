@@ -89,6 +89,14 @@ export const messages = {
     settings_logout: "Log Out",
     settings_login_hint: "Sign in to sync your vocabulary across devices",
     settings_google_login: "Sign in with Google",
+    settings_data: "Data",
+    settings_export: "Export Data",
+    settings_export_desc: "Download all {count} words as JSON file",
+    settings_export_btn: "Export",
+    settings_danger: "Danger Zone",
+    settings_delete_account: "Delete Account",
+    settings_delete_account_desc:
+      "Permanently delete your account and all data",
 
     // Word card
     word_context: "Context",
@@ -249,6 +257,13 @@ export const messages = {
     settings_logout: "退出登录",
     settings_login_hint: "登录以在设备间同步生词",
     settings_google_login: "使用 Google 登录",
+    settings_data: "数据",
+    settings_export: "导出数据",
+    settings_export_desc: "下载全部 {count} 个单词为 JSON 文件",
+    settings_export_btn: "导出",
+    settings_danger: "危险区域",
+    settings_delete_account: "删除账户",
+    settings_delete_account_desc: "永久删除您的账户和所有数据",
 
     // Word card
     word_context: "上下文",
@@ -408,6 +423,13 @@ export const messages = {
     settings_logout: "登出",
     settings_login_hint: "登入以在裝置間同步生詞",
     settings_google_login: "使用 Google 登入",
+    settings_data: "資料",
+    settings_export: "匯出資料",
+    settings_export_desc: "下載全部 {count} 個單字為 JSON 檔案",
+    settings_export_btn: "匯出",
+    settings_danger: "危險區域",
+    settings_delete_account: "刪除帳戶",
+    settings_delete_account_desc: "永久刪除您的帳戶和所有資料",
 
     // Word card
     word_context: "上下文",
@@ -569,6 +591,13 @@ export const messages = {
     settings_logout: "ログアウト",
     settings_login_hint: "デバイス間で単語を同期するにはログイン",
     settings_google_login: "Googleでログイン",
+    settings_data: "データ",
+    settings_export: "データをエクスポート",
+    settings_export_desc: "{count} 個の単語をJSONファイルでダウンロード",
+    settings_export_btn: "エクスポート",
+    settings_danger: "危険ゾーン",
+    settings_delete_account: "アカウントを削除",
+    settings_delete_account_desc: "アカウントとすべてのデータを完全に削除",
 
     // Word card
     word_context: "文脈",
@@ -730,6 +759,13 @@ export const messages = {
     settings_logout: "로그아웃",
     settings_login_hint: "기기 간 단어 동기화를 위해 로그인",
     settings_google_login: "Google로 로그인",
+    settings_data: "데이터",
+    settings_export: "데이터 내보내기",
+    settings_export_desc: "{count}개의 단어를 JSON 파일로 다운로드",
+    settings_export_btn: "내보내기",
+    settings_danger: "위험 영역",
+    settings_delete_account: "계정 삭제",
+    settings_delete_account_desc: "계정과 모든 데이터를 영구적으로 삭제",
 
     // Word card
     word_context: "문맥",

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { themeStore } from "$lib/stores/theme.svelte";
   import { authStore } from "$lib/stores/auth.svelte";
+  import { wordsStore } from "$lib/stores/words.svelte";
   import { i18n, type Locale } from "$lib/i18n/index.svelte";
 
   type ThemeOption = "light" | "dark" | "system";
@@ -13,6 +14,22 @@
   function handleLocaleChange(e: Event) {
     const value = (e.target as HTMLSelectElement).value as Locale;
     i18n.setLocale(value);
+  }
+
+  function exportData() {
+    const data = {
+      exportedAt: new Date().toISOString(),
+      version: "1.0",
+      words: wordsStore.words,
+    };
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ccplus-export-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 </script>
 
@@ -170,6 +187,49 @@
     </section>
   {/if}
 
+  <!-- Data section -->
+  <section class="mb-8">
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-1 h-4 bg-purple-500 rounded-full"></div>
+      <h2 class="text-xs font-semibold text-secondary uppercase tracking-wider">
+        {i18n.t("settings_data")}
+      </h2>
+    </div>
+
+    <div class="card">
+      <div class="setting-row">
+        <div>
+          <div class="font-medium">{i18n.t("settings_export")}</div>
+          <div class="text-sm text-secondary mt-0.5">
+            {i18n.t("settings_export_desc", { count: wordsStore.words.length })}
+          </div>
+        </div>
+        <button
+          onclick={exportData}
+          disabled={wordsStore.words.length === 0}
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium bg-tertiary hover:bg-[var(--border)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline
+              points="7 10 12 15 17 10"
+            /><line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          {i18n.t("settings_export_btn")}
+        </button>
+      </div>
+    </div>
+  </section>
+
   <!-- Danger zone -->
   <section class="mb-8">
     <div class="flex items-center gap-2 mb-4">
@@ -177,16 +237,16 @@
       <h2
         class="text-xs font-semibold text-[var(--error)] uppercase tracking-wider"
       >
-        Danger Zone
+        {i18n.t("settings_danger")}
       </h2>
     </div>
 
     <div class="card border-[var(--error)]/20">
       <div class="setting-row">
         <div>
-          <div class="font-medium">Delete Account</div>
+          <div class="font-medium">{i18n.t("settings_delete_account")}</div>
           <div class="text-sm text-secondary mt-0.5">
-            Permanently delete your account and all data
+            {i18n.t("settings_delete_account_desc")}
           </div>
         </div>
         <button
