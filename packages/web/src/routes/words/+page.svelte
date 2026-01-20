@@ -56,16 +56,14 @@
 
   <!-- Filters -->
   <div class="flex flex-col sm:flex-row gap-3 mb-6">
-    <div class="flex-1">
-      <input
-        type="text"
-        class="input"
-        placeholder={i18n.t("words_search_placeholder")}
-        value={searchInput}
-        oninput={handleSearch}
-      />
-    </div>
-    <select class="input sm:w-48" onchange={handleVideoFilter}>
+    <input
+      type="text"
+      class="input flex-1 min-w-0"
+      placeholder={i18n.t("words_search_placeholder")}
+      value={searchInput}
+      oninput={handleSearch}
+    />
+    <select class="input w-full sm:w-48 shrink-0" onchange={handleVideoFilter}>
       <option value="">{i18n.t("words_filter_all")}</option>
       {#each wordsStore.videos as video}
         <option value={video.id}>
