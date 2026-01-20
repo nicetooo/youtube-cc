@@ -150,18 +150,16 @@ export async function putWord(word: Word): Promise<void> {
     const transaction = db.transaction(STORE_NAME, "readwrite");
     const store = transaction.objectStore(STORE_NAME);
 
-    // Convert dates to ISO strings for storage (with safe handling)
-    const wordToStore = {
-      ...word,
-      nextReview: toISOStringSafe(word.nextReview),
-      createdAt: toISOStringSafe(word.createdAt),
-      updatedAt: word.updatedAt ? toISOStringSafe(word.updatedAt) : undefined,
-    };
-
-    console.log(
-      `[IndexedDB] Putting word ${word.text}, examples:`,
-      word.examples
+    // Convert to plain object and dates to ISO strings (Svelte proxies can't be cloned)
+    const wordToStore = JSON.parse(
+      JSON.stringify({
+        ...word,
+        nextReview: toISOStringSafe(word.nextReview),
+        createdAt: toISOStringSafe(word.createdAt),
+        updatedAt: word.updatedAt ? toISOStringSafe(word.updatedAt) : undefined,
+      })
     );
+
     const request = store.put(wordToStore);
 
     request.onsuccess = () => resolve();
@@ -188,12 +186,17 @@ export async function putWords(words: Word[]): Promise<void> {
     let hasError = false;
 
     for (const word of words) {
-      const wordToStore = {
-        ...word,
-        nextReview: toISOStringSafe(word.nextReview),
-        createdAt: toISOStringSafe(word.createdAt),
-        updatedAt: word.updatedAt ? toISOStringSafe(word.updatedAt) : undefined,
-      };
+      // Convert to plain object (Svelte proxies can't be cloned by IndexedDB)
+      const wordToStore = JSON.parse(
+        JSON.stringify({
+          ...word,
+          nextReview: toISOStringSafe(word.nextReview),
+          createdAt: toISOStringSafe(word.createdAt),
+          updatedAt: word.updatedAt
+            ? toISOStringSafe(word.updatedAt)
+            : undefined,
+        })
+      );
 
       const request = store.put(wordToStore);
 
