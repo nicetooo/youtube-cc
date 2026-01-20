@@ -238,10 +238,10 @@
       </h2>
       <p class="text-secondary mb-3">{i18n.t("privacy_contact_text")}</p>
       <a
-        href="mailto:support@youtubecc.com"
+        href="mailto:nicetooo.a@gmail.com"
         class="inline-flex items-center gap-2 text-accent hover:underline font-medium"
       >
-        support@youtubecc.com
+        nicetooo.a@gmail.com
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
