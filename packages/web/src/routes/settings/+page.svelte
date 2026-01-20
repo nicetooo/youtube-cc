@@ -19,7 +19,6 @@
   function exportData() {
     const data = {
       exportedAt: new Date().toISOString(),
-      version: "1.0",
       words: wordsStore.words,
     };
     const json = JSON.stringify(data, null, 2);
