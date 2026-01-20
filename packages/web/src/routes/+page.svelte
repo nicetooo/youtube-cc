@@ -1,22 +1,7 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import ThemeToggle from "$lib/components/ThemeToggle.svelte";
   import LocaleSelect from "$lib/components/LocaleSelect.svelte";
-  import AuthModal from "$lib/components/AuthModal.svelte";
-  import { authStore } from "$lib/stores/auth.svelte";
   import { i18n } from "$lib/i18n/index.svelte";
-
-  let showAuthModal = $state(false);
-
-  function handleViewWords() {
-    if (authStore.isLoggedIn) {
-      // Already logged in, go directly
-      goto("/words");
-    } else {
-      // Show login modal
-      showAuthModal = true;
-    }
-  }
 </script>
 
 <svelte:head>
@@ -61,9 +46,9 @@
           >
             {i18n.t("home_get_extension")}
           </a>
-          <button onclick={handleViewWords} class="btn btn-secondary px-6 py-3">
+          <a href="/words" class="btn btn-secondary px-6 py-3">
             {i18n.t("home_view_words")}
-          </button>
+          </a>
         </div>
       </div>
 
@@ -153,5 +138,3 @@
     <p>youtubecc.com</p>
   </footer>
 </div>
-
-<AuthModal open={showAuthModal} onClose={() => (showAuthModal = false)} />
