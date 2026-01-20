@@ -4,9 +4,9 @@
   "version": "1.5.0",
   "type": "module",
   "scripts": {
-    "dev:ext": "pnpm --filter @aspect/extension dev",
+    "dev:ext": "pnpm --filter youtube-cc dev",
     "dev:web": "pnpm --filter @aspect/web dev",
-    "build:ext": "pnpm --filter @aspect/extension build",
+    "build:ext": "pnpm --filter youtube-cc build",
     "build:web": "pnpm --filter @aspect/web build",
     "build:all": "pnpm -r build",
     "check": "pnpm -r check",

@@ -1,6 +1,6 @@
 {
-  "name": "@aspect/extension",
-  "description": "YouTube CC Plus Chrome Extension",
+  "name": "youtube-cc",
+  "description": "Transform your YouTube viewing experience with interactive transcripts, immersive cinema mode, and advanced comment search.",
   "private": true,
   "version": "1.5.0",
   "type": "module",

@@ -255,7 +255,7 @@ interface Word {
 ### 扩展
 
 - Chrome Web Store 发布
-- `pnpm build:ext && pnpm --filter @aspect/extension zip`
+- `pnpm build:ext && pnpm --filter youtube-cc zip`
 - 发布前改 popup 跳转链接为生产地址
 
 ### 网站
