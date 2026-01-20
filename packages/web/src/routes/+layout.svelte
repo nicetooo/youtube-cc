@@ -11,9 +11,10 @@
   const isLanding = $derived($page.url.pathname === "/");
 
   // Sync words store with auth state
+  // 未登录用户也能使用 IndexedDB 存储
   $effect(() => {
     const userId = authStore.user?.uid ?? null;
-    const isAnonymous = authStore.user?.isAnonymous ?? false;
+    const isAnonymous = authStore.isAnonymous; // 未登录或匿名用户都为 true
     wordsStore.setUser(userId, isAnonymous);
   });
 </script>

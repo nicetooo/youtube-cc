@@ -83,21 +83,10 @@ function createAuthStore() {
         loading = false;
       } else {
         user = null;
+        loading = false;
         // Broadcast logout to extension
         if (browser) {
           window.postMessage({ source: "ccplus-web", type: "logout" }, "*");
-        }
-
-        // Auto sign in anonymously if no user
-        loading = true;
-        try {
-          const { signInAnon } = await import("@aspect/shared/firebase");
-          console.log("[CC Plus Web] Auto signing in anonymously...");
-          await signInAnon();
-          // onAuthChange will be called again with the new user
-        } catch (e) {
-          console.error("Failed to auto sign in anonymously:", e);
-          loading = false;
         }
       }
     });
@@ -287,17 +276,6 @@ function createAuthStore() {
     }
   }
 
-  async function loginAnonymously() {
-    error = null;
-    try {
-      const { signInAnon } = await import("@aspect/shared/firebase");
-      await signInAnon();
-    } catch (e) {
-      error = (e as Error).message;
-      throw e;
-    }
-  }
-
   async function logout() {
     error = null;
     try {
@@ -389,12 +367,12 @@ function createAuthStore() {
       return !!user;
     },
     get isAnonymous() {
-      return user?.isAnonymous ?? false;
+      // 未登录或 Firebase 匿名用户都视为匿名
+      return !user || user.isAnonymous;
     },
     loginWithGoogle,
     loginWithEmail,
     registerWithEmail,
-    loginAnonymously,
     logout,
     linkToGoogle,
     linkToEmail,

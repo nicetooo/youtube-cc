@@ -25,24 +25,20 @@ function createWordsStore() {
     currentUserId = userId;
     isAnonymous = anonymous;
 
-    if (userId) {
-      loading = true;
-      try {
-        // Always load from IndexedDB first (fast, offline-capable)
-        console.log("[WordsStore] Loading from IndexedDB...");
-        words = await getIndexedDBWords();
-        loading = false;
+    loading = true;
+    try {
+      // Always load from IndexedDB first (fast, offline-capable)
+      // Works for both logged-in users and anonymous/guest users
+      console.log("[WordsStore] Loading from IndexedDB...");
+      words = await getIndexedDBWords();
+      loading = false;
 
-        // For logged in users, sync with Firebase in background
-        if (!anonymous) {
-          syncWithFirebase(userId);
-        }
-      } catch (e) {
-        console.error("Failed to fetch words:", e);
-        words = [];
-        loading = false;
+      // For logged in (non-anonymous) users, sync with Firebase in background
+      if (userId && !anonymous) {
+        syncWithFirebase(userId);
       }
-    } else {
+    } catch (e) {
+      console.error("Failed to fetch words:", e);
       words = [];
       loading = false;
     }
@@ -231,8 +227,6 @@ function createWordsStore() {
   });
 
   async function addWord(word: Omit<Word, "id" | "createdAt">) {
-    if (!currentUserId) return;
-
     // Create word with ID
     const newWord: Word = {
       ...word,
@@ -245,10 +239,11 @@ function createWordsStore() {
     words = [...words, newWord];
 
     // For logged in users, also save to Firebase (background)
-    if (!isAnonymous) {
+    if (currentUserId && !isAnonymous) {
+      const userId = currentUserId;
       import("@aspect/shared/firebase").then(
         ({ addWord: addWordToFirebase }) => {
-          addWordToFirebase(currentUserId!, word, {
+          addWordToFirebase(userId, word, {
             skipDuplicateCheck: true,
           }).catch((e) =>
             console.error("[WordsStore] Failed to sync add to Firebase:", e)
@@ -259,8 +254,6 @@ function createWordsStore() {
   }
 
   async function updateWord(id: string, updates: Partial<Word>) {
-    if (!currentUserId) return;
-
     // Update local state immediately
     const updatedWord = words.find((w) => w.id === id);
     if (!updatedWord) return;
@@ -272,10 +265,11 @@ function createWordsStore() {
     await putIndexedDBWord(newWord);
 
     // For logged in users, also update Firebase (background)
-    if (!isAnonymous) {
+    if (currentUserId && !isAnonymous) {
+      const userId = currentUserId;
       import("@aspect/shared/firebase").then(
         ({ updateWord: updateWordInFirebase }) => {
-          updateWordInFirebase(currentUserId!, id, updates).catch((e) =>
+          updateWordInFirebase(userId, id, updates).catch((e) =>
             console.error("[WordsStore] Failed to sync update to Firebase:", e)
           );
         }
@@ -284,8 +278,6 @@ function createWordsStore() {
   }
 
   async function deleteWord(id: string) {
-    if (!currentUserId) return;
-
     // Update local state immediately
     words = words.filter((w) => w.id !== id);
 
@@ -293,10 +285,11 @@ function createWordsStore() {
     await deleteIndexedDBWord(id);
 
     // For logged in users, also delete from Firebase (background)
-    if (!isAnonymous) {
+    if (currentUserId && !isAnonymous) {
+      const userId = currentUserId;
       import("@aspect/shared/firebase").then(
         ({ deleteWord: deleteWordFromFirebase }) => {
-          deleteWordFromFirebase(currentUserId!, id).catch((e) =>
+          deleteWordFromFirebase(userId, id).catch((e) =>
             console.error("[WordsStore] Failed to sync delete to Firebase:", e)
           );
         }
@@ -305,8 +298,6 @@ function createWordsStore() {
   }
 
   async function reviewWord(id: string, rating: SimpleRating) {
-    if (!currentUserId) return;
-
     const word = words.find((w) => w.id === id);
     if (!word) return;
 
@@ -320,12 +311,13 @@ function createWordsStore() {
     await putIndexedDBWord(newWord);
 
     // For logged in users, also update Firebase (background)
-    if (!isAnonymous) {
+    if (currentUserId && !isAnonymous) {
+      const userId = currentUserId;
       import("@aspect/shared/firebase").then(
         async ({ updateWord: updateWordInFirebase, updateStreak }) => {
           try {
-            await updateWordInFirebase(currentUserId!, id, updates);
-            await updateStreak(currentUserId!);
+            await updateWordInFirebase(userId, id, updates);
+            await updateStreak(userId);
           } catch (e) {
             console.error("[WordsStore] Failed to sync review to Firebase:", e);
           }

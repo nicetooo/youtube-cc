@@ -70,20 +70,6 @@
     }
   }
 
-  async function handleAnonymousLogin() {
-    loading = true;
-    error = null;
-    try {
-      await authStore.loginAnonymously();
-      onClose();
-      goto("/words");
-    } catch (e) {
-      error = (e as Error).message;
-    } finally {
-      loading = false;
-    }
-  }
-
   function handleBackdropClick(e: MouseEvent) {
     if (e.target === e.currentTarget) {
       onClose();
@@ -235,19 +221,6 @@
             </button>
           {/if}
         </div>
-
-        <div class="divider">
-          <span>or</span>
-        </div>
-
-        <!-- Anonymous Login -->
-        <button
-          class="anon-btn"
-          onclick={handleAnonymousLogin}
-          disabled={loading}
-        >
-          Try without account
-        </button>
       {:else}
         <!-- Password Reset -->
         <form
@@ -430,27 +403,5 @@
 
   .link:hover {
     text-decoration: underline;
-  }
-
-  .anon-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 0.5rem;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .anon-btn:hover:not(:disabled) {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-  }
-
-  .anon-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
   }
 </style>
