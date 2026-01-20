@@ -1,12 +1,18 @@
 {
+  "extName": {
+    "message": "CC Plus - YouTube 이중 자막 & 단어장"
+  },
+  "extDescription": {
+    "message": "이중 자막, 텍스트 선택 번역, 간격 반복 단어장, 댓글 검색, 와이드 스크린, 광고 제거로 YouTube 학습 경험을 강화하세요."
+  },
   "display_transcription": {
-    "message": "전사 표시"
+    "message": "자막 표시"
   },
   "search_transcription": {
-    "message": "전사 검색"
+    "message": "자막 검색"
   },
   "transcription": {
-    "message": "전사"
+    "message": "자막"
   },
   "wide_screen": {
     "message": "와이드 스크린"
@@ -15,7 +21,7 @@
     "message": "동영상 광고 건너뛰기"
   },
   "remove_ad_items": {
-    "message": "광고 항목 제거"
+    "message": "광고 요소 제거"
   },
   "side_comments": {
     "message": "사이드 댓글"
@@ -23,14 +29,17 @@
   "search_comment": {
     "message": "댓글 검색"
   },
+  "word_selection": {
+    "message": "텍스트 선택 번역"
+  },
   "transcription_sub": {
-    "message": "인터랙티브 사이드바 전사"
+    "message": "인터랙티브 사이드바 자막"
   },
   "wide_screen_sub": {
     "message": "몰입감 자동 극대화"
   },
   "remove_ad_items_sub": {
-    "message": "더 깔끔한 배너 및 UI 요소"
+    "message": "더 깔끔한 배너 및 UI"
   },
   "skip_video_ads_sub": {
     "message": "동영상 광고 자동 건너뛰기"
@@ -40,5 +49,29 @@
   },
   "search_comment_sub": {
     "message": "댓글 검색 및 필터링"
+  },
+  "word_selection_sub": {
+    "message": "텍스트를 선택하여 번역하고 단어 저장"
+  },
+  "save_word": {
+    "message": "단어 저장"
+  },
+  "word_saved": {
+    "message": "저장됨"
+  },
+  "translation": {
+    "message": "번역"
+  },
+  "context": {
+    "message": "문맥"
+  },
+  "source": {
+    "message": "출처"
+  },
+  "vocabulary": {
+    "message": "단어장"
+  },
+  "review": {
+    "message": "복습"
   }
 }

@@ -1,4 +1,10 @@
 {
+  "extName": {
+    "message": "CC Plus - YouTube Subtitles & Vocabulary Builder"
+  },
+  "extDescription": {
+    "message": "Bilingual subtitles, text selection translation, vocabulary builder with spaced repetition, comment search, wide screen & ad-free mode."
+  },
   "display_transcription": {
     "message": "Display Transcription"
   },
@@ -23,6 +29,9 @@
   "search_comment": {
     "message": "Search Comment"
   },
+  "word_selection": {
+    "message": "Text Selection Translation"
+  },
   "transcription_sub": {
     "message": "Interactive sidebar transcript"
   },
@@ -40,5 +49,29 @@
   },
   "search_comment_sub": {
     "message": "Search and filter comments"
+  },
+  "word_selection_sub": {
+    "message": "Select text to translate & save words"
+  },
+  "save_word": {
+    "message": "Save Word"
+  },
+  "word_saved": {
+    "message": "Word Saved"
+  },
+  "translation": {
+    "message": "Translation"
+  },
+  "context": {
+    "message": "Context"
+  },
+  "source": {
+    "message": "Source"
+  },
+  "vocabulary": {
+    "message": "Vocabulary"
+  },
+  "review": {
+    "message": "Review"
   }
 }

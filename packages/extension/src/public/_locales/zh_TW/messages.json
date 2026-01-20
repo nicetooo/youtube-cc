@@ -1,4 +1,10 @@
 {
+  "extName": {
+    "message": "CC Plus - YouTube 雙語字幕與生詞本"
+  },
+  "extDescription": {
+    "message": "雙語字幕、劃詞翻譯、生詞本與間隔重複複習、留言搜尋、寬螢幕模式、去廣告，全方位提升 YouTube 學習體驗。"
+  },
   "display_transcription": {
     "message": "顯示字幕"
   },
@@ -9,19 +15,22 @@
     "message": "字幕"
   },
   "wide_screen": {
-    "message": "寬屏"
+    "message": "寬螢幕"
   },
   "skip_video_ads": {
-    "message": "跳過視頻廣告"
+    "message": "跳過影片廣告"
   },
   "remove_ad_items": {
-    "message": "刪除廣告項目"
+    "message": "移除廣告元素"
   },
   "side_comments": {
-    "message": "側邊評論"
+    "message": "側邊留言"
   },
   "search_comment": {
-    "message": "搜尋評論"
+    "message": "搜尋留言"
+  },
+  "word_selection": {
+    "message": "劃詞翻譯"
   },
   "transcription_sub": {
     "message": "互動式側邊欄字幕"
@@ -30,15 +39,39 @@
     "message": "自動最大化沉浸感"
   },
   "remove_ad_items_sub": {
-    "message": "更清潔的橫幅和介面元素"
+    "message": "更清爽的橫幅和介面"
   },
   "skip_video_ads_sub": {
-    "message": "自動跳過視頻廣告"
+    "message": "自動跳過影片廣告"
   },
   "side_comments_sub": {
-    "message": "將評論移至右側"
+    "message": "將留言移至右側"
   },
   "search_comment_sub": {
-    "message": "搜尋和過濾評論"
+    "message": "搜尋和篩選留言"
+  },
+  "word_selection_sub": {
+    "message": "選取文字即可翻譯並儲存生詞"
+  },
+  "save_word": {
+    "message": "儲存生詞"
+  },
+  "word_saved": {
+    "message": "已儲存"
+  },
+  "translation": {
+    "message": "翻譯"
+  },
+  "context": {
+    "message": "上下文"
+  },
+  "source": {
+    "message": "來源"
+  },
+  "vocabulary": {
+    "message": "生詞本"
+  },
+  "review": {
+    "message": "複習"
   }
 }

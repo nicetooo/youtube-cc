@@ -1,4 +1,10 @@
 {
+  "extName": {
+    "message": "CC Plus - YouTube 双语字幕与生词本"
+  },
+  "extDescription": {
+    "message": "双语字幕、划词翻译、生词本与间隔重复复习、评论搜索、宽屏模式、去广告，全方位提升 YouTube 学习体验。"
+  },
   "display_transcription": {
     "message": "显示字幕"
   },
@@ -15,13 +21,16 @@
     "message": "跳过视频广告"
   },
   "remove_ad_items": {
-    "message": "删除广告项目"
+    "message": "移除广告元素"
   },
   "side_comments": {
     "message": "侧边评论"
   },
   "search_comment": {
     "message": "搜索评论"
+  },
+  "word_selection": {
+    "message": "划词翻译"
   },
   "transcription_sub": {
     "message": "交互式侧边栏字幕"
@@ -30,7 +39,7 @@
     "message": "自动最大化沉浸感"
   },
   "remove_ad_items_sub": {
-    "message": "更清洁的横幅和界面元素"
+    "message": "更清爽的横幅和界面"
   },
   "skip_video_ads_sub": {
     "message": "自动跳过视频广告"
@@ -39,6 +48,30 @@
     "message": "将评论移至右侧"
   },
   "search_comment_sub": {
-    "message": "搜索和过滤评论"
+    "message": "搜索和筛选评论"
+  },
+  "word_selection_sub": {
+    "message": "选中文字即可翻译并保存生词"
+  },
+  "save_word": {
+    "message": "保存生词"
+  },
+  "word_saved": {
+    "message": "已保存"
+  },
+  "translation": {
+    "message": "翻译"
+  },
+  "context": {
+    "message": "上下文"
+  },
+  "source": {
+    "message": "来源"
+  },
+  "vocabulary": {
+    "message": "生词本"
+  },
+  "review": {
+    "message": "复习"
   }
 }

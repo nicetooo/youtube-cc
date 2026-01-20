@@ -1,12 +1,18 @@
 {
+  "extName": {
+    "message": "CC Plus - YouTube バイリンガル字幕＆単語帳"
+  },
+  "extDescription": {
+    "message": "バイリンガル字幕、テキスト選択翻訳、間隔反復単語帳、コメント検索、ワイドスクリーン、広告除去でYouTube学習を強化。"
+  },
   "display_transcription": {
-    "message": "文字起こしを表示"
+    "message": "字幕を表示"
   },
   "search_transcription": {
-    "message": "文字起こしを検索"
+    "message": "字幕を検索"
   },
   "transcription": {
-    "message": "文字起こし"
+    "message": "字幕"
   },
   "wide_screen": {
     "message": "ワイドスクリーン"
@@ -15,7 +21,7 @@
     "message": "動画広告をスキップ"
   },
   "remove_ad_items": {
-    "message": "広告項目を削除"
+    "message": "広告要素を削除"
   },
   "side_comments": {
     "message": "サイドコメント"
@@ -23,14 +29,17 @@
   "search_comment": {
     "message": "コメントを検索"
   },
+  "word_selection": {
+    "message": "テキスト選択翻訳"
+  },
   "transcription_sub": {
-    "message": "インタラクティブなサイドバー文字起こし"
+    "message": "インタラクティブなサイドバー字幕"
   },
   "wide_screen_sub": {
     "message": "没入感を自動的に最大化"
   },
   "remove_ad_items_sub": {
-    "message": "バナーとUI要素を整理"
+    "message": "バナーとUI要素をすっきり"
   },
   "skip_video_ads_sub": {
     "message": "動画広告を自動スキップ"
@@ -40,5 +49,29 @@
   },
   "search_comment_sub": {
     "message": "コメントの検索とフィルタリング"
+  },
+  "word_selection_sub": {
+    "message": "テキストを選択して翻訳・単語を保存"
+  },
+  "save_word": {
+    "message": "単語を保存"
+  },
+  "word_saved": {
+    "message": "保存しました"
+  },
+  "translation": {
+    "message": "翻訳"
+  },
+  "context": {
+    "message": "文脈"
+  },
+  "source": {
+    "message": "出典"
+  },
+  "vocabulary": {
+    "message": "単語帳"
+  },
+  "review": {
+    "message": "復習"
   }
 }

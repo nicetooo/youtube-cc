@@ -7,6 +7,8 @@ export default defineConfig({
   extensionApi: "chrome",
   modules: ["@wxt-dev/module-svelte"],
   manifest: {
+    name: "__MSG_extName__",
+    description: "__MSG_extDescription__",
     permissions: ["storage", "webRequest", "tabs", "alarms"],
     host_permissions: [
       "*://www.youtube.com/*",
