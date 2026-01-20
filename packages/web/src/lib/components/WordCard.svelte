@@ -20,6 +20,9 @@
   let fetchingExamples = $state(false);
   let fetchError = $state("");
 
+  // Local examples state - initialized from word.examples, updated after fetch
+  let examples = $state<string[]>(word.examples ?? []);
+
   async function handleFetchExamples() {
     if (fetchingExamples) return;
 
@@ -27,9 +30,11 @@
     fetchError = "";
 
     try {
-      const examples = await fetchWordExamples(word.text);
-      if (examples.length > 0) {
-        await wordsStore.updateWord(word.id, { examples });
+      const fetchedExamples = await fetchWordExamples(word.text);
+      if (fetchedExamples.length > 0) {
+        examples = fetchedExamples;
+        // Persist to store (IndexedDB + Firebase)
+        await wordsStore.updateWord(word.id, { examples: fetchedExamples });
       } else {
         fetchError = "No examples found";
       }
@@ -277,11 +282,11 @@
         </div>
       {/if}
 
-      {#if word.examples && word.examples.length > 0}
+      {#if examples.length > 0}
         <div>
           <div class="text-xs text-tertiary mb-2">Example sentences</div>
           <ul class="space-y-1">
-            {#each word.examples as example}
+            {#each examples as example}
               <li class="text-sm text-secondary">• {example}</li>
             {/each}
           </ul>
