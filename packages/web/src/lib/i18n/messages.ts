@@ -102,6 +102,76 @@ export const messages = {
     delete: "Delete",
     edit: "Edit",
     close: "Close",
+
+    // Privacy page
+    privacy_title: "Privacy Policy",
+    privacy_updated: "Last updated: January 2025",
+    privacy_intro_title: "Introduction",
+    privacy_intro_text:
+      "CC Plus is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our browser extension and website.",
+    privacy_collect_title: "Data We Collect",
+    privacy_collect_vocab: "Vocabulary Data",
+    privacy_collect_vocab_desc:
+      "Words you save, including context sentences and video sources. Stored locally in your browser by default.",
+    privacy_collect_account: "Account Information",
+    privacy_collect_account_desc:
+      "If you sign in with Google, we receive your email and profile name for authentication purposes only.",
+    privacy_collect_analytics: "Usage Analytics",
+    privacy_collect_analytics_desc:
+      "We use Google Analytics to collect anonymous usage statistics to improve our service.",
+    privacy_storage_title: "Data Storage",
+    privacy_storage_local: "Local Storage",
+    privacy_storage_local_desc:
+      "Your vocabulary is stored locally in IndexedDB and works offline.",
+    privacy_storage_cloud: "Cloud Sync",
+    privacy_storage_cloud_desc:
+      "If you sign in, data syncs to Firebase for cross-device access.",
+    privacy_sharing_title: "Data Sharing",
+    privacy_sharing_text:
+      "We do not sell or share your personal data, except with these service providers:",
+    privacy_sharing_firebase: "Firebase (Google) - Auth & Storage",
+    privacy_sharing_analytics: "Google Analytics - Usage Stats",
+    privacy_rights_title: "Your Rights",
+    privacy_rights_export: "Export your data",
+    privacy_rights_delete: "Delete your account",
+    privacy_rights_no_account: "Use without account",
+    privacy_contact_title: "Questions?",
+    privacy_contact_text:
+      "If you have questions about this Privacy Policy, contact us:",
+    privacy_back: "Back to Settings",
+
+    // Terms page
+    terms_title: "Terms of Service",
+    terms_updated: "Last updated: January 2025",
+    terms_accept_title: "Acceptance of Terms",
+    terms_accept_text:
+      "By using CC Plus browser extension and website, you agree to these Terms of Service. If you do not agree, please do not use our services.",
+    terms_service_title: "Description of Service",
+    terms_service_text:
+      "CC Plus is a language learning tool that helps you save vocabulary from YouTube videos, review words using spaced repetition, and sync your progress across devices.",
+    terms_responsibility_title: "User Responsibilities",
+    terms_responsibility_1: "Maintain the security of your account",
+    terms_responsibility_2: "Do not misuse or abuse our services",
+    terms_responsibility_3: "Comply with YouTube's Terms of Service",
+    terms_ip_title: "Intellectual Property",
+    terms_ip_text:
+      "The CC Plus extension, website, and associated content are protected by copyright. You may not copy, modify, or distribute our software without permission.",
+    terms_data_title: "Your Data",
+    terms_data_text:
+      "You retain ownership of the vocabulary data you create. We only store and process your data to provide the service.",
+    terms_disclaimer_title: "Disclaimer",
+    terms_disclaimer_text:
+      'CC Plus is provided "as is" without warranties of any kind. We are not affiliated with YouTube or Google.',
+    terms_liability_title: "Limitation of Liability",
+    terms_liability_text:
+      "To the maximum extent permitted by law, CC Plus shall not be liable for any indirect, incidental, or consequential damages.",
+    terms_termination_title: "Termination",
+    terms_termination_text:
+      "We reserve the right to suspend or terminate access to our services at any time. You may stop using our services at any time.",
+    terms_changes_title: "Changes to Terms",
+    terms_changes_text:
+      "We may update these Terms from time to time. Continued use of the service after changes constitutes acceptance.",
+    terms_back: "Back to Settings",
   },
 
   zh_CN: {
@@ -192,6 +262,75 @@ export const messages = {
     delete: "删除",
     edit: "编辑",
     close: "关闭",
+
+    // Privacy page
+    privacy_title: "隐私政策",
+    privacy_updated: "最后更新：2025年1月",
+    privacy_intro_title: "简介",
+    privacy_intro_text:
+      "CC Plus 致力于保护您的隐私。本隐私政策说明我们如何收集、使用和保护您在使用浏览器扩展和网站时的信息。",
+    privacy_collect_title: "我们收集的数据",
+    privacy_collect_vocab: "词汇数据",
+    privacy_collect_vocab_desc:
+      "您保存的单词，包括上下文句子和视频来源。默认存储在浏览器本地。",
+    privacy_collect_account: "账户信息",
+    privacy_collect_account_desc:
+      "如果您使用 Google 登录，我们会获取您的邮箱和个人资料名称，仅用于身份验证。",
+    privacy_collect_analytics: "使用统计",
+    privacy_collect_analytics_desc:
+      "我们使用 Google Analytics 收集匿名使用统计数据，以改进我们的服务。",
+    privacy_storage_title: "数据存储",
+    privacy_storage_local: "本地存储",
+    privacy_storage_local_desc:
+      "您的词汇存储在本地 IndexedDB 中，支持离线使用。",
+    privacy_storage_cloud: "云同步",
+    privacy_storage_cloud_desc:
+      "如果您登录，数据将同步到 Firebase 以实现跨设备访问。",
+    privacy_sharing_title: "数据共享",
+    privacy_sharing_text:
+      "我们不会出售或分享您的个人数据，除了以下服务提供商：",
+    privacy_sharing_firebase: "Firebase (Google) - 认证和存储",
+    privacy_sharing_analytics: "Google Analytics - 使用统计",
+    privacy_rights_title: "您的权利",
+    privacy_rights_export: "导出您的数据",
+    privacy_rights_delete: "删除您的账户",
+    privacy_rights_no_account: "无需账户使用",
+    privacy_contact_title: "有疑问？",
+    privacy_contact_text: "如果您对本隐私政策有疑问，请联系我们：",
+    privacy_back: "返回设置",
+
+    // Terms page
+    terms_title: "服务条款",
+    terms_updated: "最后更新：2025年1月",
+    terms_accept_title: "条款接受",
+    terms_accept_text:
+      "使用 CC Plus 浏览器扩展和网站即表示您同意本服务条款。如果您不同意，请勿使用我们的服务。",
+    terms_service_title: "服务说明",
+    terms_service_text:
+      "CC Plus 是一款语言学习工具，帮助您从 YouTube 视频中保存词汇、使用间隔重复复习单词，并在设备间同步进度。",
+    terms_responsibility_title: "用户责任",
+    terms_responsibility_1: "维护账户安全",
+    terms_responsibility_2: "不得滥用我们的服务",
+    terms_responsibility_3: "遵守 YouTube 服务条款",
+    terms_ip_title: "知识产权",
+    terms_ip_text:
+      "CC Plus 扩展、网站及相关内容受版权保护。未经许可，您不得复制、修改或分发我们的软件。",
+    terms_data_title: "您的数据",
+    terms_data_text:
+      "您保留所创建词汇数据的所有权。我们仅存储和处理您的数据以提供服务。",
+    terms_disclaimer_title: "免责声明",
+    terms_disclaimer_text:
+      "CC Plus 按「原样」提供，不提供任何形式的保证。我们与 YouTube 或 Google 无关联。",
+    terms_liability_title: "责任限制",
+    terms_liability_text:
+      "在法律允许的最大范围内，CC Plus 不对任何间接、附带或后果性损害承担责任。",
+    terms_termination_title: "终止",
+    terms_termination_text:
+      "我们保留随时暂停或终止服务访问的权利。您可以随时停止使用我们的服务。",
+    terms_changes_title: "条款变更",
+    terms_changes_text:
+      "我们可能会不时更新这些条款。在变更后继续使用服务即表示接受新条款。",
+    terms_back: "返回设置",
   },
 
   zh_TW: {
@@ -282,6 +421,75 @@ export const messages = {
     delete: "刪除",
     edit: "編輯",
     close: "關閉",
+
+    // Privacy page
+    privacy_title: "隱私政策",
+    privacy_updated: "最後更新：2025年1月",
+    privacy_intro_title: "簡介",
+    privacy_intro_text:
+      "CC Plus 致力於保護您的隱私。本隱私政策說明我們如何收集、使用和保護您在使用瀏覽器擴充和網站時的資訊。",
+    privacy_collect_title: "我們收集的資料",
+    privacy_collect_vocab: "詞彙資料",
+    privacy_collect_vocab_desc:
+      "您儲存的單字，包括上下文句子和影片來源。預設儲存在瀏覽器本地。",
+    privacy_collect_account: "帳戶資訊",
+    privacy_collect_account_desc:
+      "如果您使用 Google 登入，我們會取得您的電子郵件和個人資料名稱，僅用於身份驗證。",
+    privacy_collect_analytics: "使用統計",
+    privacy_collect_analytics_desc:
+      "我們使用 Google Analytics 收集匿名使用統計資料，以改進我們的服務。",
+    privacy_storage_title: "資料儲存",
+    privacy_storage_local: "本地儲存",
+    privacy_storage_local_desc:
+      "您的詞彙儲存在本地 IndexedDB 中，支援離線使用。",
+    privacy_storage_cloud: "雲端同步",
+    privacy_storage_cloud_desc:
+      "如果您登入，資料將同步到 Firebase 以實現跨裝置存取。",
+    privacy_sharing_title: "資料分享",
+    privacy_sharing_text:
+      "我們不會出售或分享您的個人資料，除了以下服務提供商：",
+    privacy_sharing_firebase: "Firebase (Google) - 認證和儲存",
+    privacy_sharing_analytics: "Google Analytics - 使用統計",
+    privacy_rights_title: "您的權利",
+    privacy_rights_export: "匯出您的資料",
+    privacy_rights_delete: "刪除您的帳戶",
+    privacy_rights_no_account: "無需帳戶使用",
+    privacy_contact_title: "有疑問？",
+    privacy_contact_text: "如果您對本隱私政策有疑問，請聯繫我們：",
+    privacy_back: "返回設定",
+
+    // Terms page
+    terms_title: "服務條款",
+    terms_updated: "最後更新：2025年1月",
+    terms_accept_title: "條款接受",
+    terms_accept_text:
+      "使用 CC Plus 瀏覽器擴充和網站即表示您同意本服務條款。如果您不同意，請勿使用我們的服務。",
+    terms_service_title: "服務說明",
+    terms_service_text:
+      "CC Plus 是一款語言學習工具，幫助您從 YouTube 影片中儲存詞彙、使用間隔重複複習單字，並在裝置間同步進度。",
+    terms_responsibility_title: "使用者責任",
+    terms_responsibility_1: "維護帳戶安全",
+    terms_responsibility_2: "不得濫用我們的服務",
+    terms_responsibility_3: "遵守 YouTube 服務條款",
+    terms_ip_title: "智慧財產權",
+    terms_ip_text:
+      "CC Plus 擴充、網站及相關內容受版權保護。未經許可，您不得複製、修改或散布我們的軟體。",
+    terms_data_title: "您的資料",
+    terms_data_text:
+      "您保留所建立詞彙資料的所有權。我們僅儲存和處理您的資料以提供服務。",
+    terms_disclaimer_title: "免責聲明",
+    terms_disclaimer_text:
+      "CC Plus 按「原樣」提供，不提供任何形式的保證。我們與 YouTube 或 Google 無關聯。",
+    terms_liability_title: "責任限制",
+    terms_liability_text:
+      "在法律允許的最大範圍內，CC Plus 不對任何間接、附帶或後果性損害承擔責任。",
+    terms_termination_title: "終止",
+    terms_termination_text:
+      "我們保留隨時暫停或終止服務存取的權利。您可以隨時停止使用我們的服務。",
+    terms_changes_title: "條款變更",
+    terms_changes_text:
+      "我們可能會不時更新這些條款。在變更後繼續使用服務即表示接受新條款。",
+    terms_back: "返回設定",
   },
 
   ja: {
@@ -374,6 +582,76 @@ export const messages = {
     delete: "削除",
     edit: "編集",
     close: "閉じる",
+
+    // Privacy page
+    privacy_title: "プライバシーポリシー",
+    privacy_updated: "最終更新：2025年1月",
+    privacy_intro_title: "はじめに",
+    privacy_intro_text:
+      "CC Plus はあなたのプライバシーを保護することをお約束します。このプライバシーポリシーでは、ブラウザ拡張機能とウェブサイトをご利用の際に、どのように情報を収集、使用、保護するかを説明します。",
+    privacy_collect_title: "収集するデータ",
+    privacy_collect_vocab: "語彙データ",
+    privacy_collect_vocab_desc:
+      "保存した単語、文脈の文章、動画ソースを含みます。デフォルトではブラウザにローカル保存されます。",
+    privacy_collect_account: "アカウント情報",
+    privacy_collect_account_desc:
+      "Google でログインする場合、認証目的でのみメールアドレスとプロフィール名を取得します。",
+    privacy_collect_analytics: "使用統計",
+    privacy_collect_analytics_desc:
+      "サービス向上のため、Google Analytics で匿名の使用統計を収集しています。",
+    privacy_storage_title: "データの保存",
+    privacy_storage_local: "ローカルストレージ",
+    privacy_storage_local_desc:
+      "語彙は IndexedDB にローカル保存され、オフラインでも使用できます。",
+    privacy_storage_cloud: "クラウド同期",
+    privacy_storage_cloud_desc:
+      "ログインすると、Firebase に同期してデバイス間でアクセスできます。",
+    privacy_sharing_title: "データの共有",
+    privacy_sharing_text:
+      "個人データを販売または共有することはありません。以下のサービスプロバイダーを除きます：",
+    privacy_sharing_firebase: "Firebase (Google) - 認証とストレージ",
+    privacy_sharing_analytics: "Google Analytics - 使用統計",
+    privacy_rights_title: "あなたの権利",
+    privacy_rights_export: "データのエクスポート",
+    privacy_rights_delete: "アカウントの削除",
+    privacy_rights_no_account: "アカウントなしで使用",
+    privacy_contact_title: "ご質問は？",
+    privacy_contact_text:
+      "このプライバシーポリシーについてご質問がある場合は、お問い合わせください：",
+    privacy_back: "設定に戻る",
+
+    // Terms page
+    terms_title: "利用規約",
+    terms_updated: "最終更新：2025年1月",
+    terms_accept_title: "規約への同意",
+    terms_accept_text:
+      "CC Plus ブラウザ拡張機能とウェブサイトを使用することにより、この利用規約に同意したものとみなされます。同意しない場合は、サービスを使用しないでください。",
+    terms_service_title: "サービスの説明",
+    terms_service_text:
+      "CC Plus は、YouTube 動画から語彙を保存し、間隔反復で単語を復習し、デバイス間で進捗を同期する言語学習ツールです。",
+    terms_responsibility_title: "ユーザーの責任",
+    terms_responsibility_1: "アカウントのセキュリティを維持する",
+    terms_responsibility_2: "サービスを悪用しない",
+    terms_responsibility_3: "YouTube の利用規約を遵守する",
+    terms_ip_title: "知的財産権",
+    terms_ip_text:
+      "CC Plus 拡張機能、ウェブサイト、関連コンテンツは著作権で保護されています。許可なくソフトウェアをコピー、変更、配布することはできません。",
+    terms_data_title: "あなたのデータ",
+    terms_data_text:
+      "作成した語彙データの所有権はあなたにあります。サービス提供のためにのみデータを保存・処理します。",
+    terms_disclaimer_title: "免責事項",
+    terms_disclaimer_text:
+      "CC Plus は「現状のまま」提供され、いかなる保証もありません。YouTube や Google とは関係ありません。",
+    terms_liability_title: "責任の制限",
+    terms_liability_text:
+      "法律で許可される最大限の範囲で、CC Plus は間接的、付随的、または結果的な損害に対して責任を負いません。",
+    terms_termination_title: "終了",
+    terms_termination_text:
+      "当社はいつでもサービスへのアクセスを一時停止または終了する権利を留保します。いつでもサービスの使用を停止できます。",
+    terms_changes_title: "規約の変更",
+    terms_changes_text:
+      "これらの規約は随時更新される場合があります。変更後もサービスを継続使用することで、新しい規約に同意したものとみなされます。",
+    terms_back: "設定に戻る",
   },
 
   ko: {
@@ -465,6 +743,76 @@ export const messages = {
     delete: "삭제",
     edit: "편집",
     close: "닫기",
+
+    // Privacy page
+    privacy_title: "개인정보 처리방침",
+    privacy_updated: "최종 업데이트: 2025년 1월",
+    privacy_intro_title: "소개",
+    privacy_intro_text:
+      "CC Plus는 여러분의 개인정보를 보호하기 위해 노력합니다. 이 개인정보 처리방침은 브라우저 확장 프로그램과 웹사이트를 사용할 때 정보를 어떻게 수집, 사용, 보호하는지 설명합니다.",
+    privacy_collect_title: "수집하는 데이터",
+    privacy_collect_vocab: "어휘 데이터",
+    privacy_collect_vocab_desc:
+      "저장한 단어, 문맥 문장, 동영상 출처를 포함합니다. 기본적으로 브라우저에 로컬 저장됩니다.",
+    privacy_collect_account: "계정 정보",
+    privacy_collect_account_desc:
+      "Google로 로그인하면 인증 목적으로만 이메일과 프로필 이름을 받습니다.",
+    privacy_collect_analytics: "사용 통계",
+    privacy_collect_analytics_desc:
+      "서비스 개선을 위해 Google Analytics를 사용하여 익명의 사용 통계를 수집합니다.",
+    privacy_storage_title: "데이터 저장",
+    privacy_storage_local: "로컬 저장소",
+    privacy_storage_local_desc:
+      "어휘는 IndexedDB에 로컬 저장되며 오프라인에서도 사용할 수 있습니다.",
+    privacy_storage_cloud: "클라우드 동기화",
+    privacy_storage_cloud_desc:
+      "로그인하면 Firebase에 동기화하여 여러 기기에서 접근할 수 있습니다.",
+    privacy_sharing_title: "데이터 공유",
+    privacy_sharing_text:
+      "개인 데이터를 판매하거나 공유하지 않습니다. 다음 서비스 제공업체는 예외입니다:",
+    privacy_sharing_firebase: "Firebase (Google) - 인증 및 저장소",
+    privacy_sharing_analytics: "Google Analytics - 사용 통계",
+    privacy_rights_title: "귀하의 권리",
+    privacy_rights_export: "데이터 내보내기",
+    privacy_rights_delete: "계정 삭제",
+    privacy_rights_no_account: "계정 없이 사용",
+    privacy_contact_title: "궁금한 점이 있으신가요?",
+    privacy_contact_text:
+      "이 개인정보 처리방침에 대해 궁금한 점이 있으시면 연락해 주세요:",
+    privacy_back: "설정으로 돌아가기",
+
+    // Terms page
+    terms_title: "서비스 약관",
+    terms_updated: "최종 업데이트: 2025년 1월",
+    terms_accept_title: "약관 동의",
+    terms_accept_text:
+      "CC Plus 브라우저 확장 프로그램과 웹사이트를 사용함으로써 이 서비스 약관에 동의하는 것으로 간주됩니다. 동의하지 않으시면 서비스를 사용하지 마세요.",
+    terms_service_title: "서비스 설명",
+    terms_service_text:
+      "CC Plus는 YouTube 동영상에서 어휘를 저장하고, 간격 반복으로 단어를 복습하며, 기기 간 진행 상황을 동기화하는 언어 학습 도구입니다.",
+    terms_responsibility_title: "사용자 책임",
+    terms_responsibility_1: "계정 보안 유지",
+    terms_responsibility_2: "서비스 남용 금지",
+    terms_responsibility_3: "YouTube 서비스 약관 준수",
+    terms_ip_title: "지적 재산권",
+    terms_ip_text:
+      "CC Plus 확장 프로그램, 웹사이트 및 관련 콘텐츠는 저작권으로 보호됩니다. 허가 없이 소프트웨어를 복사, 수정, 배포할 수 없습니다.",
+    terms_data_title: "귀하의 데이터",
+    terms_data_text:
+      "생성한 어휘 데이터의 소유권은 귀하에게 있습니다. 서비스 제공을 위해서만 데이터를 저장하고 처리합니다.",
+    terms_disclaimer_title: "면책 조항",
+    terms_disclaimer_text:
+      "CC Plus는 어떠한 보증도 없이 '있는 그대로' 제공됩니다. YouTube나 Google과 관련이 없습니다.",
+    terms_liability_title: "책임 제한",
+    terms_liability_text:
+      "법률이 허용하는 최대 범위 내에서 CC Plus는 간접적, 부수적 또는 결과적 손해에 대해 책임을 지지 않습니다.",
+    terms_termination_title: "종료",
+    terms_termination_text:
+      "당사는 언제든지 서비스 접근을 일시 중지하거나 종료할 권리를 보유합니다. 언제든지 서비스 사용을 중단할 수 있습니다.",
+    terms_changes_title: "약관 변경",
+    terms_changes_text:
+      "이 약관은 수시로 업데이트될 수 있습니다. 변경 후에도 서비스를 계속 사용하면 새로운 약관에 동의하는 것으로 간주됩니다.",
+    terms_back: "설정으로 돌아가기",
   },
 } as const;
 

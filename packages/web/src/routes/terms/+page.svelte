@@ -3,143 +3,239 @@
 </script>
 
 <svelte:head>
-  <title>Terms of Service - CC Plus</title>
+  <title>{i18n.t("terms_title")} - CC Plus</title>
 </svelte:head>
 
-<div class="max-w-2xl mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-2">Terms of Service</h1>
-  <p class="text-sm text-tertiary mb-8">Last updated: January 2025</p>
+<div class="max-w-3xl mx-auto px-4 py-12">
+  <!-- Header -->
+  <div class="text-center mb-12">
+    <div
+      class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary mb-4"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        class="text-accent"
+      >
+        <path
+          d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+        /><polyline points="14 2 14 8 20 8" /><line
+          x1="16"
+          y1="13"
+          x2="8"
+          y2="13"
+        /><line x1="16" y1="17" x2="8" y2="17" /><polyline
+          points="10 9 9 9 8 9"
+        />
+      </svg>
+    </div>
+    <h1 class="text-3xl font-bold mb-2">{i18n.t("terms_title")}</h1>
+    <p class="text-tertiary">{i18n.t("terms_updated")}</p>
+  </div>
 
-  <div class="space-y-8 text-secondary">
+  <!-- Content -->
+  <div class="space-y-6">
     <!-- Acceptance -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">
-        1. Acceptance of Terms
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >1</span
+        >
+        {i18n.t("terms_accept_title")}
       </h2>
-      <p>
-        By using CC Plus browser extension and website, you agree to these Terms
-        of Service. If you do not agree, please do not use our services.
+      <p class="text-secondary leading-relaxed">
+        {i18n.t("terms_accept_text")}
       </p>
-    </section>
+    </div>
 
     <!-- Description -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">
-        2. Description of Service
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >2</span
+        >
+        {i18n.t("terms_service_title")}
       </h2>
-      <p>
-        CC Plus is a language learning tool that helps you save vocabulary from
-        YouTube videos, review words using spaced repetition, and sync your
-        progress across devices.
+      <p class="text-secondary leading-relaxed">
+        {i18n.t("terms_service_text")}
       </p>
-    </section>
+    </div>
 
     <!-- User Responsibilities -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">
-        3. User Responsibilities
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >3</span
+        >
+        {i18n.t("terms_responsibility_title")}
       </h2>
-      <ul class="list-disc list-inside space-y-2">
-        <li>
-          You are responsible for maintaining the security of your account
-        </li>
-        <li>You agree not to misuse or abuse our services</li>
-        <li>
-          You agree not to attempt to reverse engineer the extension or website
-        </li>
-        <li>
-          You must comply with YouTube's Terms of Service when using our
-          extension
-        </li>
-      </ul>
-    </section>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-6 h-6 rounded-full bg-tertiary flex items-center justify-center shrink-0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg
+            >
+          </div>
+          <span class="text-secondary">{i18n.t("terms_responsibility_1")}</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div
+            class="w-6 h-6 rounded-full bg-tertiary flex items-center justify-center shrink-0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg
+            >
+          </div>
+          <span class="text-secondary">{i18n.t("terms_responsibility_2")}</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div
+            class="w-6 h-6 rounded-full bg-tertiary flex items-center justify-center shrink-0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg
+            >
+          </div>
+          <span class="text-secondary">{i18n.t("terms_responsibility_3")}</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Intellectual Property -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">
-        4. Intellectual Property
-      </h2>
-      <p>
-        The CC Plus extension, website, and associated content are protected by
-        copyright. You may not copy, modify, or distribute our software without
-        permission.
-      </p>
-    </section>
-
-    <!-- Data Ownership -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">5. Your Data</h2>
-      <p>
-        You retain ownership of the vocabulary data you create. We only store
-        and process your data to provide the service. See our
-        <a href="/privacy" class="text-accent hover:underline">Privacy Policy</a
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >4</span
         >
-        for details.
-      </p>
-    </section>
-
-    <!-- Disclaimer -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">6. Disclaimer</h2>
-      <p>
-        CC Plus is provided "as is" without warranties of any kind. We do not
-        guarantee uninterrupted access or that the service will be error-free.
-        We are not affiliated with YouTube or Google.
-      </p>
-    </section>
-
-    <!-- Limitation of Liability -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">
-        7. Limitation of Liability
+        {i18n.t("terms_ip_title")}
       </h2>
-      <p>
-        To the maximum extent permitted by law, CC Plus shall not be liable for
-        any indirect, incidental, or consequential damages arising from your use
-        of our services.
+      <p class="text-secondary leading-relaxed">
+        {i18n.t("terms_ip_text")}
       </p>
-    </section>
+    </div>
 
-    <!-- Termination -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">8. Termination</h2>
-      <p>
-        We reserve the right to suspend or terminate access to our services at
-        any time, for any reason, without notice. You may stop using our
-        services at any time.
-      </p>
-    </section>
-
-    <!-- Changes -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">
-        9. Changes to Terms
-      </h2>
-      <p>
-        We may update these Terms from time to time. Continued use of the
-        service after changes constitutes acceptance of the new terms.
-      </p>
-    </section>
-
-    <!-- Contact -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">10. Contact</h2>
-      <p>
-        Questions about these Terms? Contact us at
-        <a
-          href="mailto:support@youtubecc.com"
-          class="text-accent hover:underline"
+    <!-- Your Data -->
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >5</span
         >
-          support@youtubecc.com
+        {i18n.t("terms_data_title")}
+      </h2>
+      <p class="text-secondary leading-relaxed">
+        {i18n.t("terms_data_text")}
+        <a href="/privacy" class="text-accent hover:underline ml-1">
+          {i18n.t("privacy_title")} &rarr;
         </a>
       </p>
-    </section>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="card border-yellow-500/30 bg-yellow-500/5">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-yellow-500/20 text-yellow-500 text-sm"
+          >!</span
+        >
+        {i18n.t("terms_disclaimer_title")}
+      </h2>
+      <p class="text-secondary leading-relaxed">
+        {i18n.t("terms_disclaimer_text")}
+      </p>
+    </div>
+
+    <!-- Liability -->
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >6</span
+        >
+        {i18n.t("terms_liability_title")}
+      </h2>
+      <p class="text-secondary leading-relaxed">
+        {i18n.t("terms_liability_text")}
+      </p>
+    </div>
+
+    <!-- Termination -->
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >7</span
+        >
+        {i18n.t("terms_termination_title")}
+      </h2>
+      <p class="text-secondary leading-relaxed">
+        {i18n.t("terms_termination_text")}
+      </p>
+    </div>
+
+    <!-- Changes -->
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >8</span
+        >
+        {i18n.t("terms_changes_title")}
+      </h2>
+      <p class="text-secondary leading-relaxed">
+        {i18n.t("terms_changes_text")}
+      </p>
+    </div>
   </div>
 
   <!-- Back link -->
-  <div class="mt-12 pt-6 border-t border-default">
-    <a href="/settings" class="text-accent hover:underline text-sm">
-      &larr; Back to Settings
+  <div class="mt-8 text-center">
+    <a
+      href="/settings"
+      class="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        ><line x1="19" y1="12" x2="5" y2="12" /><polyline
+          points="12 19 5 12 12 5"
+        /></svg
+      >
+      {i18n.t("terms_back")}
     </a>
   </div>
 </div>

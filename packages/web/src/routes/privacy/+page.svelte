@@ -3,122 +3,280 @@
 </script>
 
 <svelte:head>
-  <title>Privacy Policy - CC Plus</title>
+  <title>{i18n.t("privacy_title")} - CC Plus</title>
 </svelte:head>
 
-<div class="max-w-2xl mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-2">Privacy Policy</h1>
-  <p class="text-sm text-tertiary mb-8">Last updated: January 2025</p>
+<div class="max-w-3xl mx-auto px-4 py-12">
+  <!-- Header -->
+  <div class="text-center mb-12">
+    <div
+      class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary mb-4"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        class="text-accent"
+      >
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    </div>
+    <h1 class="text-3xl font-bold mb-2">{i18n.t("privacy_title")}</h1>
+    <p class="text-tertiary">{i18n.t("privacy_updated")}</p>
+  </div>
 
-  <div class="space-y-8 text-secondary">
+  <!-- Content -->
+  <div class="space-y-6">
     <!-- Introduction -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">Introduction</h2>
-      <p>
-        CC Plus ("we", "our", or "us") is committed to protecting your privacy.
-        This Privacy Policy explains how we collect, use, and safeguard your
-        information when you use our browser extension and website.
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >1</span
+        >
+        {i18n.t("privacy_intro_title")}
+      </h2>
+      <p class="text-secondary leading-relaxed">
+        {i18n.t("privacy_intro_text")}
       </p>
-    </section>
+    </div>
 
     <!-- Data Collection -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">Data We Collect</h2>
-      <ul class="list-disc list-inside space-y-2">
-        <li>
-          <strong>Vocabulary Data:</strong> Words you save, including context sentences
-          and video sources. Stored locally in your browser by default.
-        </li>
-        <li>
-          <strong>Account Information:</strong> If you sign in with Google, we receive
-          your email and profile name for authentication purposes only.
-        </li>
-        <li>
-          <strong>Usage Analytics:</strong> We use Google Analytics to collect anonymous
-          usage statistics (page views, session duration) to improve our service.
-        </li>
-      </ul>
-    </section>
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >2</span
+        >
+        {i18n.t("privacy_collect_title")}
+      </h2>
+      <div class="space-y-4">
+        <div class="flex gap-3">
+          <div class="w-2 h-2 rounded-full bg-accent mt-2 shrink-0"></div>
+          <div>
+            <p class="font-medium">{i18n.t("privacy_collect_vocab")}</p>
+            <p class="text-secondary text-sm">
+              {i18n.t("privacy_collect_vocab_desc")}
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <div class="w-2 h-2 rounded-full bg-accent mt-2 shrink-0"></div>
+          <div>
+            <p class="font-medium">{i18n.t("privacy_collect_account")}</p>
+            <p class="text-secondary text-sm">
+              {i18n.t("privacy_collect_account_desc")}
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <div class="w-2 h-2 rounded-full bg-accent mt-2 shrink-0"></div>
+          <div>
+            <p class="font-medium">{i18n.t("privacy_collect_analytics")}</p>
+            <p class="text-secondary text-sm">
+              {i18n.t("privacy_collect_analytics_desc")}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Data Storage -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">Data Storage</h2>
-      <ul class="list-disc list-inside space-y-2">
-        <li>
-          <strong>Local Storage:</strong> Your vocabulary is stored locally in your
-          browser (IndexedDB) and works offline.
-        </li>
-        <li>
-          <strong>Cloud Sync (Optional):</strong> If you sign in, your data is synced
-          to Firebase (Google Cloud) for cross-device access.
-        </li>
-      </ul>
-    </section>
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >3</span
+        >
+        {i18n.t("privacy_storage_title")}
+      </h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="p-4 rounded-lg bg-primary border border-default">
+          <div class="flex items-center gap-2 mb-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              class="text-accent"
+            >
+              <path
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+              />
+            </svg>
+            <span class="font-medium">{i18n.t("privacy_storage_local")}</span>
+          </div>
+          <p class="text-secondary text-sm">
+            {i18n.t("privacy_storage_local_desc")}
+          </p>
+        </div>
+        <div class="p-4 rounded-lg bg-primary border border-default">
+          <div class="flex items-center gap-2 mb-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              class="text-accent"
+            >
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+            </svg>
+            <span class="font-medium">{i18n.t("privacy_storage_cloud")}</span>
+          </div>
+          <p class="text-secondary text-sm">
+            {i18n.t("privacy_storage_cloud_desc")}
+          </p>
+        </div>
+      </div>
+    </div>
 
     <!-- Data Sharing -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">Data Sharing</h2>
-      <p>
-        We do <strong>not</strong> sell, trade, or share your personal data with third
-        parties, except for the following service providers:
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >4</span
+        >
+        {i18n.t("privacy_sharing_title")}
+      </h2>
+      <p class="text-secondary mb-4">
+        {i18n.t("privacy_sharing_text")}
       </p>
-      <ul class="list-disc list-inside space-y-2 mt-2">
-        <li>
-          <strong>Firebase (Google):</strong> Authentication and cloud storage
-        </li>
-        <li><strong>Google Analytics:</strong> Anonymous usage statistics</li>
-      </ul>
-    </section>
+      <div class="flex flex-wrap gap-2">
+        <span class="px-3 py-1.5 rounded-full bg-tertiary text-sm"
+          >{i18n.t("privacy_sharing_firebase")}</span
+        >
+        <span class="px-3 py-1.5 rounded-full bg-tertiary text-sm"
+          >{i18n.t("privacy_sharing_analytics")}</span
+        >
+      </div>
+    </div>
 
     <!-- Your Rights -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">Your Rights</h2>
-      <ul class="list-disc list-inside space-y-2">
-        <li>Access and export your vocabulary data at any time</li>
-        <li>Delete your account and all associated data</li>
-        <li>Use the service without an account (local storage only)</li>
-      </ul>
-    </section>
-
-    <!-- Cookies -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">Cookies</h2>
-      <p>
-        We use essential cookies for authentication and preferences (theme,
-        language). Google Analytics uses cookies for anonymous usage tracking.
-      </p>
-    </section>
-
-    <!-- Changes -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">
-        Changes to This Policy
+    <div class="card">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-4">
+        <span
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-tertiary text-sm"
+          >5</span
+        >
+        {i18n.t("privacy_rights_title")}
       </h2>
-      <p>
-        We may update this Privacy Policy from time to time. We will notify you
-        of any changes by posting the new policy on this page.
-      </p>
-    </section>
+      <div class="flex flex-wrap gap-3">
+        <div
+          class="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 text-green-500 text-sm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg
+          >
+          {i18n.t("privacy_rights_export")}
+        </div>
+        <div
+          class="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 text-green-500 text-sm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg
+          >
+          {i18n.t("privacy_rights_delete")}
+        </div>
+        <div
+          class="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 text-green-500 text-sm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg
+          >
+          {i18n.t("privacy_rights_no_account")}
+        </div>
+      </div>
+    </div>
 
     <!-- Contact -->
-    <section>
-      <h2 class="text-lg font-semibold text-primary mb-3">Contact Us</h2>
-      <p>
-        If you have questions about this Privacy Policy, please contact us at
-        <a
-          href="mailto:support@youtubecc.com"
-          class="text-accent hover:underline"
+    <div class="card bg-gradient-to-br from-secondary to-tertiary">
+      <h2 class="flex items-center gap-3 text-lg font-semibold mb-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          class="text-accent"
         >
-          support@youtubecc.com
-        </a>
-      </p>
-    </section>
+          <path
+            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+          /><polyline points="22,6 12,13 2,6" />
+        </svg>
+        {i18n.t("privacy_contact_title")}
+      </h2>
+      <p class="text-secondary mb-3">{i18n.t("privacy_contact_text")}</p>
+      <a
+        href="mailto:support@youtubecc.com"
+        class="inline-flex items-center gap-2 text-accent hover:underline font-medium"
+      >
+        support@youtubecc.com
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          ><line x1="7" y1="17" x2="17" y2="7" /><polyline
+            points="7 7 17 7 17 17"
+          /></svg
+        >
+      </a>
+    </div>
   </div>
 
   <!-- Back link -->
-  <div class="mt-12 pt-6 border-t border-default">
-    <a href="/settings" class="text-accent hover:underline text-sm">
-      &larr; Back to Settings
+  <div class="mt-8 text-center">
+    <a
+      href="/settings"
+      class="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        ><line x1="19" y1="12" x2="5" y2="12" /><polyline
+          points="12 19 5 12 12 5"
+        /></svg
+      >
+      {i18n.t("privacy_back")}
     </a>
   </div>
 </div>
