@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Word } from "@aspect/shared/types";
+  import { speak } from "$lib/utils/speak";
 
   interface Props {
     word: Word;
@@ -7,6 +8,11 @@
   }
 
   let { word, onDelete }: Props = $props();
+
+  function handleSpeak() {
+    // Default to English for word pronunciation
+    speak(word.text, "en");
+  }
 
   let expanded = $state(false);
 
@@ -90,6 +96,28 @@
       class="text-lg font-semibold hover:text-accent transition-colors text-left"
     >
       {word.text}
+    </button>
+    <!-- Speak button -->
+    <button
+      onclick={handleSpeak}
+      class="p-1 rounded hover:bg-tertiary transition-colors text-secondary hover:text-accent"
+      title="Pronounce"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+      </svg>
     </button>
     <span class="badge {getStatusBadgeClass(word.status)}">
       {word.status}
