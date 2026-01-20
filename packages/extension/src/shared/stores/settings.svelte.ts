@@ -1,6 +1,38 @@
 import { writable } from "svelte/store";
 import { isEqual } from "lodash-es";
 
+// Supported languages
+const SUPPORTED_LANGUAGES = ["zh-CN", "zh-TW", "en", "ja", "ko"];
+
+// Get browser language and map to supported language
+export function getBrowserLanguage(): string {
+  const browserLang = navigator.language;
+
+  // Direct match
+  if (SUPPORTED_LANGUAGES.includes(browserLang)) {
+    return browserLang;
+  }
+
+  // Handle zh variants
+  if (browserLang.startsWith("zh")) {
+    // zh-HK, zh-MO -> zh-TW (Traditional)
+    if (browserLang === "zh-HK" || browserLang === "zh-MO") {
+      return "zh-TW";
+    }
+    // Default to Simplified Chinese for other zh variants
+    return "zh-CN";
+  }
+
+  // Match base language (e.g., en-US -> en, ja-JP -> ja)
+  const baseLang = browserLang.split("-")[0];
+  if (SUPPORTED_LANGUAGES.includes(baseLang)) {
+    return baseLang;
+  }
+
+  // Default fallback
+  return "en";
+}
+
 // Extension settings type
 export interface ExtensionSettings {
   caption: boolean;
@@ -13,6 +45,7 @@ export interface ExtensionSettings {
   // Word selection / translation settings
   wordSelection: boolean;
   targetLanguage: string;
+  myLanguage: string;
 }
 
 // App store state type
@@ -20,6 +53,10 @@ export interface AppStoreState {
   isStorageLoad: boolean;
   settings: ExtensionSettings;
 }
+
+// Get default my language from browser
+const defaultMyLanguage =
+  typeof navigator !== "undefined" ? getBrowserLanguage() : "en";
 
 // Default settings
 const defaultSettings: ExtensionSettings = {
@@ -31,7 +68,8 @@ const defaultSettings: ExtensionSettings = {
   commentSearch: true,
   captionFontSize: 14,
   wordSelection: true,
-  targetLanguage: "zh-CN",
+  targetLanguage: "en",
+  myLanguage: defaultMyLanguage,
 };
 
 /** sync store between popup & content.js */

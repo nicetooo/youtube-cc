@@ -3,6 +3,7 @@
   import {
     appStore,
     subscribeStorageChange,
+    getBrowserLanguage,
   } from "@/shared/stores/settings.svelte";
   import { i18n } from "@/shared/i18n/i18n";
   import { fade } from "svelte/transition";
@@ -186,6 +187,17 @@
     }));
   }
 
+  // Update my language
+  function setMyLanguage(lang: string) {
+    appStore.update((s) => ({
+      ...s,
+      settings: {
+        ...s.settings,
+        myLanguage: lang,
+      },
+    }));
+  }
+
   // Language options
   const languages = [
     { code: "zh-CN", label: "简体中文" },
@@ -195,15 +207,33 @@
     { code: "ko", label: "한국어" },
   ];
 
-  let showLangDropdown = $state(false);
+  // Default language based on browser
+  const defaultMyLanguage = getBrowserLanguage();
 
-  function toggleLangDropdown() {
-    showLangDropdown = !showLangDropdown;
+  // Target language dropdown state
+  let showTargetLangDropdown = $state(false);
+
+  function toggleTargetLangDropdown() {
+    showTargetLangDropdown = !showTargetLangDropdown;
+    showMyLangDropdown = false; // Close the other dropdown
   }
 
-  function selectLanguage(code: string) {
+  function selectTargetLanguage(code: string) {
     setTargetLanguage(code);
-    showLangDropdown = false;
+    showTargetLangDropdown = false;
+  }
+
+  // My language dropdown state
+  let showMyLangDropdown = $state(false);
+
+  function toggleMyLangDropdown() {
+    showMyLangDropdown = !showMyLangDropdown;
+    showTargetLangDropdown = false; // Close the other dropdown
+  }
+
+  function selectMyLanguage(code: string) {
+    setMyLanguage(code);
+    showMyLangDropdown = false;
   }
 
   // Get current language label
@@ -458,29 +488,29 @@
           </div>
         </button>
 
-        <!-- Target Language Selector -->
+        <!-- My Language Selector -->
         <div class="relative">
           <button
-            on:click={toggleLangDropdown}
+            on:click={toggleMyLangDropdown}
             class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
           >
             <div class="flex flex-col text-left">
               <span
                 class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
-                >{i18n("target_language")}</span
+                >{i18n("my_language")}</span
               >
               <span class="text-xs text-[var(--cc-text-muted)]"
-                >{i18n("target_language_sub")}</span
+                >{i18n("my_language_sub")}</span
               >
             </div>
             <div class="flex items-center gap-2">
               <span class="text-sm text-[var(--cc-text-secondary)]">
                 {getCurrentLangLabel(
-                  $appStore.settings.targetLanguage ?? "zh-CN"
+                  $appStore.settings.myLanguage ?? defaultMyLanguage
                 )}
               </span>
               <svg
-                class={`w-4 h-4 text-[var(--cc-text-muted)] transition-transform ${showLangDropdown ? "rotate-180" : ""}`}
+                class={`w-4 h-4 text-[var(--cc-text-muted)] transition-transform ${showMyLangDropdown ? "-rotate-180" : ""}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -495,20 +525,80 @@
             </div>
           </button>
 
-          <!-- Dropdown Menu -->
-          {#if showLangDropdown}
+          <!-- Dropdown Menu (opens upward) -->
+          {#if showMyLangDropdown}
             <div
-              class="absolute top-full left-0 right-0 mt-1 py-1 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border-hover)] shadow-lg z-50 overflow-hidden"
+              class="absolute bottom-full right-0 mb-2 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border-hover)] shadow-xl z-50 overflow-hidden"
               transition:fade={{ duration: 150 }}
             >
               {#each languages as lang}
+                {@const isSelected =
+                  ($appStore.settings.myLanguage ?? defaultMyLanguage) ===
+                  lang.code}
                 <button
-                  on:click={() => selectLanguage(lang.code)}
-                  class={`w-full px-4 py-2.5 text-left text-sm transition-colors ${
-                    ($appStore.settings.targetLanguage ?? "zh-CN") === lang.code
-                      ? "bg-[var(--cc-accent)] text-white"
-                      : "text-[var(--cc-text-secondary)] hover:bg-[var(--cc-bg-hover)] hover:text-[var(--cc-text)]"
-                  }`}
+                  on:click={() => selectMyLanguage(lang.code)}
+                  style="padding: 10px 16px; font-size: 14px; {isSelected
+                    ? 'background: var(--cc-accent); color: white;'
+                    : 'color: var(--cc-text);'}"
+                  class="block w-full text-left transition-colors lang-option"
+                >
+                  {lang.label}
+                </button>
+              {/each}
+            </div>
+          {/if}
+        </div>
+
+        <!-- Target Language Selector -->
+        <div class="relative">
+          <button
+            on:click={toggleTargetLangDropdown}
+            class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
+          >
+            <div class="flex flex-col text-left">
+              <span
+                class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
+                >{i18n("target_language")}</span
+              >
+              <span class="text-xs text-[var(--cc-text-muted)]"
+                >{i18n("target_language_sub")}</span
+              >
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-[var(--cc-text-secondary)]">
+                {getCurrentLangLabel($appStore.settings.targetLanguage ?? "en")}
+              </span>
+              <svg
+                class={`w-4 h-4 text-[var(--cc-text-muted)] transition-transform ${showTargetLangDropdown ? "-rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+          </button>
+
+          <!-- Dropdown Menu (opens upward) -->
+          {#if showTargetLangDropdown}
+            <div
+              class="absolute bottom-full right-0 mb-2 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border-hover)] shadow-xl z-50 overflow-hidden"
+              transition:fade={{ duration: 150 }}
+            >
+              {#each languages as lang}
+                {@const isSelected =
+                  ($appStore.settings.targetLanguage ?? "en") === lang.code}
+                <button
+                  on:click={() => selectTargetLanguage(lang.code)}
+                  style="padding: 10px 16px; font-size: 14px; {isSelected
+                    ? 'background: var(--cc-accent); color: white;'
+                    : 'color: var(--cc-text);'}"
+                  class="block w-full text-left transition-colors lang-option"
                 >
                   {lang.label}
                 </button>

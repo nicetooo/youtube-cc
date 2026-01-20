@@ -2,6 +2,7 @@
 import tailwindStyles from "~/assets/tailwind.css?inline";
 import { mount, unmount } from "svelte";
 import SelectionPopup from "@/features/word-selection/SelectionPopup.svelte";
+import { getBrowserLanguage } from "@/shared/stores/settings.svelte";
 import {
   extractSentenceContext,
   isYouTubePage,
@@ -25,7 +26,8 @@ export default defineContentScript({
     let shadowHost: HTMLDivElement | null = null;
     let shadowRoot: ShadowRoot | null = null;
     let isEnabled = true;
-    let targetLanguage = "zh-CN";
+    let targetLanguage = "en";
+    let myLanguage = getBrowserLanguage();
 
     // Load settings from storage
     async function loadSettings() {
@@ -33,7 +35,8 @@ export default defineContentScript({
         const { settings } = await chrome.storage.local.get("settings");
         if (settings) {
           isEnabled = settings.wordSelection ?? true;
-          targetLanguage = settings.targetLanguage ?? "zh-CN";
+          targetLanguage = settings.targetLanguage ?? "en";
+          myLanguage = settings.myLanguage ?? getBrowserLanguage();
         }
       } catch (error) {
         console.error("[CC Plus] Failed to load settings:", error);
@@ -47,7 +50,8 @@ export default defineContentScript({
           const newSettings = changes.settings.newValue;
           if (newSettings) {
             isEnabled = newSettings.wordSelection ?? true;
-            targetLanguage = newSettings.targetLanguage ?? "zh-CN";
+            targetLanguage = newSettings.targetLanguage ?? "en";
+            myLanguage = newSettings.myLanguage ?? getBrowserLanguage();
 
             // If disabled, close any open popup
             if (!isEnabled) {
@@ -134,6 +138,7 @@ export default defineContentScript({
           context,
           source,
           targetLanguage,
+          myLanguage,
           position,
           onClose: () => {
             closePopup();

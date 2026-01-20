@@ -11,12 +11,41 @@
     context: string;
     source: WordSource;
     targetLanguage: string;
+    myLanguage: string;
     position: { x: number; y: number };
     onClose: () => void;
   }
 
-  let { text, context, source, targetLanguage, position, onClose }: Props =
-    $props();
+  let {
+    text,
+    context,
+    source,
+    targetLanguage,
+    myLanguage,
+    position,
+    onClose,
+  }: Props = $props();
+
+  // Check if detected language matches my language
+  function isMyLanguage(detected: string | undefined): boolean {
+    if (!detected) return false;
+    const normalizedDetected = detected.toLowerCase();
+    const normalizedMy = myLanguage.toLowerCase();
+
+    // Handle zh variants: zh matches zh-CN, zh-TW
+    if (normalizedMy.startsWith("zh")) {
+      return (
+        normalizedDetected === "zh" ||
+        normalizedDetected === normalizedMy.replace("-", "") ||
+        normalizedDetected === normalizedMy
+      );
+    }
+
+    // For other languages, match the base language code
+    const baseDetected = normalizedDetected.split("-")[0];
+    const baseMy = normalizedMy.split("-")[0];
+    return baseDetected === baseMy;
+  }
 
   // State
   let translation = $state("");
@@ -121,16 +150,34 @@
       "[CC Plus] doTranslate called, text:",
       text,
       "targetLang:",
-      targetLanguage
+      targetLanguage,
+      "myLang:",
+      myLanguage
     );
     isLoading = true;
     error = null;
 
     try {
+      // First, translate to detect the source language
       const result = await translate(text, targetLanguage);
       console.log("[CC Plus] Translation result:", result);
-      translation = result.translation;
       detectedLang = result.detectedLang;
+
+      // Determine translation direction based on detected language
+      if (isMyLanguage(detectedLang)) {
+        // Source is my language -> translate to target language (already done)
+        console.log(
+          "[CC Plus] Source is my language, using target translation"
+        );
+        translation = result.translation;
+      } else {
+        // Source is not my language -> translate to my language
+        console.log(
+          "[CC Plus] Source is foreign language, translating to my language"
+        );
+        const result2 = await translate(text, myLanguage);
+        translation = result2.translation;
+      }
     } catch (e) {
       console.error("[CC Plus] Translation error:", e);
       const err = e as TranslateError;
@@ -259,65 +306,52 @@
     {/if}
   </div>
 
-  <!-- Footer: Save button -->
+  <!-- Footer: Save button (only show for foreign language words) -->
   <div class="popup-footer">
-    <button
-      class="save-button"
-      class:saved={isSaved}
-      onclick={handleSave}
-      disabled={isSaved || isSaving || isLoading}
-    >
-      {#if isSaving}
-        <div class="spinner small"></div>
-      {:else if isSaved}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="icon"
-        >
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-        Saved
-      {:else}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="icon"
-        >
-          <path
-            d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
-          />
-          <polyline points="17 21 17 13 7 13 7 21" />
-          <polyline points="7 3 7 8 15 8" />
-        </svg>
-        Save
-      {/if}
-    </button>
-    <button class="close-button" onclick={onClose} aria-label="Close">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="icon"
+    {#if !isLoading && !isMyLanguage(detectedLang)}
+      <button
+        class="save-button"
+        class:saved={isSaved}
+        onclick={handleSave}
+        disabled={isSaved || isSaving || isLoading}
       >
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </svg>
-    </button>
+        {#if isSaving}
+          <div class="spinner small"></div>
+        {:else if isSaved}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          Saved
+        {:else}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon"
+          >
+            <path
+              d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+            />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+          </svg>
+          Save
+        {/if}
+      </button>
+    {/if}
   </div>
 </div>
 
