@@ -255,14 +255,23 @@ function createWordsStore() {
 
   async function updateWord(id: string, updates: Partial<Word>) {
     // Update local state immediately
+    console.log(
+      `[WordsStore] updateWord called for id: ${id}, updates:`,
+      updates
+    );
     const updatedWord = words.find((w) => w.id === id);
-    if (!updatedWord) return;
+    if (!updatedWord) {
+      console.error(`[WordsStore] Word not found with id: ${id}`);
+      return;
+    }
 
     const newWord = { ...updatedWord, ...updates, updatedAt: new Date() };
+    console.log(`[WordsStore] Saving word with examples:`, newWord.examples);
     words = words.map((w) => (w.id === id ? newWord : w));
 
     // Save to IndexedDB
     await putIndexedDBWord(newWord);
+    console.log(`[WordsStore] Word saved to IndexedDB`);
 
     // For logged in users, also update Firebase (background)
     if (currentUserId && !isAnonymous) {

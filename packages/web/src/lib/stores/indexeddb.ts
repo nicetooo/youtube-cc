@@ -158,6 +158,10 @@ export async function putWord(word: Word): Promise<void> {
       updatedAt: word.updatedAt ? toISOStringSafe(word.updatedAt) : undefined,
     };
 
+    console.log(
+      `[IndexedDB] Putting word ${word.text}, examples:`,
+      word.examples
+    );
     const request = store.put(wordToStore);
 
     request.onsuccess = () => resolve();

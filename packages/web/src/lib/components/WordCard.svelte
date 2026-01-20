@@ -23,6 +23,9 @@
   // Local examples state - initialized from word.examples, updated after fetch
   let examples = $state<string[]>(word.examples ?? []);
 
+  // Debug: log when component initializes
+  console.log(`[WordCard] ${word.text} initialized, examples:`, word.examples);
+
   async function handleFetchExamples() {
     if (fetchingExamples) return;
 
@@ -34,7 +37,12 @@
       if (fetchedExamples.length > 0) {
         examples = fetchedExamples;
         // Persist to store (IndexedDB + Firebase)
+        console.log(
+          `[WordCard] Saving examples for ${word.text}:`,
+          fetchedExamples
+        );
         await wordsStore.updateWord(word.id, { examples: fetchedExamples });
+        console.log(`[WordCard] Examples saved for ${word.text}`);
       } else {
         fetchError = "No examples found";
       }
