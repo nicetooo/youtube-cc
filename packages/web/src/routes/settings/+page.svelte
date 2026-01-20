@@ -208,14 +208,6 @@
         >
         <a href="/terms" class="hover:text-secondary transition-colors">Terms</a
         >
-        <a
-          href="https://github.com"
-          target="_blank"
-          rel="noopener"
-          class="hover:text-secondary transition-colors"
-        >
-          GitHub
-        </a>
       </div>
     </div>
   </footer>
