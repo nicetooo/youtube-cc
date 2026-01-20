@@ -11,8 +11,8 @@
 export default defineContentScript({
   matches: [
     "http://localhost/*", // Chrome match patterns don't support ports
-    "https://youtubecc.com/*",
-    "https://www.youtubecc.com/*",
+    "https://youtube-cc.com/*",
+    "https://www.youtube-cc.com/*",
   ],
   runAt: "document_idle",
 

@@ -135,6 +135,6 @@
 
   <!-- Footer -->
   <footer class="px-6 py-6 text-center text-sm text-tertiary">
-    <p>youtubecc.com</p>
+    <p>youtube-cc.com</p>
   </footer>
 </div>

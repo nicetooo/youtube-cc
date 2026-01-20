@@ -5,7 +5,7 @@
 **CC Plus** - YouTube 学习增强平台，包含浏览器扩展和配套网站。
 
 - **扩展:** 交互式双语字幕、生词收藏、划词翻译、宽屏模式、广告移除、评论增强
-- **网站:** 生词管理、复习系统、用户账号 (youtubecc.com)
+- **网站:** 生词管理、复习系统、用户账号 (youtube-cc.com)
 
 ## 技术栈
 
@@ -261,7 +261,7 @@ interface Word {
 ### 网站
 
 - Vercel 自动部署 (连接 GitHub)
-- 域名: youtubecc.com
+- 域名: youtube-cc.com
 
 ## 开发注意事项
 

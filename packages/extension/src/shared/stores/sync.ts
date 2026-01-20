@@ -18,8 +18,8 @@ import {
 // Website URL patterns for finding the tab
 const WEBSITE_PATTERNS = [
   "http://localhost:5188/*",
-  "https://youtubecc.com/*",
-  "https://www.youtubecc.com/*",
+  "https://youtube-cc.com/*",
+  "https://www.youtube-cc.com/*",
 ];
 
 // Sync status
