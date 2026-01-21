@@ -67,7 +67,7 @@ const defaultSettings: ExtensionSettings = {
   sideComment: false,
   commentSearch: true,
   captionFontSize: 14,
-  wordSelection: true,
+  wordSelection: true, // YouTube works without extra permission
   targetLanguage: "en",
   myLanguage: defaultMyLanguage,
 };

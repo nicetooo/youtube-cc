@@ -5,10 +5,221 @@ import {
   handleWebsiteAuth,
   handleWebsiteWordsResponse,
 } from "@/shared/stores/sync";
+import {
+  hasAllUrlsPermission,
+  onPermissionChange,
+} from "@/shared/utils/permissions";
+
+// Content script IDs for word selection
+const SELECTION_SCRIPT_YOUTUBE = "cc-plus-selection-youtube";
+const SELECTION_SCRIPT_ALL = "cc-plus-selection-all";
+// Legacy script ID from previous version
+const SELECTION_SCRIPT_LEGACY = "cc-plus-selection";
+
+// Track registration state
+let isYouTubeScriptRegistered = false;
+let isAllSitesScriptRegistered = false;
+
+/**
+ * Clean up any legacy or stale registered scripts on startup
+ * Dynamic content scripts persist across extension updates
+ */
+async function cleanupLegacyScripts(): Promise<void> {
+  try {
+    // Get all currently registered scripts
+    const scripts = await chrome.scripting.getRegisteredContentScripts();
+    const ourScriptIds = scripts
+      .filter((s) => s.id.startsWith("cc-plus-selection"))
+      .map((s) => s.id);
+
+    if (ourScriptIds.length > 0) {
+      console.log("[CC Plus] Cleaning up registered scripts:", ourScriptIds);
+      await chrome.scripting.unregisterContentScripts({ ids: ourScriptIds });
+    }
+
+    // Reset state
+    isYouTubeScriptRegistered = false;
+    isAllSitesScriptRegistered = false;
+  } catch (error) {
+    console.error("[CC Plus] Failed to cleanup scripts:", error);
+  }
+}
+
+/**
+ * Register selection script for YouTube only (no extra permission needed)
+ */
+async function registerYouTubeSelectionScript(): Promise<boolean> {
+  if (isYouTubeScriptRegistered) return true;
+
+  try {
+    await chrome.scripting.registerContentScripts([
+      {
+        id: SELECTION_SCRIPT_YOUTUBE,
+        matches: ["*://www.youtube.com/*", "*://youtube.com/*"],
+        js: ["content-scripts/selection.js"],
+        runAt: "document_end",
+      },
+    ]);
+    isYouTubeScriptRegistered = true;
+    console.log("[CC Plus] YouTube selection script registered");
+    return true;
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes("Duplicate script ID")
+    ) {
+      isYouTubeScriptRegistered = true;
+      return true;
+    }
+    console.error(
+      "[CC Plus] Failed to register YouTube selection script:",
+      error
+    );
+    return false;
+  }
+}
+
+/**
+ * Register selection script for all sites (requires <all_urls> permission)
+ */
+async function registerAllSitesSelectionScript(): Promise<boolean> {
+  if (isAllSitesScriptRegistered) return true;
+
+  try {
+    await chrome.scripting.registerContentScripts([
+      {
+        id: SELECTION_SCRIPT_ALL,
+        matches: ["http://*/*", "https://*/*"],
+        excludeMatches: ["*://www.youtube.com/*", "*://youtube.com/*"],
+        js: ["content-scripts/selection.js"],
+        runAt: "document_end",
+      },
+    ]);
+    isAllSitesScriptRegistered = true;
+    console.log("[CC Plus] All sites selection script registered");
+    return true;
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes("Duplicate script ID")
+    ) {
+      isAllSitesScriptRegistered = true;
+      return true;
+    }
+    console.error(
+      "[CC Plus] Failed to register all sites selection script:",
+      error
+    );
+    return false;
+  }
+}
+
+/**
+ * Unregister YouTube selection script
+ */
+async function unregisterYouTubeSelectionScript(): Promise<boolean> {
+  if (!isYouTubeScriptRegistered) return true;
+
+  try {
+    await chrome.scripting.unregisterContentScripts({
+      ids: [SELECTION_SCRIPT_YOUTUBE],
+    });
+    isYouTubeScriptRegistered = false;
+    console.log("[CC Plus] YouTube selection script unregistered");
+    return true;
+  } catch (error) {
+    console.error(
+      "[CC Plus] Failed to unregister YouTube selection script:",
+      error
+    );
+    return false;
+  }
+}
+
+/**
+ * Unregister all sites selection script
+ */
+async function unregisterAllSitesSelectionScript(): Promise<boolean> {
+  if (!isAllSitesScriptRegistered) return true;
+
+  try {
+    await chrome.scripting.unregisterContentScripts({
+      ids: [SELECTION_SCRIPT_ALL],
+    });
+    isAllSitesScriptRegistered = false;
+    console.log("[CC Plus] All sites selection script unregistered");
+    return true;
+  } catch (error) {
+    console.error(
+      "[CC Plus] Failed to unregister all sites selection script:",
+      error
+    );
+    return false;
+  }
+}
+
+/**
+ * Update selection script registration based on permission and settings
+ * - YouTube: always available when wordSelection is enabled
+ * - All sites: only when user has granted <all_urls> permission
+ */
+async function updateSelectionScriptState(): Promise<void> {
+  const hasAllUrlsPerm = await hasAllUrlsPermission();
+  const { settings } = await chrome.storage.local.get("settings");
+  const wordSelectionEnabled = settings?.wordSelection ?? true;
+
+  console.log("[CC Plus] Updating selection scripts:", {
+    wordSelectionEnabled,
+    hasAllUrlsPerm,
+  });
+
+  // YouTube selection script - no extra permission needed
+  if (wordSelectionEnabled) {
+    await registerYouTubeSelectionScript();
+  } else {
+    await unregisterYouTubeSelectionScript();
+  }
+
+  // All sites selection script - requires <all_urls> permission
+  if (wordSelectionEnabled && hasAllUrlsPerm) {
+    await registerAllSitesSelectionScript();
+  } else {
+    await unregisterAllSitesSelectionScript();
+  }
+}
 
 export default defineBackground(() => {
   // 存储所有活跃的 port 连接
   const ports = new Map<number, chrome.runtime.Port>();
+
+  // --- Word Selection Script Management ---
+
+  // Clean up legacy scripts then initialize based on current permission/settings
+  // This ensures stale scripts from previous versions are removed
+  cleanupLegacyScripts().then(() => {
+    updateSelectionScriptState();
+  });
+
+  // Listen for permission changes
+  onPermissionChange((hasPermission) => {
+    console.log("[CC Plus] Permission changed:", hasPermission);
+    updateSelectionScriptState();
+  });
+
+  // Listen for settings changes
+  chrome.storage.onChanged.addListener((changes) => {
+    if (changes.settings) {
+      const oldWordSelection = changes.settings.oldValue?.wordSelection;
+      const newWordSelection = changes.settings.newValue?.wordSelection;
+      if (oldWordSelection !== newWordSelection) {
+        console.log(
+          "[CC Plus] wordSelection setting changed:",
+          newWordSelection
+        );
+        updateSelectionScriptState();
+      }
+    }
+  });
 
   // --- Ad Selectors Sync Logic ---
 
@@ -65,6 +276,22 @@ export default defineBackground(() => {
       // Just log for debugging
       console.log("[CC Plus] Upload response:", message.success);
       return false;
+    }
+
+    // Check if word selection permission is granted
+    if (message.type === "check-word-selection-permission") {
+      hasAllUrlsPermission()
+        .then((hasPermission) => sendResponse({ hasPermission }))
+        .catch(() => sendResponse({ hasPermission: false }));
+      return true;
+    }
+
+    // Update selection script state (after permission granted/revoked)
+    if (message.type === "update-selection-script") {
+      updateSelectionScriptState()
+        .then(() => sendResponse({ success: true }))
+        .catch(() => sendResponse({ success: false }));
+      return true;
     }
 
     // Default: don't keep channel open

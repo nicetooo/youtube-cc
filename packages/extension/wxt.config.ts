@@ -9,12 +9,24 @@ export default defineConfig({
   manifest: {
     name: "__MSG_extName__",
     description: "__MSG_extDescription__",
-    permissions: ["storage", "webRequest", "tabs", "alarms"],
-    host_permissions: [
-      "*://www.youtube.com/*",
-      "<all_urls>", // For word selection on any website
-    ],
+    permissions: ["storage", "webRequest", "tabs", "alarms", "scripting"],
+    host_permissions: ["*://www.youtube.com/*"],
+    // Optional permission for word selection on any website
+    // User must explicitly enable this feature to grant permission
+    optional_host_permissions: ["<all_urls>"],
     default_locale: "en",
+  },
+  // Remove broad host permissions that WXT auto-adds from runtime content scripts
+  transformManifest(manifest) {
+    if (manifest.host_permissions) {
+      // Only keep YouTube-specific permissions, remove broad permissions
+      // (http://*/*, https://*/*) that come from selection.content.ts
+      manifest.host_permissions = manifest.host_permissions.filter(
+        (permission) =>
+          !["http://*/*", "https://*/*", "<all_urls>"].includes(permission)
+      );
+    }
+    return manifest;
   },
   runner: {
     startUrls: ["https://www.youtube.com/watch?v=dQw4w9WgXcQ"],

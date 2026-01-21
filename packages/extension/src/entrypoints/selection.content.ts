@@ -14,10 +14,13 @@ import {
 import type { WordSource } from "@aspect/shared";
 
 // WXT content script definition
+// Using runtime registration for optional permission support
 export default defineContentScript({
   matches: ["http://*/*", "https://*/*"],
   // No need to exclude websites anymore - Shadow DOM isolates CSS completely
   runAt: "document_end",
+  // Dynamic registration - not included in manifest, registered via scripting API
+  registration: "runtime",
   // Don't inject CSS globally - we'll inject it into Shadow DOM
   cssInjectionMode: "manual",
 

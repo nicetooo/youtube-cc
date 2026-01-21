@@ -13,6 +13,10 @@
     onAuthChange,
     WEBSITE_USER_KEY,
   } from "@aspect/shared";
+  import {
+    hasAllUrlsPermission,
+    requestAllUrlsPermission,
+  } from "@/shared/utils/permissions";
 
   // Simplified Firebase user info type
   interface AuthUser {
@@ -29,8 +33,15 @@
   let syncStatus = $state<"idle" | "syncing" | "success" | "error">("idle");
   let unsubscribeAuth: (() => void) | null = null;
 
+  // Word selection permission state
+  let hasWordSelectionPermission = $state(false);
+  let permissionLoading = $state(false);
+
   onMount(async () => {
     subscribeStorageChange();
+
+    // Check word selection permission
+    hasWordSelectionPermission = await hasAllUrlsPermission();
 
     // First check for website user (logged in via website)
     const result = await chrome.storage.local.get(WEBSITE_USER_KEY);
@@ -163,7 +174,6 @@
       | "wideScreen"
       | "sideComment"
       | "commentSearch"
-      | "wordSelection"
   ) {
     appStore.update((s) => {
       return {
@@ -174,6 +184,35 @@
         },
       };
     });
+  }
+
+  // Toggle word selection (YouTube works without extra permission)
+  function toggleWordSelection() {
+    appStore.update((s) => ({
+      ...s,
+      settings: { ...s.settings, wordSelection: !s.settings.wordSelection },
+    }));
+    // Notify background to update script registration
+    chrome.runtime.sendMessage({ type: "update-selection-script" });
+  }
+
+  // Enable word selection on all websites (requires permission)
+  async function enableAllSitesSelection() {
+    if (hasWordSelectionPermission) return; // Already enabled
+
+    permissionLoading = true;
+    try {
+      const granted = await requestAllUrlsPermission();
+      if (granted) {
+        hasWordSelectionPermission = true;
+        // Notify background to register all-sites script
+        chrome.runtime.sendMessage({ type: "update-selection-script" });
+      }
+    } catch (error) {
+      console.error("[CC Plus] Failed to request permission:", error);
+    } finally {
+      permissionLoading = false;
+    }
   }
 
   // Update target language
@@ -465,9 +504,9 @@
       </div>
 
       <div class="space-y-3">
-        <!-- Word Selection Toggle -->
+        <!-- Word Selection Toggle (YouTube) -->
         <button
-          on:click={() => toggle("wordSelection")}
+          on:click={toggleWordSelection}
           class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
         >
           <div class="flex flex-col text-left">
@@ -486,6 +525,56 @@
               class={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${($appStore.settings.wordSelection ?? true) ? "left-6" : "left-1"}`}
             ></div>
           </div>
+        </button>
+
+        <!-- All Sites Word Selection (requires permission) -->
+        <button
+          on:click={enableAllSitesSelection}
+          disabled={permissionLoading || hasWordSelectionPermission}
+          class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group disabled:opacity-60"
+        >
+          <div class="flex flex-col text-left">
+            <span
+              class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
+              >{i18n("all_sites_selection")}</span
+            >
+            <span class="text-xs text-[var(--cc-text-muted)]"
+              >{i18n("all_sites_selection_sub")}</span
+            >
+          </div>
+          {#if permissionLoading}
+            <div
+              class="w-5 h-5 border-2 border-[var(--cc-text-muted)] border-t-transparent rounded-full animate-spin"
+            ></div>
+          {:else if hasWordSelectionPermission}
+            <svg
+              class="w-5 h-5 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          {:else}
+            <svg
+              class="w-5 h-5 text-[var(--cc-text-muted)] group-hover:text-[var(--cc-text)] transition-colors"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+          {/if}
         </button>
 
         <!-- My Language Selector -->
