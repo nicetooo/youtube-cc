@@ -118,76 +118,104 @@
   }
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-<div
-  class="card hover:border-[var(--accent)] transition-colors group cursor-pointer"
-  onclick={() => (expanded = !expanded)}
->
-  <!-- Header: Word + Status + Actions -->
-  <div class="flex items-center gap-2 mb-2">
-    <span
-      class="text-lg font-semibold hover:text-accent transition-colors text-left"
-    >
-      {word.text}
-    </span>
-    <!-- Speak button -->
-    <button
-      onclick={(e) => {
-        e.stopPropagation();
-        handleSpeak();
-      }}
-      class="p-1 rounded hover:bg-tertiary transition-colors text-secondary hover:text-accent"
-      title="Pronounce"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+<div class="card hover:border-[var(--accent)] transition-colors group">
+  <!-- Upper area: clickable to expand/collapse -->
+  <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+  <div class="cursor-pointer" onclick={() => (expanded = !expanded)}>
+    <!-- Header: Word + Status + Actions -->
+    <div class="flex items-center gap-2 mb-2">
+      <span
+        class="text-lg font-semibold hover:text-accent transition-colors text-left"
       >
-        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-      </svg>
-    </button>
-    <span class="badge {getStatusBadgeClass(word.status)}">
-      {word.status}
-    </span>
-
-    <!-- Actions -->
-    <div
-      class="ml-auto flex items-center shrink-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-    >
-      {#if getSourceLink()}
-        <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-        <a
-          href={getSourceLink()}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="p-1.5 rounded hover:bg-tertiary transition-colors"
-          title={isYouTube && word.source?.type === "youtube-caption"
-            ? `Watch at ${formatTimestamp(word.source.timestamp)}`
-            : "Open source page"}
-          onclick={(e) => e.stopPropagation()}
+        {word.text}
+      </span>
+      <!-- Speak button -->
+      <button
+        onclick={(e) => {
+          e.stopPropagation();
+          handleSpeak();
+        }}
+        class="p-1 rounded hover:bg-tertiary transition-colors text-secondary hover:text-accent"
+        title="Pronounce"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
         >
-          {#if isYouTube}
-            <!-- Play icon for YouTube -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"><polygon points="6 3 20 12 6 21 6 3" /></svg
-            >
-          {:else}
-            <!-- External link icon for webpage -->
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        </svg>
+      </button>
+      <span class="badge {getStatusBadgeClass(word.status)}">
+        {word.status}
+      </span>
+
+      <!-- Actions -->
+      <div
+        class="ml-auto flex items-center shrink-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+      >
+        {#if getSourceLink()}
+          <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+          <a
+            href={getSourceLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="p-1.5 rounded hover:bg-tertiary transition-colors"
+            title={isYouTube && word.source?.type === "youtube-caption"
+              ? `Watch at ${formatTimestamp(word.source.timestamp)}`
+              : "Open source page"}
+            onclick={(e) => e.stopPropagation()}
+          >
+            {#if isYouTube}
+              <!-- Play icon for YouTube -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"><polygon points="6 3 20 12 6 21 6 3" /></svg
+              >
+            {:else}
+              <!-- External link icon for webpage -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            {/if}
+          </a>
+        {/if}
+        {#if onDelete}
+          <button
+            onclick={(e) => {
+              e.stopPropagation();
+              onDelete?.(word.id);
+            }}
+            class="p-1.5 rounded hover:bg-tertiary hover:text-[var(--error)] transition-colors"
+            title="Delete"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -196,91 +224,63 @@
               fill="none"
               stroke="currentColor"
               stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              ><path d="M3 6h18" /><path
+                d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
+              /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg
             >
-              <path
-                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-              />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
-          {/if}
-        </a>
-      {/if}
-      {#if onDelete}
-        <button
-          onclick={(e) => {
-            e.stopPropagation();
-            onDelete?.(word.id);
-          }}
-          class="p-1.5 rounded hover:bg-tertiary hover:text-[var(--error)] transition-colors"
-          title="Delete"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            ><path d="M3 6h18" /><path
-              d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
-            /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg
-          >
-        </button>
-      {/if}
+          </button>
+        {/if}
+      </div>
     </div>
-  </div>
 
-  <!-- Context -->
-  <p class="text-sm text-secondary line-clamp-2 mb-2">"{word.context}"</p>
+    <!-- Context -->
+    <p class="text-sm text-secondary line-clamp-2 mb-2">"{word.context}"</p>
 
-  <!-- Meta -->
-  <div class="text-xs text-tertiary flex items-center gap-1">
-    {#if isYouTube}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="12"
-        height="12"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        class="text-red-500 shrink-0"
+    <!-- Meta -->
+    <div class="text-xs text-tertiary flex items-center gap-1">
+      {#if isYouTube}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="text-red-500 shrink-0"
+        >
+          <path
+            d="M23.5 6.2c-.3-1-1-1.8-2-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.5.5c-1 .3-1.7 1.1-2 2.1-.5 1.9-.5 5.8-.5 5.8s0 3.9.5 5.8c.3 1 1 1.8 2 2.1 1.9.5 9.5.5 9.5.5s7.6 0 9.5-.5c1-.3 1.7-1.1 2-2.1.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.7zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"
+          />
+        </svg>
+      {:else}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          class="shrink-0"
+        >
+          <circle cx="12" cy="12" r="10" /><line
+            x1="2"
+            y1="12"
+            x2="22"
+            y2="12"
+          /><path
+            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+          />
+        </svg>
+      {/if}
+      <span
+        class="truncate inline-block max-w-[180px] sm:max-w-[250px] align-bottom"
+        title={getSourceTitle()}
       >
-        <path
-          d="M23.5 6.2c-.3-1-1-1.8-2-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.5.5c-1 .3-1.7 1.1-2 2.1-.5 1.9-.5 5.8-.5 5.8s0 3.9.5 5.8c.3 1 1 1.8 2 2.1 1.9.5 9.5.5 9.5.5s7.6 0 9.5-.5c1-.3 1.7-1.1 2-2.1.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.7zM9.5 15.5v-7l6.5 3.5-6.5 3.5z"
-        />
-      </svg>
-    {:else}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="12"
-        height="12"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        class="shrink-0"
-      >
-        <circle cx="12" cy="12" r="10" /><line
-          x1="2"
-          y1="12"
-          x2="22"
-          y2="12"
-        /><path
-          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-        />
-      </svg>
-    {/if}
-    <span
-      class="truncate inline-block max-w-[180px] sm:max-w-[250px] align-bottom"
-      title={getSourceTitle()}
-    >
-      {getSourceTitle()}
-    </span>
-    <span class="mx-1">·</span>
-    <span>{formatDate(word.createdAt)}</span>
+        {getSourceTitle()}
+      </span>
+      <span class="mx-1">·</span>
+      <span>{formatDate(word.createdAt)}</span>
+    </div>
   </div>
 
   <!-- Expanded content -->
@@ -306,10 +306,7 @@
         <div class="flex items-center gap-2">
           <button
             class="btn btn-ghost text-sm"
-            onclick={(e) => {
-              e.stopPropagation();
-              handleFetchExamples();
-            }}
+            onclick={handleFetchExamples}
             disabled={fetchingExamples}
           >
             {#if fetchingExamples}
