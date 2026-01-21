@@ -256,8 +256,11 @@ export default defineContentScript({
 
       // Close popup when clicking outside
       document.addEventListener("mousedown", (e) => {
-        const target = e.target as Element;
-        if (shadowHost && !target.closest("#cc-plus-selection-popup-host")) {
+        // Use composedPath to correctly detect clicks inside Shadow DOM
+        const path = e.composedPath();
+        const isClickInsidePopup = shadowHost && path.includes(shadowHost);
+
+        if (shadowHost && !isClickInsidePopup) {
           // Don't close immediately, let the popup's click handler work first
           setTimeout(() => {
             const selection = window.getSelection();

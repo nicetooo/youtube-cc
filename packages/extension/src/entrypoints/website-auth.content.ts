@@ -10,7 +10,14 @@
 
 export default defineContentScript({
   matches: [
-    "http://localhost/*", // Chrome match patterns don't support ports
+    "http://localhost/*",
+    "http://localhost:5188/*",
+    "http://localhost:5189/*",
+    "http://localhost:5190/*",
+    "http://localhost:5191/*",
+    "http://localhost:5173/*", // Vite default
+    "http://127.0.0.1:5188/*",
+    "http://127.0.0.1:5191/*",
     "https://youtube-cc.com/*",
     "https://www.youtube-cc.com/*",
   ],
