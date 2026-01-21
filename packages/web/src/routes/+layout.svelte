@@ -1,6 +1,7 @@
 <script lang="ts">
   import "../app.css";
   import Nav from "$lib/components/Nav.svelte";
+  import PWAReloadPrompt from "$lib/components/PWAReloadPrompt.svelte";
   import { page } from "$app/stores";
   import { authStore } from "$lib/stores/auth.svelte";
   import { wordsStore } from "$lib/stores/words.svelte";
@@ -27,4 +28,6 @@
   <main class={isLanding ? "" : "pb-20 sm:pb-0"}>
     {@render children()}
   </main>
+
+  <PWAReloadPrompt />
 </div>
