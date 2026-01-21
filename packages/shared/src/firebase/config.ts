@@ -4,7 +4,7 @@ import { getFirestore, type Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAWyLXZ4_H2bABRfYVxi8X5mBm2soBer6U",
-  authDomain: "ccplus-3de90.firebaseapp.com",
+  authDomain: "auth.youtube-cc.com",
   projectId: "ccplus-3de90",
   storageBucket: "ccplus-3de90.firebasestorage.app",
   messagingSenderId: "745640994995",
