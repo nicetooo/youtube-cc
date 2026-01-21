@@ -1,10 +1,24 @@
 // Google Translate API wrapper (free tier)
 // Uses the unofficial Google Translate API endpoint
 
+// Single word entry with synonyms
+export interface WordEntry {
+  word: string; // Translation word
+  synonyms?: string[]; // Reverse translations (synonyms in source language)
+}
+
+// Dictionary entry with part of speech and terms
+export interface DictEntry {
+  pos: string; // Part of speech (noun, verb, adjective, etc.)
+  terms: string[]; // Translation terms for this part of speech
+  entries?: WordEntry[]; // Detailed entries with synonyms
+}
+
 export interface TranslateResult {
   text: string; // Original text
   translation: string; // Translated text
   detectedLang?: string; // Detected source language
+  definitions?: DictEntry[]; // Dictionary definitions by part of speech
 }
 
 export interface TranslateError {
@@ -48,6 +62,7 @@ export async function translate(
       text,
       translation: response.translation,
       detectedLang: response.detectedLang,
+      definitions: response.definitions,
     };
   } catch (error) {
     console.error("[CC Plus] Translate error:", error);

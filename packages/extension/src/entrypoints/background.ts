@@ -143,10 +143,30 @@ function handleUrlUpdate(
 }
 
 // --- Translation Handler ---
+
+// Single word entry with synonyms
+interface WordEntry {
+  word: string; // Translation word
+  synonyms?: string[]; // Reverse translations (synonyms in source language)
+}
+
+// Dictionary entry from Google Translate API
+interface DictEntry {
+  pos: string; // Part of speech (noun, verb, etc.)
+  terms: string[]; // Translation terms
+  entries?: WordEntry[]; // Detailed entries with synonyms
+}
+
+interface TranslateResponse {
+  translation: string;
+  detectedLang?: string;
+  definitions?: DictEntry[]; // Dictionary definitions by part of speech
+}
+
 async function handleTranslate(
   text: string,
   targetLang: string
-): Promise<{ translation: string; detectedLang?: string } | { error: string }> {
+): Promise<TranslateResponse | { error: string }> {
   const LANG_CODE_MAP: Record<string, string> = {
     "zh-CN": "zh-CN",
     "zh-TW": "zh-TW",
@@ -162,9 +182,10 @@ async function handleTranslate(
     url.searchParams.set("client", "gtx");
     url.searchParams.set("sl", "auto");
     url.searchParams.set("tl", target);
-    url.searchParams.append("dt", "t");
-    url.searchParams.append("dt", "bd");
-    url.searchParams.set("dj", "1");
+    url.searchParams.append("dt", "t"); // Translation
+    url.searchParams.append("dt", "bd"); // Dictionary (basic)
+    url.searchParams.append("dt", "rm"); // Transliteration/phonetic
+    url.searchParams.set("dj", "1"); // JSON format
     url.searchParams.set("q", text);
 
     const response = await fetch(url.toString());
@@ -174,7 +195,9 @@ async function handleTranslate(
     }
 
     const data = await response.json();
+    console.log("[CC Plus] Google Translate raw response:", data);
 
+    // Extract translation from sentences
     let translation = "";
     if (data.sentences && Array.isArray(data.sentences)) {
       translation = data.sentences
@@ -183,9 +206,39 @@ async function handleTranslate(
         .join("");
     }
 
+    // Extract dictionary definitions (bd parameter)
+    // Format: dict: [{ pos: "noun", terms: ["word1", "word2"], entry: [...] }, ...]
+    const definitions: DictEntry[] = [];
+    if (data.dict && Array.isArray(data.dict)) {
+      for (const dictItem of data.dict) {
+        if (dictItem.pos && dictItem.terms && Array.isArray(dictItem.terms)) {
+          // Extract detailed entries with synonyms (reverse_translation)
+          const entries: WordEntry[] = [];
+          if (dictItem.entry && Array.isArray(dictItem.entry)) {
+            for (const e of dictItem.entry.slice(0, 3)) {
+              // Top 3 entries
+              if (e.word) {
+                entries.push({
+                  word: e.word,
+                  synonyms: e.reverse_translation?.slice(0, 4), // Top 4 synonyms
+                });
+              }
+            }
+          }
+
+          definitions.push({
+            pos: dictItem.pos,
+            terms: dictItem.terms.slice(0, 5), // Limit to 5 terms per pos
+            entries: entries.length > 0 ? entries : undefined,
+          });
+        }
+      }
+    }
+
     return {
       translation: translation || text,
       detectedLang: data.src,
+      definitions: definitions.length > 0 ? definitions : undefined,
     };
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Network error" };

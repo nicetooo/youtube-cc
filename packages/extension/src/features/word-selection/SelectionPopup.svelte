@@ -1,8 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { scale } from "svelte/transition";
-  import { translate, speak, type TranslateError } from "./translate";
+  import {
+    translate,
+    speak,
+    type TranslateError,
+    type DictEntry,
+  } from "./translate";
   import { saveWord } from "@/shared/stores/words.svelte";
+  import { i18n } from "@/shared/i18n/i18n";
   import type { WordSource } from "@aspect/shared";
 
   // Props
@@ -50,6 +56,7 @@
   // State
   let translation = $state("");
   let detectedLang = $state<string | undefined>();
+  let definitions = $state<DictEntry[] | undefined>();
   let isLoading = $state(true);
   let error = $state<string | null>(null);
   let isSaved = $state(false);
@@ -162,6 +169,7 @@
       const result = await translate(text, targetLanguage);
       console.log("[CC Plus] Translation result:", result);
       detectedLang = result.detectedLang;
+      definitions = result.definitions;
 
       // Determine translation direction based on detected language
       if (isMyLanguage(detectedLang)) {
@@ -177,6 +185,11 @@
         );
         const result2 = await translate(text, myLanguage);
         translation = result2.translation;
+        // Prefer definitions from first translation (English POS tags),
+        // fallback to second translation if first has none
+        if (!definitions || definitions.length === 0) {
+          definitions = result2.definitions;
+        }
       }
     } catch (e) {
       console.error("[CC Plus] Translation error:", e);
@@ -201,6 +214,8 @@
         context,
         translation: translation || undefined,
         source,
+        detectedLang,
+        definitions,
       });
       isSaved = true;
     } catch (e) {
@@ -288,7 +303,7 @@
     {#if isLoading}
       <div class="loading">
         <div class="spinner"></div>
-        <span>Translating...</span>
+        <span>{i18n("translation_loading", myLanguage)}</span>
       </div>
     {:else if error}
       <div class="error">
@@ -298,11 +313,48 @@
           onclick={(e) => {
             e.stopPropagation();
             doTranslate();
-          }}>Retry</button
+          }}>{i18n("retry", myLanguage)}</button
         >
       </div>
     {:else}
+      <!-- Main translation -->
       <p class="translation">{translation}</p>
+
+      <!-- Dictionary definitions by part of speech -->
+      {#if definitions && definitions.length > 0}
+        <div class="definitions">
+          {#each definitions as def}
+            <div class="definition-group">
+              <div class="definition-header">
+                <span class="pos-tag">{def.pos}</span>
+                <span class="terms">{def.terms.join(", ")}</span>
+              </div>
+              <!-- Synonyms for each entry -->
+              {#if def.entries && def.entries.length > 0}
+                <div class="synonyms-list">
+                  {#each def.entries as entry}
+                    <div class="synonym-entry">
+                      <span class="synonym-word">{entry.word}</span>
+                      {#if entry.synonyms && entry.synonyms.length > 0}
+                        <span class="synonym-tags"
+                          >{entry.synonyms.join(", ")}</span
+                        >
+                      {/if}
+                    </div>
+                  {/each}
+                </div>
+              {/if}
+            </div>
+          {/each}
+        </div>
+      {/if}
+
+      <!-- Detected language badge -->
+      {#if detectedLang}
+        <div class="detected-lang">
+          <span class="lang-badge">{detectedLang}</span>
+        </div>
+      {/if}
     {/if}
   </div>
 
@@ -330,7 +382,7 @@
           >
             <polyline points="20 6 9 17 4 12" />
           </svg>
-          Saved
+          {i18n("word_saved", myLanguage)}
         {:else}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -348,7 +400,7 @@
             <polyline points="17 21 17 13 7 13 7 21" />
             <polyline points="7 3 7 8 15 8" />
           </svg>
-          Save
+          {i18n("save_word", myLanguage)}
         {/if}
       </button>
     {/if}

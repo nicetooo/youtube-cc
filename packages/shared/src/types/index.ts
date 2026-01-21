@@ -12,6 +12,19 @@ export type WordSource =
       pageTitle?: string;
     };
 
+// Single word entry with synonyms
+export interface WordEntry {
+  word: string; // Translation word
+  synonyms?: string[]; // Reverse translations (synonyms in source language)
+}
+
+// Dictionary entry with part of speech and terms
+export interface DictEntry {
+  pos: string; // Part of speech (noun, verb, adjective, etc.)
+  terms: string[]; // Translation terms for this part of speech
+  entries?: WordEntry[]; // Detailed entries with synonyms
+}
+
 // Word/Vocabulary types for the collection feature
 export interface Word {
   id: string;
@@ -19,6 +32,10 @@ export interface Word {
   context: string; // The full sentence/paragraph containing the word
   translation?: string; // Optional translation
   source: WordSource; // Where the word was collected from
+
+  // Translation metadata
+  detectedLang?: string; // Detected source language (e.g., "en", "ja")
+  definitions?: DictEntry[]; // Dictionary definitions by part of speech
 
   // SM-2 spaced repetition fields
   easeFactor: number; // Default 2.5, minimum 1.3
@@ -155,6 +172,8 @@ export type CreateWordInput = {
   context: string;
   translation?: string;
   source: WordSource;
+  detectedLang?: string;
+  definitions?: DictEntry[];
 };
 
 // Helper to create a new word with default SM-2 values
