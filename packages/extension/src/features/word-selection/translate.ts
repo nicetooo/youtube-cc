@@ -19,6 +19,8 @@ export interface TranslateResult {
   translation: string; // Translated text
   detectedLang?: string; // Detected source language
   definitions?: DictEntry[]; // Dictionary definitions by part of speech
+  srcTranslit?: string; // Source text transliteration (phonetic/pinyin)
+  translit?: string; // Translation transliteration (phonetic/pinyin)
 }
 
 export interface TranslateError {
@@ -63,6 +65,8 @@ export async function translate(
       translation: response.translation,
       detectedLang: response.detectedLang,
       definitions: response.definitions,
+      srcTranslit: response.srcTranslit,
+      translit: response.translit,
     };
   } catch (error) {
     console.error("[CC Plus] Translate error:", error);

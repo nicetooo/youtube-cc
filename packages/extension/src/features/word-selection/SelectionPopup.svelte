@@ -57,6 +57,8 @@
   let translation = $state("");
   let detectedLang = $state<string | undefined>();
   let definitions = $state<DictEntry[] | undefined>();
+  let srcTranslit = $state<string | undefined>(); // Source phonetic/pinyin
+  let translit = $state<string | undefined>(); // Translation phonetic/pinyin
   let isLoading = $state(true);
   let error = $state<string | null>(null);
   let isSaved = $state(false);
@@ -170,6 +172,7 @@
       console.log("[CC Plus] Translation result:", result);
       detectedLang = result.detectedLang;
       definitions = result.definitions;
+      srcTranslit = result.srcTranslit; // Source text phonetic
 
       // Determine translation direction based on detected language
       if (isMyLanguage(detectedLang)) {
@@ -178,6 +181,7 @@
           "[CC Plus] Source is my language, using target translation"
         );
         translation = result.translation;
+        translit = result.translit; // Translation phonetic
       } else {
         // Source is not my language -> translate to my language
         console.log(
@@ -185,6 +189,7 @@
         );
         const result2 = await translate(text, myLanguage);
         translation = result2.translation;
+        translit = result2.translit; // Translation phonetic
         // Prefer definitions from first translation (English POS tags),
         // fallback to second translation if first has none
         if (!definitions || definitions.length === 0) {
@@ -202,6 +207,14 @@
 
   function handleSpeak() {
     speak(text, detectedLang);
+  }
+
+  function handleSpeakTranslation() {
+    // Determine the language of the translation
+    const translationLang = isMyLanguage(detectedLang)
+      ? targetLanguage
+      : myLanguage;
+    speak(translation, translationLang);
   }
 
   async function handleSave() {
@@ -271,7 +284,12 @@
 >
   <!-- Header: Selected text + speak button -->
   <div class="popup-header">
-    <span class="selected-text">{text}</span>
+    <div class="header-text">
+      <span class="selected-text">{text}</span>
+      {#if srcTranslit}
+        <span class="phonetic">/{srcTranslit}/</span>
+      {/if}
+    </div>
     <button
       class="speak-button"
       onclick={handleSpeak}
@@ -317,8 +335,35 @@
         >
       </div>
     {:else}
-      <!-- Main translation -->
-      <p class="translation">{translation}</p>
+      <!-- Main translation with speak button -->
+      <div class="translation-row">
+        <div class="translation-content">
+          <p class="translation">{translation}</p>
+          {#if translit}
+            <span class="phonetic translation-phonetic">/{translit}/</span>
+          {/if}
+        </div>
+        <button
+          class="speak-button small"
+          onclick={handleSpeakTranslation}
+          title="Speak translation"
+          aria-label="Speak translation"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+          </svg>
+        </button>
+      </div>
 
       <!-- Dictionary definitions by part of speech -->
       {#if definitions && definitions.length > 0}

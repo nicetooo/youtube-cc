@@ -103,11 +103,24 @@
   gap: 6px;
 }
 
+.cc-plus-selection-popup .header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
 .cc-plus-selection-popup .selected-text {
   font-weight: 600;
   font-size: 14px;
   word-break: break-word;
-  flex: 1;
+}
+
+.cc-plus-selection-popup .phonetic {
+  font-size: 12px;
+  color: var(--popup-text-secondary);
+  font-style: italic;
 }
 
 .cc-plus-selection-popup .speak-button {
@@ -193,10 +206,38 @@
   background: var(--popup-button-hover);
 }
 
+.cc-plus-selection-popup .translation-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cc-plus-selection-popup .translation-content {
+  flex: 1;
+  min-width: 0;
+}
+
 .cc-plus-selection-popup .translation {
   margin: 0;
   color: var(--popup-text);
   word-break: break-word;
+}
+
+.cc-plus-selection-popup .translation-phonetic {
+  display: block;
+  margin-top: 2px;
+}
+
+.cc-plus-selection-popup .speak-button.small {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.cc-plus-selection-popup .speak-button.small .icon {
+  width: 12px;
+  height: 12px;
 }
 
 .cc-plus-selection-popup .definitions {

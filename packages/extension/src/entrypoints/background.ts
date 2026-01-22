@@ -388,6 +388,8 @@ interface TranslateResponse {
   translation: string;
   detectedLang?: string;
   definitions?: DictEntry[]; // Dictionary definitions by part of speech
+  srcTranslit?: string; // Source text transliteration (phonetic/pinyin)
+  translit?: string; // Translation transliteration (phonetic/pinyin)
 }
 
 async function handleTranslate(
@@ -424,13 +426,25 @@ async function handleTranslate(
     const data = await response.json();
     console.log("[CC Plus] Google Translate raw response:", data);
 
-    // Extract translation from sentences
+    // Extract translation and transliteration from sentences
     let translation = "";
+    let srcTranslit = "";
+    let translit = "";
     if (data.sentences && Array.isArray(data.sentences)) {
       translation = data.sentences
         .filter((s: { trans?: string }) => s.trans)
         .map((s: { trans: string }) => s.trans)
         .join("");
+      // Extract source transliteration (phonetic/pinyin for source text)
+      srcTranslit = data.sentences
+        .filter((s: { src_translit?: string }) => s.src_translit)
+        .map((s: { src_translit: string }) => s.src_translit)
+        .join(" ");
+      // Extract translation transliteration (phonetic/pinyin for translated text)
+      translit = data.sentences
+        .filter((s: { translit?: string }) => s.translit)
+        .map((s: { translit: string }) => s.translit)
+        .join(" ");
     }
 
     // Extract dictionary definitions (bd parameter)
@@ -466,6 +480,8 @@ async function handleTranslate(
       translation: translation || text,
       detectedLang: data.src,
       definitions: definitions.length > 0 ? definitions : undefined,
+      srcTranslit: srcTranslit || undefined,
+      translit: translit || undefined,
     };
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Network error" };
