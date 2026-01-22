@@ -80,6 +80,104 @@ export async function translate(
   }
 }
 
+// Language code mapping for speech synthesis
+const SPEECH_LANG_MAP: Record<string, string> = {
+  "zh-CN": "zh-CN",
+  "zh-TW": "zh-TW",
+  zh: "zh-CN",
+  en: "en-US",
+  ja: "ja-JP",
+  ko: "ko-KR",
+  es: "es-ES",
+  fr: "fr-FR",
+  de: "de-DE",
+  it: "it-IT",
+  pt: "pt-PT",
+  ru: "ru-RU",
+  ar: "ar-SA",
+  hi: "hi-IN",
+  nl: "nl-NL",
+  pl: "pl-PL",
+  vi: "vi-VN",
+  th: "th-TH",
+  id: "id-ID",
+  tr: "tr-TR",
+};
+
+// Cache for available voices
+let cachedVoices: SpeechSynthesisVoice[] = [];
+let voicesLoaded = false;
+
+/**
+ * Get available speech synthesis voices
+ */
+function getVoices(): SpeechSynthesisVoice[] {
+  if (!("speechSynthesis" in window)) return [];
+
+  if (voicesLoaded && cachedVoices.length > 0) {
+    return cachedVoices;
+  }
+
+  cachedVoices = speechSynthesis.getVoices();
+  if (cachedVoices.length > 0) {
+    voicesLoaded = true;
+  }
+  return cachedVoices;
+}
+
+// Pre-load voices when module loads
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  // Voices may load asynchronously
+  speechSynthesis.onvoiceschanged = () => {
+    cachedVoices = speechSynthesis.getVoices();
+    voicesLoaded = true;
+  };
+  // Try to get voices immediately (may work in some browsers)
+  getVoices();
+}
+
+/**
+ * Check if a language is supported for speech synthesis
+ * @param lang - Language code to check
+ * @returns true if the language has available voices
+ */
+export function canSpeak(lang?: string): boolean {
+  if (!("speechSynthesis" in window)) return false;
+  if (!lang) return false;
+
+  const voices = getVoices();
+  if (voices.length === 0) {
+    // Voices not loaded yet, assume supported for common languages
+    const commonLangs = [
+      "en",
+      "zh",
+      "ja",
+      "ko",
+      "es",
+      "fr",
+      "de",
+      "it",
+      "pt",
+      "ru",
+    ];
+    const baseLang = lang.split("-")[0].toLowerCase();
+    return commonLangs.includes(baseLang);
+  }
+
+  const targetLang = SPEECH_LANG_MAP[lang] || lang;
+  const baseLang = targetLang.split("-")[0].toLowerCase();
+
+  // Check if any voice matches the language
+  return voices.some((voice) => {
+    const voiceLang = voice.lang.toLowerCase();
+    return (
+      voiceLang === targetLang.toLowerCase() ||
+      voiceLang.startsWith(baseLang + "-") ||
+      voiceLang === baseLang
+    );
+  });
+}
+
 /**
  * Speak text using browser's Speech Synthesis API
  * @param text - Text to speak
@@ -98,14 +196,7 @@ export function speak(text: string, lang?: string): void {
 
   // Map language codes to speech synthesis language
   if (lang) {
-    const langMap: Record<string, string> = {
-      "zh-CN": "zh-CN",
-      "zh-TW": "zh-TW",
-      en: "en-US",
-      ja: "ja-JP",
-      ko: "ko-KR",
-    };
-    utterance.lang = langMap[lang] || lang;
+    utterance.lang = SPEECH_LANG_MAP[lang] || lang;
   }
 
   utterance.rate = 0.9; // Slightly slower for clarity

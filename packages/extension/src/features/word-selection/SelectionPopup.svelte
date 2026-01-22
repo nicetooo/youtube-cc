@@ -4,6 +4,7 @@
   import {
     translate,
     speak,
+    canSpeak,
     type TranslateError,
     type DictEntry,
   } from "./translate";
@@ -63,6 +64,12 @@
   let error = $state<string | null>(null);
   let isSaved = $state(false);
   let isSaving = $state(false);
+
+  // Check if source and translation languages support speech
+  let canSpeakSource = $derived(canSpeak(detectedLang));
+  let canSpeakTranslation = $derived(
+    canSpeak(isMyLanguage(detectedLang) ? targetLanguage : myLanguage)
+  );
 
   // Theme detection
   let isDarkMode = $state(
@@ -290,27 +297,29 @@
         <span class="phonetic">/{srcTranslit}/</span>
       {/if}
     </div>
-    <button
-      class="speak-button"
-      onclick={handleSpeak}
-      title="Speak"
-      aria-label="Speak"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="icon"
+    {#if canSpeakSource}
+      <button
+        class="speak-button"
+        onclick={handleSpeak}
+        title="Speak"
+        aria-label="Speak"
       >
-        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-      </svg>
-    </button>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon"
+        >
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        </svg>
+      </button>
+    {/if}
   </div>
 
   <!-- Divider -->
@@ -343,26 +352,28 @@
             <span class="phonetic translation-phonetic">/{translit}/</span>
           {/if}
         </div>
-        <button
-          class="speak-button small"
-          onclick={handleSpeakTranslation}
-          title="Speak translation"
-          aria-label="Speak translation"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon"
+        {#if canSpeakTranslation}
+          <button
+            class="speak-button small"
+            onclick={handleSpeakTranslation}
+            title="Speak translation"
+            aria-label="Speak translation"
           >
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+          </button>
+        {/if}
       </div>
 
       <!-- Dictionary definitions by part of speech -->
