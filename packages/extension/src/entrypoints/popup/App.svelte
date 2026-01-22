@@ -699,7 +699,7 @@
         <!-- View Words Button -->
         <button
           on:click={() =>
-            chrome.tabs.create({ url: "http://localhost:5188/words" })}
+            chrome.tabs.create({ url: `${__WEBSITE_URL__}/words` })}
           class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
         >
           <div class="flex flex-col text-left">

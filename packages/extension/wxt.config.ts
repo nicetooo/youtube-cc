@@ -34,6 +34,11 @@ export default defineConfig({
   vite: ({ mode }) => ({
     define: {
       __APP_VERSION__: JSON.stringify(pkg.version),
+      __WEBSITE_URL__: JSON.stringify(
+        mode === "production"
+          ? "https://youtube-cc.com"
+          : "http://localhost:5188"
+      ),
     },
     build: {
       minify: mode === "production" ? "terser" : false, // 开发模式不压缩
