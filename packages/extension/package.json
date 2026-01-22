@@ -2,7 +2,7 @@
   "name": "youtube-cc",
   "description": "Transform your YouTube viewing experience with interactive transcripts, immersive cinema mode, and advanced comment search.",
   "private": true,
-  "version": "1.5.4",
+  "version": "1.5.5",
   "type": "module",
   "scripts": {
     "dev": "wxt",
