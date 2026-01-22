@@ -42,6 +42,8 @@ export const messages = {
     sync_success: "Synced",
     logged_in_as: "Logged in as",
     anonymous: "Guest",
+    search_language: "Search language...",
+    no_results: "No results found",
   },
   zh_CN: {
     display_transcription: "显示字幕",
@@ -86,6 +88,8 @@ export const messages = {
     sync_success: "已同步",
     logged_in_as: "已登录为",
     anonymous: "游客",
+    search_language: "搜索语言...",
+    no_results: "未找到结果",
   },
   zh_TW: {
     display_transcription: "顯示字幕",
@@ -130,6 +134,8 @@ export const messages = {
     sync_success: "已同步",
     logged_in_as: "已登入為",
     anonymous: "訪客",
+    search_language: "搜尋語言...",
+    no_results: "未找到結果",
   },
   ja: {
     display_transcription: "文字起こしを表示",
@@ -174,6 +180,8 @@ export const messages = {
     sync_success: "同期しました",
     logged_in_as: "ログイン中",
     anonymous: "ゲスト",
+    search_language: "言語を検索...",
+    no_results: "結果が見つかりません",
   },
   ko: {
     display_transcription: "전사 표시",
@@ -218,6 +226,8 @@ export const messages = {
     sync_success: "동기화됨",
     logged_in_as: "로그인됨",
     anonymous: "게스트",
+    search_language: "언어 검색...",
+    no_results: "결과 없음",
   },
 };
 
