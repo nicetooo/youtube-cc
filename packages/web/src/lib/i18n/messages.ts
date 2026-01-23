@@ -1,5 +1,17 @@
 // Supported languages
-export type Locale = "en" | "zh_CN" | "zh_TW" | "ja" | "ko";
+export type Locale =
+  | "en"
+  | "zh_CN"
+  | "zh_TW"
+  | "ja"
+  | "ko"
+  | "hi"
+  | "es"
+  | "fr"
+  | "ar"
+  | "bn"
+  | "pt"
+  | "ru";
 
 export const localeNames: Record<Locale, string> = {
   en: "English",
@@ -7,6 +19,13 @@ export const localeNames: Record<Locale, string> = {
   zh_TW: "繁體中文",
   ja: "日本語",
   ko: "한국어",
+  hi: "हिन्दी",
+  es: "Español",
+  fr: "Français",
+  ar: "العربية",
+  bn: "বাংলা",
+  pt: "Português",
+  ru: "Русский",
 };
 
 export const messages = {
@@ -879,6 +898,1261 @@ export const messages = {
     terms_changes_text:
       "이 약관은 수시로 업데이트될 수 있습니다. 변경 후에도 서비스를 계속 사용하면 새로운 약관에 동의하는 것으로 간주됩니다.",
     terms_back: "설정으로 돌아가기",
+  },
+
+  hi: {
+    // Nav
+    nav_home: "होम",
+    nav_words: "शब्द",
+    nav_review: "समीक्षा",
+    nav_stats: "आँकड़े",
+    nav_settings: "सेटिंग्स",
+
+    // Home page
+    home_title: "YouTube के साथ भाषाएं सीखें",
+    home_subtitle:
+      "वीडियो से शब्दावली सहेजें, स्पेस्ड रिपीटिशन के साथ समीक्षा करें, और आसानी से नए शब्द सीखें।",
+    home_get_extension: "एक्सटेंशन प्राप्त करें",
+    home_view_words: "मेरे शब्द देखें",
+    home_feature_captions: "इंटरैक्टिव कैप्शन",
+    home_feature_captions_desc: "सबटाइटल में किसी भी शब्द पर क्लिक करके सहेजें",
+    home_feature_sync: "क्लाउड सिंक",
+    home_feature_sync_desc:
+      "आपकी शब्दावली एक्सटेंशन और वेबसाइट पर सिंक होती है",
+    home_feature_review: "स्मार्ट समीक्षा",
+    home_feature_review_desc:
+      "SM-2 एल्गोरिथम इष्टतम अंतराल पर समीक्षा शेड्यूल करता है",
+
+    // Words page
+    words_title: "मेरी शब्दावली",
+    words_search_placeholder: "शब्द खोजें...",
+    words_filter_all: "सभी",
+    words_filter_new: "नया",
+    words_filter_learning: "सीख रहे हैं",
+    words_filter_mastered: "महारत हासिल",
+    words_empty: "कोई शब्द नहीं मिला",
+    words_empty_hint: "YouTube वीडियो से शब्द सहेजना शुरू करें!",
+    words_count: "{count} शब्द",
+
+    // Review page
+    review_title: "समीक्षा",
+    review_due_today: "आज देय",
+    review_start: "समीक्षा शुरू करें",
+    review_no_cards: "समीक्षा के लिए कोई कार्ड नहीं",
+    review_no_cards_hint: "बढ़िया! और समीक्षाओं के लिए बाद में आएं।",
+    review_show_answer: "उत्तर दिखाएं",
+    review_again: "फिर से",
+    review_hard: "कठिन",
+    review_good: "अच्छा",
+    review_easy: "आसान",
+    review_complete: "समीक्षा पूर्ण!",
+    review_complete_message: "आज आपने {count} कार्ड की समीक्षा की।",
+    review_back_home: "होम पर वापस जाएं",
+
+    // Stats page
+    stats_title: "आँकड़े",
+    stats_streak: "दिन की स्ट्रीक",
+    stats_total_words: "कुल शब्द",
+    stats_mastered: "महारत हासिल",
+    stats_due_today: "आज देय",
+    stats_vocabulary_growth: "शब्दावली वृद्धि",
+    stats_last_7_days: "पिछले 7 दिन",
+    stats_30_days_ago: "30 दिन पहले",
+    stats_today: "आज",
+    stats_mastery_distribution: "महारत वितरण",
+    stats_videos_studied: "अध्ययन किए गए वीडियो",
+    stats_no_videos: "अभी तक कोई वीडियो नहीं",
+    stats_word_count: "{count} शब्द",
+
+    // Settings page
+    settings_title: "सेटिंग्स",
+    settings_account: "खाता",
+    settings_email: "ईमेल",
+    settings_member_since: "सदस्य बने",
+    settings_appearance: "दिखावट",
+    settings_theme: "थीम",
+    settings_theme_light: "लाइट",
+    settings_theme_dark: "डार्क",
+    settings_theme_system: "सिस्टम",
+    settings_language: "भाषा",
+    settings_learning: "सीखना",
+    settings_daily_goal: "दैनिक लक्ष्य",
+    settings_daily_goal_unit: "शब्द/दिन",
+    settings_sync: "सिंक",
+    settings_sync_enabled: "सिंक सक्षम",
+    settings_sync_desc: "एक्सटेंशन और वेबसाइट के बीच शब्दावली सिंक करें",
+    settings_logout: "लॉग आउट",
+    settings_login_hint:
+      "अपनी शब्दावली को डिवाइस पर सिंक करने के लिए साइन इन करें",
+    settings_google_login: "Google से साइन इन करें",
+    settings_data: "डेटा",
+    settings_export: "डेटा निर्यात करें",
+    settings_export_desc:
+      "सभी {count} शब्दों को JSON फ़ाइल के रूप में डाउनलोड करें",
+    settings_export_btn: "निर्यात करें",
+    settings_danger: "खतरनाक क्षेत्र",
+    settings_delete_account: "खाता हटाएं",
+    settings_delete_account_desc: "अपना खाता और सभी डेटा स्थायी रूप से हटाएं",
+
+    // Word card
+    word_context: "संदर्भ",
+    word_from_video: "वीडियो से",
+    word_added: "जोड़ा गया",
+
+    // Common
+    loading: "लोड हो रहा है...",
+    save: "सहेजें",
+    cancel: "रद्द करें",
+    delete: "हटाएं",
+    edit: "संपादित करें",
+    close: "बंद करें",
+
+    // Privacy page
+    privacy_title: "गोपनीयता नीति",
+    privacy_updated: "अंतिम अपडेट: जनवरी 2025",
+    privacy_intro_title: "परिचय",
+    privacy_intro_text:
+      "CC Plus आपकी गोपनीयता की रक्षा के लिए प्रतिबद्ध है। यह गोपनीयता नीति बताती है कि हम आपके ब्राउज़र एक्सटेंशन और वेबसाइट का उपयोग करते समय आपकी जानकारी कैसे एकत्र, उपयोग और सुरक्षित करते हैं।",
+    privacy_collect_title: "हम जो डेटा एकत्र करते हैं",
+    privacy_collect_vocab: "शब्दावली डेटा",
+    privacy_collect_vocab_desc:
+      "आपके द्वारा सहेजे गए शब्द, संदर्भ वाक्य और वीडियो स्रोत सहित। डिफ़ॉल्ट रूप से आपके ब्राउज़र में स्थानीय रूप से संग्रहीत।",
+    privacy_collect_account: "खाता जानकारी",
+    privacy_collect_account_desc:
+      "यदि आप Google से साइन इन करते हैं, तो हमें केवल प्रमाणीकरण उद्देश्यों के लिए आपका ईमेल और प्रोफ़ाइल नाम प्राप्त होता है।",
+    privacy_collect_analytics: "उपयोग विश्लेषण",
+    privacy_collect_analytics_desc:
+      "हम अपनी सेवा को बेहतर बनाने के लिए अनाम उपयोग आँकड़े एकत्र करने के लिए Google Analytics का उपयोग करते हैं।",
+    privacy_storage_title: "डेटा संग्रहण",
+    privacy_storage_local: "स्थानीय संग्रहण",
+    privacy_storage_local_desc:
+      "आपकी शब्दावली IndexedDB में स्थानीय रूप से संग्रहीत है और ऑफ़लाइन काम करती है।",
+    privacy_storage_cloud: "क्लाउड सिंक",
+    privacy_storage_cloud_desc:
+      "यदि आप साइन इन करते हैं, तो क्रॉस-डिवाइस एक्सेस के लिए डेटा Firebase में सिंक होता है।",
+    privacy_sharing_title: "डेटा साझाकरण",
+    privacy_sharing_text:
+      "हम आपका व्यक्तिगत डेटा नहीं बेचते या साझा नहीं करते, इन सेवा प्रदाताओं को छोड़कर:",
+    privacy_sharing_firebase: "Firebase (Google) - प्रमाणीकरण और संग्रहण",
+    privacy_sharing_analytics: "Google Analytics - उपयोग आँकड़े",
+    privacy_rights_title: "आपके अधिकार",
+    privacy_rights_export: "अपना डेटा निर्यात करें",
+    privacy_rights_delete: "अपना खाता हटाएं",
+    privacy_rights_no_account: "खाते के बिना उपयोग करें",
+    privacy_contact_title: "प्रश्न?",
+    privacy_contact_text:
+      "यदि आपके पास इस गोपनीयता नीति के बारे में प्रश्न हैं, तो हमसे संपर्क करें:",
+    privacy_back: "सेटिंग्स पर वापस जाएं",
+
+    // Terms page
+    terms_title: "सेवा की शर्तें",
+    terms_updated: "अंतिम अपडेट: जनवरी 2025",
+    terms_accept_title: "शर्तों की स्वीकृति",
+    terms_accept_text:
+      "CC Plus ब्राउज़र एक्सटेंशन और वेबसाइट का उपयोग करके, आप इन सेवा की शर्तों से सहमत हैं। यदि आप सहमत नहीं हैं, तो कृपया हमारी सेवाओं का उपयोग न करें।",
+    terms_service_title: "सेवा का विवरण",
+    terms_service_text:
+      "CC Plus एक भाषा सीखने का उपकरण है जो आपको YouTube वीडियो से शब्दावली सहेजने, स्पेस्ड रिपीटिशन का उपयोग करके शब्दों की समीक्षा करने और डिवाइस पर अपनी प्रगति सिंक करने में मदद करता है।",
+    terms_responsibility_title: "उपयोगकर्ता जिम्मेदारियां",
+    terms_responsibility_1: "अपने खाते की सुरक्षा बनाए रखें",
+    terms_responsibility_2: "हमारी सेवाओं का दुरुपयोग न करें",
+    terms_responsibility_3: "YouTube की सेवा की शर्तों का पालन करें",
+    terms_ip_title: "बौद्धिक संपदा",
+    terms_ip_text:
+      "CC Plus एक्सटेंशन, वेबसाइट और संबंधित सामग्री कॉपीराइट द्वारा संरक्षित है। आप बिना अनुमति के हमारे सॉफ़्टवेयर को कॉपी, संशोधित या वितरित नहीं कर सकते।",
+    terms_data_title: "आपका डेटा",
+    terms_data_text:
+      "आप अपने द्वारा बनाए गए शब्दावली डेटा का स्वामित्व बनाए रखते हैं। हम केवल सेवा प्रदान करने के लिए आपके डेटा को संग्रहीत और संसाधित करते हैं।",
+    terms_disclaimer_title: "अस्वीकरण",
+    terms_disclaimer_text:
+      'CC Plus किसी भी प्रकार की वारंटी के बिना "जैसा है" प्रदान किया जाता है। हम YouTube या Google से संबद्ध नहीं हैं।',
+    terms_liability_title: "दायित्व की सीमा",
+    terms_liability_text:
+      "कानून द्वारा अनुमत अधिकतम सीमा तक, CC Plus किसी भी अप्रत्यक्ष, आकस्मिक या परिणामी क्षति के लिए उत्तरदायी नहीं होगा।",
+    terms_termination_title: "समाप्ति",
+    terms_termination_text:
+      "हम किसी भी समय हमारी सेवाओं तक पहुंच को निलंबित या समाप्त करने का अधिकार सुरक्षित रखते हैं। आप किसी भी समय हमारी सेवाओं का उपयोग बंद कर सकते हैं।",
+    terms_changes_title: "शर्तों में परिवर्तन",
+    terms_changes_text:
+      "हम समय-समय पर इन शर्तों को अपडेट कर सकते हैं। परिवर्तनों के बाद सेवा का निरंतर उपयोग स्वीकृति का गठन करता है।",
+    terms_back: "सेटिंग्स पर वापस जाएं",
+  },
+
+  es: {
+    // Nav
+    nav_home: "Inicio",
+    nav_words: "Palabras",
+    nav_review: "Revisar",
+    nav_stats: "Estadísticas",
+    nav_settings: "Configuración",
+
+    // Home page
+    home_title: "Aprende idiomas con YouTube",
+    home_subtitle:
+      "Guarda vocabulario de videos, repasa con repetición espaciada y domina palabras nuevas sin esfuerzo.",
+    home_get_extension: "Obtener Extensión",
+    home_view_words: "Ver Mis Palabras",
+    home_feature_captions: "Subtítulos Interactivos",
+    home_feature_captions_desc:
+      "Haz clic en cualquier palabra de los subtítulos para guardarla",
+    home_feature_sync: "Sincronización en la Nube",
+    home_feature_sync_desc:
+      "Tu vocabulario se sincroniza entre la extensión y el sitio web",
+    home_feature_review: "Repaso Inteligente",
+    home_feature_review_desc:
+      "El algoritmo SM-2 programa repasos en intervalos óptimos",
+
+    // Words page
+    words_title: "Mi Vocabulario",
+    words_search_placeholder: "Buscar palabras...",
+    words_filter_all: "Todas",
+    words_filter_new: "Nuevas",
+    words_filter_learning: "Aprendiendo",
+    words_filter_mastered: "Dominadas",
+    words_empty: "No se encontraron palabras",
+    words_empty_hint: "¡Empieza a guardar palabras de videos de YouTube!",
+    words_count: "{count} palabras",
+
+    // Review page
+    review_title: "Revisar",
+    review_due_today: "Pendientes Hoy",
+    review_start: "Iniciar Repaso",
+    review_no_cards: "No hay tarjetas pendientes",
+    review_no_cards_hint: "¡Buen trabajo! Vuelve más tarde para más repasos.",
+    review_show_answer: "Mostrar Respuesta",
+    review_again: "Otra vez",
+    review_hard: "Difícil",
+    review_good: "Bien",
+    review_easy: "Fácil",
+    review_complete: "¡Repaso Completado!",
+    review_complete_message: "Hoy repasaste {count} tarjetas.",
+    review_back_home: "Volver al Inicio",
+
+    // Stats page
+    stats_title: "Estadísticas",
+    stats_streak: "Racha de Días",
+    stats_total_words: "Total de Palabras",
+    stats_mastered: "Dominadas",
+    stats_due_today: "Pendientes Hoy",
+    stats_vocabulary_growth: "Crecimiento del Vocabulario",
+    stats_last_7_days: "Últimos 7 Días",
+    stats_30_days_ago: "Hace 30 días",
+    stats_today: "Hoy",
+    stats_mastery_distribution: "Distribución de Dominio",
+    stats_videos_studied: "Videos Estudiados",
+    stats_no_videos: "Aún no hay videos",
+    stats_word_count: "{count} palabras",
+
+    // Settings page
+    settings_title: "Configuración",
+    settings_account: "Cuenta",
+    settings_email: "Correo",
+    settings_member_since: "Miembro desde",
+    settings_appearance: "Apariencia",
+    settings_theme: "Tema",
+    settings_theme_light: "Claro",
+    settings_theme_dark: "Oscuro",
+    settings_theme_system: "Sistema",
+    settings_language: "Idioma",
+    settings_learning: "Aprendizaje",
+    settings_daily_goal: "Meta Diaria",
+    settings_daily_goal_unit: "palabras/día",
+    settings_sync: "Sincronización",
+    settings_sync_enabled: "Sincronización Activada",
+    settings_sync_desc: "Sincroniza vocabulario entre extensión y sitio web",
+    settings_logout: "Cerrar Sesión",
+    settings_login_hint:
+      "Inicia sesión para sincronizar tu vocabulario entre dispositivos",
+    settings_google_login: "Iniciar sesión con Google",
+    settings_data: "Datos",
+    settings_export: "Exportar Datos",
+    settings_export_desc:
+      "Descargar todas las {count} palabras como archivo JSON",
+    settings_export_btn: "Exportar",
+    settings_danger: "Zona de Peligro",
+    settings_delete_account: "Eliminar Cuenta",
+    settings_delete_account_desc:
+      "Elimina permanentemente tu cuenta y todos los datos",
+
+    // Word card
+    word_context: "Contexto",
+    word_from_video: "Del video",
+    word_added: "Añadida",
+
+    // Common
+    loading: "Cargando...",
+    save: "Guardar",
+    cancel: "Cancelar",
+    delete: "Eliminar",
+    edit: "Editar",
+    close: "Cerrar",
+
+    // Privacy page
+    privacy_title: "Política de Privacidad",
+    privacy_updated: "Última actualización: Enero 2025",
+    privacy_intro_title: "Introducción",
+    privacy_intro_text:
+      "CC Plus está comprometido con proteger tu privacidad. Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos tu información cuando usas nuestra extensión de navegador y sitio web.",
+    privacy_collect_title: "Datos que Recopilamos",
+    privacy_collect_vocab: "Datos de Vocabulario",
+    privacy_collect_vocab_desc:
+      "Palabras que guardas, incluyendo oraciones de contexto y fuentes de video. Almacenadas localmente en tu navegador por defecto.",
+    privacy_collect_account: "Información de Cuenta",
+    privacy_collect_account_desc:
+      "Si inicias sesión con Google, recibimos tu correo y nombre de perfil solo para autenticación.",
+    privacy_collect_analytics: "Análisis de Uso",
+    privacy_collect_analytics_desc:
+      "Usamos Google Analytics para recopilar estadísticas de uso anónimas para mejorar nuestro servicio.",
+    privacy_storage_title: "Almacenamiento de Datos",
+    privacy_storage_local: "Almacenamiento Local",
+    privacy_storage_local_desc:
+      "Tu vocabulario se almacena localmente en IndexedDB y funciona sin conexión.",
+    privacy_storage_cloud: "Sincronización en la Nube",
+    privacy_storage_cloud_desc:
+      "Si inicias sesión, los datos se sincronizan con Firebase para acceso entre dispositivos.",
+    privacy_sharing_title: "Compartir Datos",
+    privacy_sharing_text:
+      "No vendemos ni compartimos tus datos personales, excepto con estos proveedores de servicios:",
+    privacy_sharing_firebase:
+      "Firebase (Google) - Autenticación y Almacenamiento",
+    privacy_sharing_analytics: "Google Analytics - Estadísticas de Uso",
+    privacy_rights_title: "Tus Derechos",
+    privacy_rights_export: "Exportar tus datos",
+    privacy_rights_delete: "Eliminar tu cuenta",
+    privacy_rights_no_account: "Usar sin cuenta",
+    privacy_contact_title: "¿Preguntas?",
+    privacy_contact_text:
+      "Si tienes preguntas sobre esta Política de Privacidad, contáctanos:",
+    privacy_back: "Volver a Configuración",
+
+    // Terms page
+    terms_title: "Términos de Servicio",
+    terms_updated: "Última actualización: Enero 2025",
+    terms_accept_title: "Aceptación de Términos",
+    terms_accept_text:
+      "Al usar la extensión de navegador y sitio web CC Plus, aceptas estos Términos de Servicio. Si no estás de acuerdo, por favor no uses nuestros servicios.",
+    terms_service_title: "Descripción del Servicio",
+    terms_service_text:
+      "CC Plus es una herramienta de aprendizaje de idiomas que te ayuda a guardar vocabulario de videos de YouTube, repasar palabras usando repetición espaciada y sincronizar tu progreso entre dispositivos.",
+    terms_responsibility_title: "Responsabilidades del Usuario",
+    terms_responsibility_1: "Mantener la seguridad de tu cuenta",
+    terms_responsibility_2: "No hacer mal uso de nuestros servicios",
+    terms_responsibility_3: "Cumplir con los Términos de Servicio de YouTube",
+    terms_ip_title: "Propiedad Intelectual",
+    terms_ip_text:
+      "La extensión CC Plus, sitio web y contenido asociado están protegidos por derechos de autor. No puedes copiar, modificar o distribuir nuestro software sin permiso.",
+    terms_data_title: "Tus Datos",
+    terms_data_text:
+      "Conservas la propiedad de los datos de vocabulario que creas. Solo almacenamos y procesamos tus datos para proporcionar el servicio.",
+    terms_disclaimer_title: "Descargo de Responsabilidad",
+    terms_disclaimer_text:
+      'CC Plus se proporciona "tal cual" sin garantías de ningún tipo. No estamos afiliados con YouTube o Google.',
+    terms_liability_title: "Limitación de Responsabilidad",
+    terms_liability_text:
+      "En la máxima medida permitida por la ley, CC Plus no será responsable de ningún daño indirecto, incidental o consecuente.",
+    terms_termination_title: "Terminación",
+    terms_termination_text:
+      "Nos reservamos el derecho de suspender o terminar el acceso a nuestros servicios en cualquier momento. Puedes dejar de usar nuestros servicios en cualquier momento.",
+    terms_changes_title: "Cambios a los Términos",
+    terms_changes_text:
+      "Podemos actualizar estos Términos de vez en cuando. El uso continuado del servicio después de los cambios constituye aceptación.",
+    terms_back: "Volver a Configuración",
+  },
+
+  fr: {
+    // Nav
+    nav_home: "Accueil",
+    nav_words: "Mots",
+    nav_review: "Réviser",
+    nav_stats: "Statistiques",
+    nav_settings: "Paramètres",
+
+    // Home page
+    home_title: "Apprenez les langues avec YouTube",
+    home_subtitle:
+      "Enregistrez du vocabulaire depuis des vidéos, révisez avec la répétition espacée et maîtrisez de nouveaux mots facilement.",
+    home_get_extension: "Obtenir l'Extension",
+    home_view_words: "Voir Mes Mots",
+    home_feature_captions: "Sous-titres Interactifs",
+    home_feature_captions_desc:
+      "Cliquez sur n'importe quel mot des sous-titres pour l'enregistrer",
+    home_feature_sync: "Synchronisation Cloud",
+    home_feature_sync_desc:
+      "Votre vocabulaire se synchronise entre l'extension et le site web",
+    home_feature_review: "Révision Intelligente",
+    home_feature_review_desc:
+      "L'algorithme SM-2 planifie les révisions à intervalles optimaux",
+
+    // Words page
+    words_title: "Mon Vocabulaire",
+    words_search_placeholder: "Rechercher des mots...",
+    words_filter_all: "Tous",
+    words_filter_new: "Nouveaux",
+    words_filter_learning: "En apprentissage",
+    words_filter_mastered: "Maîtrisés",
+    words_empty: "Aucun mot trouvé",
+    words_empty_hint:
+      "Commencez à enregistrer des mots depuis des vidéos YouTube !",
+    words_count: "{count} mots",
+
+    // Review page
+    review_title: "Réviser",
+    review_due_today: "À réviser aujourd'hui",
+    review_start: "Commencer la Révision",
+    review_no_cards: "Aucune carte à réviser",
+    review_no_cards_hint:
+      "Excellent ! Revenez plus tard pour d'autres révisions.",
+    review_show_answer: "Afficher la Réponse",
+    review_again: "Encore",
+    review_hard: "Difficile",
+    review_good: "Bien",
+    review_easy: "Facile",
+    review_complete: "Révision Terminée !",
+    review_complete_message: "Vous avez révisé {count} cartes aujourd'hui.",
+    review_back_home: "Retour à l'Accueil",
+
+    // Stats page
+    stats_title: "Statistiques",
+    stats_streak: "Jours Consécutifs",
+    stats_total_words: "Total des Mots",
+    stats_mastered: "Maîtrisés",
+    stats_due_today: "À réviser aujourd'hui",
+    stats_vocabulary_growth: "Croissance du Vocabulaire",
+    stats_last_7_days: "7 Derniers Jours",
+    stats_30_days_ago: "Il y a 30 jours",
+    stats_today: "Aujourd'hui",
+    stats_mastery_distribution: "Distribution de Maîtrise",
+    stats_videos_studied: "Vidéos Étudiées",
+    stats_no_videos: "Pas encore de vidéos",
+    stats_word_count: "{count} mots",
+
+    // Settings page
+    settings_title: "Paramètres",
+    settings_account: "Compte",
+    settings_email: "Email",
+    settings_member_since: "Membre depuis",
+    settings_appearance: "Apparence",
+    settings_theme: "Thème",
+    settings_theme_light: "Clair",
+    settings_theme_dark: "Sombre",
+    settings_theme_system: "Système",
+    settings_language: "Langue",
+    settings_learning: "Apprentissage",
+    settings_daily_goal: "Objectif Quotidien",
+    settings_daily_goal_unit: "mots/jour",
+    settings_sync: "Synchronisation",
+    settings_sync_enabled: "Synchronisation Activée",
+    settings_sync_desc:
+      "Synchroniser le vocabulaire entre l'extension et le site web",
+    settings_logout: "Déconnexion",
+    settings_login_hint:
+      "Connectez-vous pour synchroniser votre vocabulaire entre appareils",
+    settings_google_login: "Se connecter avec Google",
+    settings_data: "Données",
+    settings_export: "Exporter les Données",
+    settings_export_desc: "Télécharger les {count} mots en fichier JSON",
+    settings_export_btn: "Exporter",
+    settings_danger: "Zone Dangereuse",
+    settings_delete_account: "Supprimer le Compte",
+    settings_delete_account_desc:
+      "Supprimer définitivement votre compte et toutes les données",
+
+    // Word card
+    word_context: "Contexte",
+    word_from_video: "De la vidéo",
+    word_added: "Ajouté",
+
+    // Common
+    loading: "Chargement...",
+    save: "Enregistrer",
+    cancel: "Annuler",
+    delete: "Supprimer",
+    edit: "Modifier",
+    close: "Fermer",
+
+    // Privacy page
+    privacy_title: "Politique de Confidentialité",
+    privacy_updated: "Dernière mise à jour : Janvier 2025",
+    privacy_intro_title: "Introduction",
+    privacy_intro_text:
+      "CC Plus s'engage à protéger votre vie privée. Cette Politique de Confidentialité explique comment nous collectons, utilisons et protégeons vos informations lorsque vous utilisez notre extension de navigateur et notre site web.",
+    privacy_collect_title: "Données que Nous Collectons",
+    privacy_collect_vocab: "Données de Vocabulaire",
+    privacy_collect_vocab_desc:
+      "Les mots que vous enregistrez, y compris les phrases de contexte et les sources vidéo. Stockées localement dans votre navigateur par défaut.",
+    privacy_collect_account: "Informations de Compte",
+    privacy_collect_account_desc:
+      "Si vous vous connectez avec Google, nous recevons votre email et nom de profil uniquement à des fins d'authentification.",
+    privacy_collect_analytics: "Analyses d'Utilisation",
+    privacy_collect_analytics_desc:
+      "Nous utilisons Google Analytics pour collecter des statistiques d'utilisation anonymes afin d'améliorer notre service.",
+    privacy_storage_title: "Stockage des Données",
+    privacy_storage_local: "Stockage Local",
+    privacy_storage_local_desc:
+      "Votre vocabulaire est stocké localement dans IndexedDB et fonctionne hors ligne.",
+    privacy_storage_cloud: "Synchronisation Cloud",
+    privacy_storage_cloud_desc:
+      "Si vous vous connectez, les données se synchronisent avec Firebase pour un accès multi-appareils.",
+    privacy_sharing_title: "Partage des Données",
+    privacy_sharing_text:
+      "Nous ne vendons ni ne partageons vos données personnelles, sauf avec ces fournisseurs de services :",
+    privacy_sharing_firebase:
+      "Firebase (Google) - Authentification et Stockage",
+    privacy_sharing_analytics: "Google Analytics - Statistiques d'Utilisation",
+    privacy_rights_title: "Vos Droits",
+    privacy_rights_export: "Exporter vos données",
+    privacy_rights_delete: "Supprimer votre compte",
+    privacy_rights_no_account: "Utiliser sans compte",
+    privacy_contact_title: "Questions ?",
+    privacy_contact_text:
+      "Si vous avez des questions sur cette Politique de Confidentialité, contactez-nous :",
+    privacy_back: "Retour aux Paramètres",
+
+    // Terms page
+    terms_title: "Conditions d'Utilisation",
+    terms_updated: "Dernière mise à jour : Janvier 2025",
+    terms_accept_title: "Acceptation des Conditions",
+    terms_accept_text:
+      "En utilisant l'extension de navigateur et le site web CC Plus, vous acceptez ces Conditions d'Utilisation. Si vous n'êtes pas d'accord, veuillez ne pas utiliser nos services.",
+    terms_service_title: "Description du Service",
+    terms_service_text:
+      "CC Plus est un outil d'apprentissage des langues qui vous aide à enregistrer du vocabulaire depuis des vidéos YouTube, réviser des mots avec la répétition espacée et synchroniser vos progrès entre appareils.",
+    terms_responsibility_title: "Responsabilités de l'Utilisateur",
+    terms_responsibility_1: "Maintenir la sécurité de votre compte",
+    terms_responsibility_2: "Ne pas abuser de nos services",
+    terms_responsibility_3: "Respecter les Conditions d'Utilisation de YouTube",
+    terms_ip_title: "Propriété Intellectuelle",
+    terms_ip_text:
+      "L'extension CC Plus, le site web et le contenu associé sont protégés par le droit d'auteur. Vous ne pouvez pas copier, modifier ou distribuer notre logiciel sans autorisation.",
+    terms_data_title: "Vos Données",
+    terms_data_text:
+      "Vous conservez la propriété des données de vocabulaire que vous créez. Nous ne stockons et traitons vos données que pour fournir le service.",
+    terms_disclaimer_title: "Avertissement",
+    terms_disclaimer_text:
+      'CC Plus est fourni "tel quel" sans garantie d\'aucune sorte. Nous ne sommes pas affiliés à YouTube ou Google.',
+    terms_liability_title: "Limitation de Responsabilité",
+    terms_liability_text:
+      "Dans toute la mesure permise par la loi, CC Plus ne sera pas responsable des dommages indirects, accessoires ou consécutifs.",
+    terms_termination_title: "Résiliation",
+    terms_termination_text:
+      "Nous nous réservons le droit de suspendre ou de résilier l'accès à nos services à tout moment. Vous pouvez cesser d'utiliser nos services à tout moment.",
+    terms_changes_title: "Modifications des Conditions",
+    terms_changes_text:
+      "Nous pouvons mettre à jour ces Conditions de temps en temps. L'utilisation continue du service après les modifications constitue une acceptation.",
+    terms_back: "Retour aux Paramètres",
+  },
+
+  ar: {
+    // Nav
+    nav_home: "الرئيسية",
+    nav_words: "الكلمات",
+    nav_review: "المراجعة",
+    nav_stats: "الإحصائيات",
+    nav_settings: "الإعدادات",
+
+    // Home page
+    home_title: "تعلم اللغات مع YouTube",
+    home_subtitle:
+      "احفظ المفردات من الفيديوهات، راجع بالتكرار المتباعد، وأتقن كلمات جديدة بسهولة.",
+    home_get_extension: "احصل على الإضافة",
+    home_view_words: "عرض كلماتي",
+    home_feature_captions: "ترجمات تفاعلية",
+    home_feature_captions_desc: "انقر على أي كلمة في الترجمات لحفظها فوراً",
+    home_feature_sync: "مزامنة سحابية",
+    home_feature_sync_desc: "تتم مزامنة مفرداتك بين الإضافة والموقع",
+    home_feature_review: "مراجعة ذكية",
+    home_feature_review_desc: "خوارزمية SM-2 تجدول المراجعات بفترات مثالية",
+
+    // Words page
+    words_title: "مفرداتي",
+    words_search_placeholder: "البحث عن كلمات...",
+    words_filter_all: "الكل",
+    words_filter_new: "جديد",
+    words_filter_learning: "قيد التعلم",
+    words_filter_mastered: "متقن",
+    words_empty: "لم يتم العثور على كلمات",
+    words_empty_hint: "ابدأ بحفظ الكلمات من فيديوهات YouTube!",
+    words_count: "{count} كلمة",
+
+    // Review page
+    review_title: "المراجعة",
+    review_due_today: "مستحق اليوم",
+    review_start: "بدء المراجعة",
+    review_no_cards: "لا توجد بطاقات للمراجعة",
+    review_no_cards_hint: "أحسنت! عد لاحقاً لمزيد من المراجعات.",
+    review_show_answer: "إظهار الإجابة",
+    review_again: "مرة أخرى",
+    review_hard: "صعب",
+    review_good: "جيد",
+    review_easy: "سهل",
+    review_complete: "اكتملت المراجعة!",
+    review_complete_message: "راجعت {count} بطاقة اليوم.",
+    review_back_home: "العودة للرئيسية",
+
+    // Stats page
+    stats_title: "الإحصائيات",
+    stats_streak: "أيام متتالية",
+    stats_total_words: "إجمالي الكلمات",
+    stats_mastered: "متقن",
+    stats_due_today: "مستحق اليوم",
+    stats_vocabulary_growth: "نمو المفردات",
+    stats_last_7_days: "آخر 7 أيام",
+    stats_30_days_ago: "قبل 30 يوماً",
+    stats_today: "اليوم",
+    stats_mastery_distribution: "توزيع الإتقان",
+    stats_videos_studied: "الفيديوهات المدروسة",
+    stats_no_videos: "لا توجد فيديوهات بعد",
+    stats_word_count: "{count} كلمة",
+
+    // Settings page
+    settings_title: "الإعدادات",
+    settings_account: "الحساب",
+    settings_email: "البريد الإلكتروني",
+    settings_member_since: "عضو منذ",
+    settings_appearance: "المظهر",
+    settings_theme: "السمة",
+    settings_theme_light: "فاتح",
+    settings_theme_dark: "داكن",
+    settings_theme_system: "النظام",
+    settings_language: "اللغة",
+    settings_learning: "التعلم",
+    settings_daily_goal: "الهدف اليومي",
+    settings_daily_goal_unit: "كلمة/يوم",
+    settings_sync: "المزامنة",
+    settings_sync_enabled: "المزامنة مفعلة",
+    settings_sync_desc: "مزامنة المفردات بين الإضافة والموقع",
+    settings_logout: "تسجيل الخروج",
+    settings_login_hint: "سجل الدخول لمزامنة مفرداتك عبر الأجهزة",
+    settings_google_login: "تسجيل الدخول بـ Google",
+    settings_data: "البيانات",
+    settings_export: "تصدير البيانات",
+    settings_export_desc: "تحميل جميع الـ {count} كلمة كملف JSON",
+    settings_export_btn: "تصدير",
+    settings_danger: "منطقة خطرة",
+    settings_delete_account: "حذف الحساب",
+    settings_delete_account_desc: "حذف حسابك وجميع البيانات نهائياً",
+
+    // Word card
+    word_context: "السياق",
+    word_from_video: "من الفيديو",
+    word_added: "أضيف",
+
+    // Common
+    loading: "جاري التحميل...",
+    save: "حفظ",
+    cancel: "إلغاء",
+    delete: "حذف",
+    edit: "تعديل",
+    close: "إغلاق",
+
+    // Privacy page
+    privacy_title: "سياسة الخصوصية",
+    privacy_updated: "آخر تحديث: يناير 2025",
+    privacy_intro_title: "مقدمة",
+    privacy_intro_text:
+      "CC Plus ملتزم بحماية خصوصيتك. توضح سياسة الخصوصية هذه كيف نجمع ونستخدم ونحمي معلوماتك عند استخدام إضافة المتصفح والموقع.",
+    privacy_collect_title: "البيانات التي نجمعها",
+    privacy_collect_vocab: "بيانات المفردات",
+    privacy_collect_vocab_desc:
+      "الكلمات التي تحفظها، بما في ذلك جمل السياق ومصادر الفيديو. مخزنة محلياً في متصفحك افتراضياً.",
+    privacy_collect_account: "معلومات الحساب",
+    privacy_collect_account_desc:
+      "إذا سجلت الدخول بـ Google، نستلم بريدك الإلكتروني واسم الملف الشخصي لأغراض المصادقة فقط.",
+    privacy_collect_analytics: "تحليلات الاستخدام",
+    privacy_collect_analytics_desc:
+      "نستخدم Google Analytics لجمع إحصاءات استخدام مجهولة لتحسين خدمتنا.",
+    privacy_storage_title: "تخزين البيانات",
+    privacy_storage_local: "التخزين المحلي",
+    privacy_storage_local_desc:
+      "مفرداتك مخزنة محلياً في IndexedDB وتعمل بدون اتصال.",
+    privacy_storage_cloud: "المزامنة السحابية",
+    privacy_storage_cloud_desc:
+      "إذا سجلت الدخول، تتم مزامنة البيانات مع Firebase للوصول عبر الأجهزة.",
+    privacy_sharing_title: "مشاركة البيانات",
+    privacy_sharing_text:
+      "لا نبيع أو نشارك بياناتك الشخصية، باستثناء مع مقدمي الخدمات هؤلاء:",
+    privacy_sharing_firebase: "Firebase (Google) - المصادقة والتخزين",
+    privacy_sharing_analytics: "Google Analytics - إحصاءات الاستخدام",
+    privacy_rights_title: "حقوقك",
+    privacy_rights_export: "تصدير بياناتك",
+    privacy_rights_delete: "حذف حسابك",
+    privacy_rights_no_account: "الاستخدام بدون حساب",
+    privacy_contact_title: "أسئلة؟",
+    privacy_contact_text:
+      "إذا كانت لديك أسئلة حول سياسة الخصوصية هذه، تواصل معنا:",
+    privacy_back: "العودة للإعدادات",
+
+    // Terms page
+    terms_title: "شروط الخدمة",
+    terms_updated: "آخر تحديث: يناير 2025",
+    terms_accept_title: "قبول الشروط",
+    terms_accept_text:
+      "باستخدام إضافة المتصفح والموقع CC Plus، فإنك توافق على شروط الخدمة هذه. إذا لم توافق، يرجى عدم استخدام خدماتنا.",
+    terms_service_title: "وصف الخدمة",
+    terms_service_text:
+      "CC Plus هو أداة لتعلم اللغات تساعدك على حفظ المفردات من فيديوهات YouTube، مراجعة الكلمات باستخدام التكرار المتباعد، ومزامنة تقدمك عبر الأجهزة.",
+    terms_responsibility_title: "مسؤوليات المستخدم",
+    terms_responsibility_1: "الحفاظ على أمان حسابك",
+    terms_responsibility_2: "عدم إساءة استخدام خدماتنا",
+    terms_responsibility_3: "الامتثال لشروط خدمة YouTube",
+    terms_ip_title: "الملكية الفكرية",
+    terms_ip_text:
+      "إضافة CC Plus والموقع والمحتوى المرتبط محمية بحقوق النشر. لا يجوز لك نسخ أو تعديل أو توزيع برنامجنا دون إذن.",
+    terms_data_title: "بياناتك",
+    terms_data_text:
+      "تحتفظ بملكية بيانات المفردات التي تنشئها. نقوم فقط بتخزين ومعالجة بياناتك لتقديم الخدمة.",
+    terms_disclaimer_title: "إخلاء المسؤولية",
+    terms_disclaimer_text:
+      'يتم تقديم CC Plus "كما هو" دون أي ضمانات. نحن غير تابعين لـ YouTube أو Google.',
+    terms_liability_title: "حدود المسؤولية",
+    terms_liability_text:
+      "إلى أقصى حد يسمح به القانون، لن يكون CC Plus مسؤولاً عن أي أضرار غير مباشرة أو عرضية أو تبعية.",
+    terms_termination_title: "الإنهاء",
+    terms_termination_text:
+      "نحتفظ بالحق في تعليق أو إنهاء الوصول إلى خدماتنا في أي وقت. يمكنك التوقف عن استخدام خدماتنا في أي وقت.",
+    terms_changes_title: "تغييرات الشروط",
+    terms_changes_text:
+      "قد نقوم بتحديث هذه الشروط من وقت لآخر. الاستمرار في استخدام الخدمة بعد التغييرات يشكل قبولاً.",
+    terms_back: "العودة للإعدادات",
+  },
+
+  bn: {
+    // Nav
+    nav_home: "হোম",
+    nav_words: "শব্দ",
+    nav_review: "পর্যালোচনা",
+    nav_stats: "পরিসংখ্যান",
+    nav_settings: "সেটিংস",
+
+    // Home page
+    home_title: "YouTube দিয়ে ভাষা শিখুন",
+    home_subtitle:
+      "ভিডিও থেকে শব্দভাণ্ডার সংরক্ষণ করুন, স্পেসড রিপিটিশন দিয়ে পর্যালোচনা করুন এবং সহজেই নতুন শব্দ আয়ত্ত করুন।",
+    home_get_extension: "এক্সটেনশন পান",
+    home_view_words: "আমার শব্দ দেখুন",
+    home_feature_captions: "ইন্টারঅ্যাক্টিভ ক্যাপশন",
+    home_feature_captions_desc:
+      "সাবটাইটেলে যেকোনো শব্দে ক্লিক করে সংরক্ষণ করুন",
+    home_feature_sync: "ক্লাউড সিঙ্ক",
+    home_feature_sync_desc:
+      "আপনার শব্দভাণ্ডার এক্সটেনশন এবং ওয়েবসাইটে সিঙ্ক হয়",
+    home_feature_review: "স্মার্ট পর্যালোচনা",
+    home_feature_review_desc:
+      "SM-2 অ্যালগরিদম সর্বোত্তম বিরতিতে পর্যালোচনা নির্ধারণ করে",
+
+    // Words page
+    words_title: "আমার শব্দভাণ্ডার",
+    words_search_placeholder: "শব্দ খুঁজুন...",
+    words_filter_all: "সব",
+    words_filter_new: "নতুন",
+    words_filter_learning: "শেখা হচ্ছে",
+    words_filter_mastered: "আয়ত্ত",
+    words_empty: "কোনো শব্দ পাওয়া যায়নি",
+    words_empty_hint: "YouTube ভিডিও থেকে শব্দ সংরক্ষণ শুরু করুন!",
+    words_count: "{count}টি শব্দ",
+
+    // Review page
+    review_title: "পর্যালোচনা",
+    review_due_today: "আজ বাকি",
+    review_start: "পর্যালোচনা শুরু করুন",
+    review_no_cards: "পর্যালোচনার জন্য কোনো কার্ড নেই",
+    review_no_cards_hint: "দারুণ! আরও পর্যালোচনার জন্য পরে আসুন।",
+    review_show_answer: "উত্তর দেখান",
+    review_again: "আবার",
+    review_hard: "কঠিন",
+    review_good: "ভালো",
+    review_easy: "সহজ",
+    review_complete: "পর্যালোচনা সম্পূর্ণ!",
+    review_complete_message: "আজ আপনি {count}টি কার্ড পর্যালোচনা করেছেন।",
+    review_back_home: "হোমে ফিরে যান",
+
+    // Stats page
+    stats_title: "পরিসংখ্যান",
+    stats_streak: "দিনের ধারা",
+    stats_total_words: "মোট শব্দ",
+    stats_mastered: "আয়ত্ত",
+    stats_due_today: "আজ বাকি",
+    stats_vocabulary_growth: "শব্দভাণ্ডার বৃদ্ধি",
+    stats_last_7_days: "গত ৭ দিন",
+    stats_30_days_ago: "৩০ দিন আগে",
+    stats_today: "আজ",
+    stats_mastery_distribution: "আয়ত্ত বিতরণ",
+    stats_videos_studied: "অধ্যয়নকৃত ভিডিও",
+    stats_no_videos: "এখনো কোনো ভিডিও নেই",
+    stats_word_count: "{count}টি শব্দ",
+
+    // Settings page
+    settings_title: "সেটিংস",
+    settings_account: "অ্যাকাউন্ট",
+    settings_email: "ইমেইল",
+    settings_member_since: "সদস্য হয়েছেন",
+    settings_appearance: "চেহারা",
+    settings_theme: "থিম",
+    settings_theme_light: "লাইট",
+    settings_theme_dark: "ডার্ক",
+    settings_theme_system: "সিস্টেম",
+    settings_language: "ভাষা",
+    settings_learning: "শেখা",
+    settings_daily_goal: "দৈনিক লক্ষ্য",
+    settings_daily_goal_unit: "শব্দ/দিন",
+    settings_sync: "সিঙ্ক",
+    settings_sync_enabled: "সিঙ্ক সক্রিয়",
+    settings_sync_desc:
+      "এক্সটেনশন এবং ওয়েবসাইটের মধ্যে শব্দভাণ্ডার সিঙ্ক করুন",
+    settings_logout: "লগ আউট",
+    settings_login_hint:
+      "ডিভাইস জুড়ে আপনার শব্দভাণ্ডার সিঙ্ক করতে সাইন ইন করুন",
+    settings_google_login: "Google দিয়ে সাইন ইন",
+    settings_data: "ডেটা",
+    settings_export: "ডেটা এক্সপোর্ট করুন",
+    settings_export_desc: "সমস্ত {count}টি শব্দ JSON ফাইল হিসাবে ডাউনলোড করুন",
+    settings_export_btn: "এক্সপোর্ট",
+    settings_danger: "বিপদ এলাকা",
+    settings_delete_account: "অ্যাকাউন্ট মুছুন",
+    settings_delete_account_desc:
+      "স্থায়ীভাবে আপনার অ্যাকাউন্ট এবং সমস্ত ডেটা মুছুন",
+
+    // Word card
+    word_context: "প্রসঙ্গ",
+    word_from_video: "ভিডিও থেকে",
+    word_added: "যোগ করা হয়েছে",
+
+    // Common
+    loading: "লোড হচ্ছে...",
+    save: "সংরক্ষণ",
+    cancel: "বাতিল",
+    delete: "মুছুন",
+    edit: "সম্পাদনা",
+    close: "বন্ধ",
+
+    // Privacy page
+    privacy_title: "গোপনীয়তা নীতি",
+    privacy_updated: "সর্বশেষ আপডেট: জানুয়ারি ২০২৫",
+    privacy_intro_title: "ভূমিকা",
+    privacy_intro_text:
+      "CC Plus আপনার গোপনীয়তা রক্ষা করতে প্রতিশ্রুতিবদ্ধ। এই গোপনীয়তা নীতি ব্যাখ্যা করে যে আমরা কীভাবে আপনার ব্রাউজার এক্সটেনশন এবং ওয়েবসাইট ব্যবহার করার সময় আপনার তথ্য সংগ্রহ, ব্যবহার এবং সুরক্ষিত করি।",
+    privacy_collect_title: "আমরা যে ডেটা সংগ্রহ করি",
+    privacy_collect_vocab: "শব্দভাণ্ডার ডেটা",
+    privacy_collect_vocab_desc:
+      "আপনার সংরক্ষিত শব্দ, প্রসঙ্গ বাক্য এবং ভিডিও উৎস সহ। ডিফল্টরূপে আপনার ব্রাউজারে স্থানীয়ভাবে সংরক্ষিত।",
+    privacy_collect_account: "অ্যাকাউন্ট তথ্য",
+    privacy_collect_account_desc:
+      "আপনি যদি Google দিয়ে সাইন ইন করেন, আমরা শুধুমাত্র প্রমাণীকরণের উদ্দেশ্যে আপনার ইমেইল এবং প্রোফাইল নাম পাই।",
+    privacy_collect_analytics: "ব্যবহার বিশ্লেষণ",
+    privacy_collect_analytics_desc:
+      "আমাদের সেবা উন্নত করতে বেনামে ব্যবহারের পরিসংখ্যান সংগ্রহ করতে আমরা Google Analytics ব্যবহার করি।",
+    privacy_storage_title: "ডেটা সংরক্ষণ",
+    privacy_storage_local: "স্থানীয় সংরক্ষণ",
+    privacy_storage_local_desc:
+      "আপনার শব্দভাণ্ডার IndexedDB-তে স্থানীয়ভাবে সংরক্ষিত এবং অফলাইনে কাজ করে।",
+    privacy_storage_cloud: "ক্লাউড সিঙ্ক",
+    privacy_storage_cloud_desc:
+      "আপনি সাইন ইন করলে, ক্রস-ডিভাইস অ্যাক্সেসের জন্য ডেটা Firebase-এ সিঙ্ক হয়।",
+    privacy_sharing_title: "ডেটা শেয়ারিং",
+    privacy_sharing_text:
+      "আমরা আপনার ব্যক্তিগত ডেটা বিক্রি বা শেয়ার করি না, এই সেবা প্রদানকারীদের ছাড়া:",
+    privacy_sharing_firebase: "Firebase (Google) - প্রমাণীকরণ এবং সংরক্ষণ",
+    privacy_sharing_analytics: "Google Analytics - ব্যবহার পরিসংখ্যান",
+    privacy_rights_title: "আপনার অধিকার",
+    privacy_rights_export: "আপনার ডেটা এক্সপোর্ট করুন",
+    privacy_rights_delete: "আপনার অ্যাকাউন্ট মুছুন",
+    privacy_rights_no_account: "অ্যাকাউন্ট ছাড়া ব্যবহার করুন",
+    privacy_contact_title: "প্রশ্ন আছে?",
+    privacy_contact_text:
+      "এই গোপনীয়তা নীতি সম্পর্কে আপনার প্রশ্ন থাকলে, আমাদের সাথে যোগাযোগ করুন:",
+    privacy_back: "সেটিংসে ফিরে যান",
+
+    // Terms page
+    terms_title: "সেবার শর্তাবলী",
+    terms_updated: "সর্বশেষ আপডেট: জানুয়ারি ২০২৫",
+    terms_accept_title: "শর্তাবলী গ্রহণ",
+    terms_accept_text:
+      "CC Plus ব্রাউজার এক্সটেনশন এবং ওয়েবসাইট ব্যবহার করে, আপনি এই সেবার শর্তাবলীতে সম্মত হন। আপনি সম্মত না হলে, দয়া করে আমাদের সেবা ব্যবহার করবেন না।",
+    terms_service_title: "সেবার বিবরণ",
+    terms_service_text:
+      "CC Plus একটি ভাষা শেখার টুল যা আপনাকে YouTube ভিডিও থেকে শব্দভাণ্ডার সংরক্ষণ করতে, স্পেসড রিপিটিশন ব্যবহার করে শব্দ পর্যালোচনা করতে এবং ডিভাইস জুড়ে আপনার অগ্রগতি সিঙ্ক করতে সাহায্য করে।",
+    terms_responsibility_title: "ব্যবহারকারীর দায়িত্ব",
+    terms_responsibility_1: "আপনার অ্যাকাউন্টের নিরাপত্তা বজায় রাখুন",
+    terms_responsibility_2: "আমাদের সেবার অপব্যবহার করবেন না",
+    terms_responsibility_3: "YouTube-এর সেবার শর্তাবলী মেনে চলুন",
+    terms_ip_title: "মেধা সম্পত্তি",
+    terms_ip_text:
+      "CC Plus এক্সটেনশন, ওয়েবসাইট এবং সংশ্লিষ্ট বিষয়বস্তু কপিরাইট দ্বারা সুরক্ষিত। অনুমতি ছাড়া আপনি আমাদের সফ্টওয়্যার কপি, পরিবর্তন বা বিতরণ করতে পারবেন না।",
+    terms_data_title: "আপনার ডেটা",
+    terms_data_text:
+      "আপনি আপনার তৈরি শব্দভাণ্ডার ডেটার মালিকানা বজায় রাখেন। আমরা শুধুমাত্র সেবা প্রদানের জন্য আপনার ডেটা সংরক্ষণ এবং প্রক্রিয়া করি।",
+    terms_disclaimer_title: "দাবিত্যাগ",
+    terms_disclaimer_text:
+      'CC Plus কোনো ধরনের ওয়ারেন্টি ছাড়াই "যেমন আছে" প্রদান করা হয়। আমরা YouTube বা Google-এর সাথে সম্পর্কিত নই।',
+    terms_liability_title: "দায়বদ্ধতার সীমাবদ্ধতা",
+    terms_liability_text:
+      "আইন দ্বারা অনুমোদিত সর্বাধিক পরিমাণে, CC Plus কোনো পরোক্ষ, আকস্মিক বা পরিণতিমূলক ক্ষতির জন্য দায়ী থাকবে না।",
+    terms_termination_title: "সমাপ্তি",
+    terms_termination_text:
+      "আমরা যেকোনো সময় আমাদের সেবায় অ্যাক্সেস স্থগিত বা সমাপ্ত করার অধিকার সংরক্ষণ করি। আপনি যেকোনো সময় আমাদের সেবা ব্যবহার বন্ধ করতে পারেন।",
+    terms_changes_title: "শর্তাবলী পরিবর্তন",
+    terms_changes_text:
+      "আমরা সময়ে সময়ে এই শর্তাবলী আপডেট করতে পারি। পরিবর্তনের পরে সেবার অব্যাহত ব্যবহার গ্রহণযোগ্যতা গঠন করে।",
+    terms_back: "সেটিংসে ফিরে যান",
+  },
+
+  pt: {
+    // Nav
+    nav_home: "Início",
+    nav_words: "Palavras",
+    nav_review: "Revisar",
+    nav_stats: "Estatísticas",
+    nav_settings: "Configurações",
+
+    // Home page
+    home_title: "Aprenda idiomas com o YouTube",
+    home_subtitle:
+      "Salve vocabulário de vídeos, revise com repetição espaçada e domine novas palavras sem esforço.",
+    home_get_extension: "Obter Extensão",
+    home_view_words: "Ver Minhas Palavras",
+    home_feature_captions: "Legendas Interativas",
+    home_feature_captions_desc:
+      "Clique em qualquer palavra nas legendas para salvá-la",
+    home_feature_sync: "Sincronização na Nuvem",
+    home_feature_sync_desc:
+      "Seu vocabulário sincroniza entre a extensão e o site",
+    home_feature_review: "Revisão Inteligente",
+    home_feature_review_desc:
+      "O algoritmo SM-2 agenda revisões em intervalos ideais",
+
+    // Words page
+    words_title: "Meu Vocabulário",
+    words_search_placeholder: "Buscar palavras...",
+    words_filter_all: "Todas",
+    words_filter_new: "Novas",
+    words_filter_learning: "Aprendendo",
+    words_filter_mastered: "Dominadas",
+    words_empty: "Nenhuma palavra encontrada",
+    words_empty_hint: "Comece a salvar palavras de vídeos do YouTube!",
+    words_count: "{count} palavras",
+
+    // Review page
+    review_title: "Revisar",
+    review_due_today: "Pendentes Hoje",
+    review_start: "Iniciar Revisão",
+    review_no_cards: "Nenhum cartão para revisar",
+    review_no_cards_hint:
+      "Ótimo trabalho! Volte mais tarde para mais revisões.",
+    review_show_answer: "Mostrar Resposta",
+    review_again: "De novo",
+    review_hard: "Difícil",
+    review_good: "Bom",
+    review_easy: "Fácil",
+    review_complete: "Revisão Concluída!",
+    review_complete_message: "Você revisou {count} cartões hoje.",
+    review_back_home: "Voltar ao Início",
+
+    // Stats page
+    stats_title: "Estatísticas",
+    stats_streak: "Sequência de Dias",
+    stats_total_words: "Total de Palavras",
+    stats_mastered: "Dominadas",
+    stats_due_today: "Pendentes Hoje",
+    stats_vocabulary_growth: "Crescimento do Vocabulário",
+    stats_last_7_days: "Últimos 7 Dias",
+    stats_30_days_ago: "30 dias atrás",
+    stats_today: "Hoje",
+    stats_mastery_distribution: "Distribuição de Domínio",
+    stats_videos_studied: "Vídeos Estudados",
+    stats_no_videos: "Nenhum vídeo ainda",
+    stats_word_count: "{count} palavras",
+
+    // Settings page
+    settings_title: "Configurações",
+    settings_account: "Conta",
+    settings_email: "Email",
+    settings_member_since: "Membro desde",
+    settings_appearance: "Aparência",
+    settings_theme: "Tema",
+    settings_theme_light: "Claro",
+    settings_theme_dark: "Escuro",
+    settings_theme_system: "Sistema",
+    settings_language: "Idioma",
+    settings_learning: "Aprendizado",
+    settings_daily_goal: "Meta Diária",
+    settings_daily_goal_unit: "palavras/dia",
+    settings_sync: "Sincronização",
+    settings_sync_enabled: "Sincronização Ativada",
+    settings_sync_desc: "Sincronizar vocabulário entre extensão e site",
+    settings_logout: "Sair",
+    settings_login_hint:
+      "Entre para sincronizar seu vocabulário entre dispositivos",
+    settings_google_login: "Entrar com Google",
+    settings_data: "Dados",
+    settings_export: "Exportar Dados",
+    settings_export_desc: "Baixar todas as {count} palavras como arquivo JSON",
+    settings_export_btn: "Exportar",
+    settings_danger: "Zona de Perigo",
+    settings_delete_account: "Excluir Conta",
+    settings_delete_account_desc:
+      "Exclua permanentemente sua conta e todos os dados",
+
+    // Word card
+    word_context: "Contexto",
+    word_from_video: "Do vídeo",
+    word_added: "Adicionada",
+
+    // Common
+    loading: "Carregando...",
+    save: "Salvar",
+    cancel: "Cancelar",
+    delete: "Excluir",
+    edit: "Editar",
+    close: "Fechar",
+
+    // Privacy page
+    privacy_title: "Política de Privacidade",
+    privacy_updated: "Última atualização: Janeiro de 2025",
+    privacy_intro_title: "Introdução",
+    privacy_intro_text:
+      "O CC Plus está comprometido em proteger sua privacidade. Esta Política de Privacidade explica como coletamos, usamos e protegemos suas informações quando você usa nossa extensão de navegador e site.",
+    privacy_collect_title: "Dados que Coletamos",
+    privacy_collect_vocab: "Dados de Vocabulário",
+    privacy_collect_vocab_desc:
+      "Palavras que você salva, incluindo frases de contexto e fontes de vídeo. Armazenadas localmente no seu navegador por padrão.",
+    privacy_collect_account: "Informações da Conta",
+    privacy_collect_account_desc:
+      "Se você entrar com o Google, recebemos seu email e nome de perfil apenas para autenticação.",
+    privacy_collect_analytics: "Análise de Uso",
+    privacy_collect_analytics_desc:
+      "Usamos o Google Analytics para coletar estatísticas de uso anônimas para melhorar nosso serviço.",
+    privacy_storage_title: "Armazenamento de Dados",
+    privacy_storage_local: "Armazenamento Local",
+    privacy_storage_local_desc:
+      "Seu vocabulário é armazenado localmente no IndexedDB e funciona offline.",
+    privacy_storage_cloud: "Sincronização na Nuvem",
+    privacy_storage_cloud_desc:
+      "Se você entrar, os dados sincronizam com o Firebase para acesso entre dispositivos.",
+    privacy_sharing_title: "Compartilhamento de Dados",
+    privacy_sharing_text:
+      "Não vendemos nem compartilhamos seus dados pessoais, exceto com estes provedores de serviços:",
+    privacy_sharing_firebase:
+      "Firebase (Google) - Autenticação e Armazenamento",
+    privacy_sharing_analytics: "Google Analytics - Estatísticas de Uso",
+    privacy_rights_title: "Seus Direitos",
+    privacy_rights_export: "Exportar seus dados",
+    privacy_rights_delete: "Excluir sua conta",
+    privacy_rights_no_account: "Usar sem conta",
+    privacy_contact_title: "Dúvidas?",
+    privacy_contact_text:
+      "Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato:",
+    privacy_back: "Voltar às Configurações",
+
+    // Terms page
+    terms_title: "Termos de Serviço",
+    terms_updated: "Última atualização: Janeiro de 2025",
+    terms_accept_title: "Aceitação dos Termos",
+    terms_accept_text:
+      "Ao usar a extensão de navegador e o site CC Plus, você concorda com estes Termos de Serviço. Se você não concordar, por favor não use nossos serviços.",
+    terms_service_title: "Descrição do Serviço",
+    terms_service_text:
+      "O CC Plus é uma ferramenta de aprendizado de idiomas que ajuda você a salvar vocabulário de vídeos do YouTube, revisar palavras usando repetição espaçada e sincronizar seu progresso entre dispositivos.",
+    terms_responsibility_title: "Responsabilidades do Usuário",
+    terms_responsibility_1: "Manter a segurança da sua conta",
+    terms_responsibility_2: "Não fazer mau uso dos nossos serviços",
+    terms_responsibility_3: "Cumprir os Termos de Serviço do YouTube",
+    terms_ip_title: "Propriedade Intelectual",
+    terms_ip_text:
+      "A extensão CC Plus, site e conteúdo associado são protegidos por direitos autorais. Você não pode copiar, modificar ou distribuir nosso software sem permissão.",
+    terms_data_title: "Seus Dados",
+    terms_data_text:
+      "Você mantém a propriedade dos dados de vocabulário que cria. Apenas armazenamos e processamos seus dados para fornecer o serviço.",
+    terms_disclaimer_title: "Isenção de Responsabilidade",
+    terms_disclaimer_text:
+      'O CC Plus é fornecido "como está" sem garantias de qualquer tipo. Não somos afiliados ao YouTube ou Google.',
+    terms_liability_title: "Limitação de Responsabilidade",
+    terms_liability_text:
+      "Na máxima extensão permitida por lei, o CC Plus não será responsável por quaisquer danos indiretos, incidentais ou consequenciais.",
+    terms_termination_title: "Rescisão",
+    terms_termination_text:
+      "Reservamos o direito de suspender ou encerrar o acesso aos nossos serviços a qualquer momento. Você pode parar de usar nossos serviços a qualquer momento.",
+    terms_changes_title: "Alterações nos Termos",
+    terms_changes_text:
+      "Podemos atualizar estes Termos de tempos em tempos. O uso continuado do serviço após as alterações constitui aceitação.",
+    terms_back: "Voltar às Configurações",
+  },
+
+  ru: {
+    // Nav
+    nav_home: "Главная",
+    nav_words: "Слова",
+    nav_review: "Повторение",
+    nav_stats: "Статистика",
+    nav_settings: "Настройки",
+
+    // Home page
+    home_title: "Изучайте языки с YouTube",
+    home_subtitle:
+      "Сохраняйте словарный запас из видео, повторяйте с интервальным повторением и легко осваивайте новые слова.",
+    home_get_extension: "Получить расширение",
+    home_view_words: "Мои слова",
+    home_feature_captions: "Интерактивные субтитры",
+    home_feature_captions_desc:
+      "Нажмите на любое слово в субтитрах, чтобы сохранить его",
+    home_feature_sync: "Облачная синхронизация",
+    home_feature_sync_desc:
+      "Ваш словарь синхронизируется между расширением и сайтом",
+    home_feature_review: "Умное повторение",
+    home_feature_review_desc:
+      "Алгоритм SM-2 планирует повторения с оптимальными интервалами",
+
+    // Words page
+    words_title: "Мой словарь",
+    words_search_placeholder: "Поиск слов...",
+    words_filter_all: "Все",
+    words_filter_new: "Новые",
+    words_filter_learning: "Изучаемые",
+    words_filter_mastered: "Освоенные",
+    words_empty: "Слова не найдены",
+    words_empty_hint: "Начните сохранять слова из видео YouTube!",
+    words_count: "{count} слов",
+
+    // Review page
+    review_title: "Повторение",
+    review_due_today: "На сегодня",
+    review_start: "Начать повторение",
+    review_no_cards: "Нет карточек для повторения",
+    review_no_cards_hint: "Отлично! Возвращайтесь позже для новых повторений.",
+    review_show_answer: "Показать ответ",
+    review_again: "Снова",
+    review_hard: "Сложно",
+    review_good: "Хорошо",
+    review_easy: "Легко",
+    review_complete: "Повторение завершено!",
+    review_complete_message: "Сегодня вы повторили {count} карточек.",
+    review_back_home: "На главную",
+
+    // Stats page
+    stats_title: "Статистика",
+    stats_streak: "Дней подряд",
+    stats_total_words: "Всего слов",
+    stats_mastered: "Освоено",
+    stats_due_today: "На сегодня",
+    stats_vocabulary_growth: "Рост словаря",
+    stats_last_7_days: "Последние 7 дней",
+    stats_30_days_ago: "30 дней назад",
+    stats_today: "Сегодня",
+    stats_mastery_distribution: "Распределение освоения",
+    stats_videos_studied: "Изученные видео",
+    stats_no_videos: "Пока нет видео",
+    stats_word_count: "{count} слов",
+
+    // Settings page
+    settings_title: "Настройки",
+    settings_account: "Аккаунт",
+    settings_email: "Email",
+    settings_member_since: "Участник с",
+    settings_appearance: "Внешний вид",
+    settings_theme: "Тема",
+    settings_theme_light: "Светлая",
+    settings_theme_dark: "Тёмная",
+    settings_theme_system: "Системная",
+    settings_language: "Язык",
+    settings_learning: "Обучение",
+    settings_daily_goal: "Дневная цель",
+    settings_daily_goal_unit: "слов/день",
+    settings_sync: "Синхронизация",
+    settings_sync_enabled: "Синхронизация включена",
+    settings_sync_desc: "Синхронизировать словарь между расширением и сайтом",
+    settings_logout: "Выйти",
+    settings_login_hint:
+      "Войдите, чтобы синхронизировать словарь между устройствами",
+    settings_google_login: "Войти через Google",
+    settings_data: "Данные",
+    settings_export: "Экспорт данных",
+    settings_export_desc: "Скачать все {count} слов в формате JSON",
+    settings_export_btn: "Экспорт",
+    settings_danger: "Опасная зона",
+    settings_delete_account: "Удалить аккаунт",
+    settings_delete_account_desc: "Навсегда удалить ваш аккаунт и все данные",
+
+    // Word card
+    word_context: "Контекст",
+    word_from_video: "Из видео",
+    word_added: "Добавлено",
+
+    // Common
+    loading: "Загрузка...",
+    save: "Сохранить",
+    cancel: "Отмена",
+    delete: "Удалить",
+    edit: "Редактировать",
+    close: "Закрыть",
+
+    // Privacy page
+    privacy_title: "Политика конфиденциальности",
+    privacy_updated: "Последнее обновление: Январь 2025",
+    privacy_intro_title: "Введение",
+    privacy_intro_text:
+      "CC Plus стремится защитить вашу конфиденциальность. Эта Политика конфиденциальности объясняет, как мы собираем, используем и защищаем вашу информацию при использовании расширения браузера и сайта.",
+    privacy_collect_title: "Данные, которые мы собираем",
+    privacy_collect_vocab: "Данные словаря",
+    privacy_collect_vocab_desc:
+      "Сохранённые слова, включая контекстные предложения и источники видео. По умолчанию хранятся локально в браузере.",
+    privacy_collect_account: "Информация об аккаунте",
+    privacy_collect_account_desc:
+      "При входе через Google мы получаем ваш email и имя профиля только для аутентификации.",
+    privacy_collect_analytics: "Аналитика использования",
+    privacy_collect_analytics_desc:
+      "Мы используем Google Analytics для сбора анонимной статистики использования для улучшения сервиса.",
+    privacy_storage_title: "Хранение данных",
+    privacy_storage_local: "Локальное хранилище",
+    privacy_storage_local_desc:
+      "Ваш словарь хранится локально в IndexedDB и работает офлайн.",
+    privacy_storage_cloud: "Облачная синхронизация",
+    privacy_storage_cloud_desc:
+      "При входе данные синхронизируются с Firebase для доступа с разных устройств.",
+    privacy_sharing_title: "Передача данных",
+    privacy_sharing_text:
+      "Мы не продаём и не передаём ваши личные данные, за исключением этих поставщиков услуг:",
+    privacy_sharing_firebase: "Firebase (Google) - Аутентификация и хранение",
+    privacy_sharing_analytics: "Google Analytics - Статистика использования",
+    privacy_rights_title: "Ваши права",
+    privacy_rights_export: "Экспортировать данные",
+    privacy_rights_delete: "Удалить аккаунт",
+    privacy_rights_no_account: "Использовать без аккаунта",
+    privacy_contact_title: "Вопросы?",
+    privacy_contact_text:
+      "Если у вас есть вопросы об этой Политике конфиденциальности, свяжитесь с нами:",
+    privacy_back: "Назад к настройкам",
+
+    // Terms page
+    terms_title: "Условия использования",
+    terms_updated: "Последнее обновление: Январь 2025",
+    terms_accept_title: "Принятие условий",
+    terms_accept_text:
+      "Используя расширение браузера и сайт CC Plus, вы соглашаетесь с этими Условиями использования. Если вы не согласны, пожалуйста, не используйте наши услуги.",
+    terms_service_title: "Описание сервиса",
+    terms_service_text:
+      "CC Plus — это инструмент для изучения языков, который помогает сохранять словарный запас из видео YouTube, повторять слова с помощью интервального повторения и синхронизировать прогресс между устройствами.",
+    terms_responsibility_title: "Обязанности пользователя",
+    terms_responsibility_1: "Обеспечивать безопасность аккаунта",
+    terms_responsibility_2: "Не злоупотреблять нашими услугами",
+    terms_responsibility_3: "Соблюдать Условия использования YouTube",
+    terms_ip_title: "Интеллектуальная собственность",
+    terms_ip_text:
+      "Расширение CC Plus, сайт и связанный контент защищены авторским правом. Вы не можете копировать, изменять или распространять наше программное обеспечение без разрешения.",
+    terms_data_title: "Ваши данные",
+    terms_data_text:
+      "Вы сохраняете право собственности на созданные данные словаря. Мы храним и обрабатываем ваши данные только для предоставления услуги.",
+    terms_disclaimer_title: "Отказ от ответственности",
+    terms_disclaimer_text:
+      'CC Plus предоставляется "как есть" без каких-либо гарантий. Мы не связаны с YouTube или Google.',
+    terms_liability_title: "Ограничение ответственности",
+    terms_liability_text:
+      "В максимальной степени, разрешённой законом, CC Plus не несёт ответственности за любые косвенные, случайные или последующие убытки.",
+    terms_termination_title: "Прекращение",
+    terms_termination_text:
+      "Мы оставляем за собой право приостановить или прекратить доступ к нашим услугам в любое время. Вы можете прекратить использование наших услуг в любое время.",
+    terms_changes_title: "Изменение условий",
+    terms_changes_text:
+      "Мы можем время от времени обновлять эти Условия. Продолжение использования сервиса после изменений означает принятие.",
+    terms_back: "Назад к настройкам",
   },
 } as const;
 

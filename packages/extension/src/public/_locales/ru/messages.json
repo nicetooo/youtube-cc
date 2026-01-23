@@ -1,0 +1,77 @@
+{
+  "extName": {
+    "message": "CC Plus - Субтитры YouTube и Конструктор Словаря"
+  },
+  "extDescription": {
+    "message": "Двуязычные субтитры, перевод выделенного текста, конструктор словаря с интервальным повторением, поиск комментариев, широкий экран и без рекламы."
+  },
+  "display_transcription": {
+    "message": "Показать Транскрипцию"
+  },
+  "search_transcription": {
+    "message": "Поиск Транскрипции"
+  },
+  "transcription": {
+    "message": "Транскрипция"
+  },
+  "wide_screen": {
+    "message": "Широкий Экран"
+  },
+  "skip_video_ads": {
+    "message": "Пропустить Видеорекламу"
+  },
+  "remove_ad_items": {
+    "message": "Удалить Рекламу"
+  },
+  "side_comments": {
+    "message": "Боковые Комментарии"
+  },
+  "search_comment": {
+    "message": "Поиск Комментария"
+  },
+  "word_selection": {
+    "message": "Перевод Выделением"
+  },
+  "transcription_sub": {
+    "message": "Интерактивная транскрипция на боковой панели"
+  },
+  "wide_screen_sub": {
+    "message": "Автоматически максимизирует погружение"
+  },
+  "remove_ad_items_sub": {
+    "message": "Более чистые баннеры и элементы интерфейса"
+  },
+  "skip_video_ads_sub": {
+    "message": "Автоматически пропускать видеорекламу"
+  },
+  "side_comments_sub": {
+    "message": "Переместить комментарии вправо"
+  },
+  "search_comment_sub": {
+    "message": "Поиск и фильтрация комментариев"
+  },
+  "word_selection_sub": {
+    "message": "Выделите текст для перевода и сохранения слов"
+  },
+  "save_word": {
+    "message": "Сохранить Слово"
+  },
+  "word_saved": {
+    "message": "Слово Сохранено"
+  },
+  "translation": {
+    "message": "Перевод"
+  },
+  "context": {
+    "message": "Контекст"
+  },
+  "source": {
+    "message": "Источник"
+  },
+  "vocabulary": {
+    "message": "Словарь"
+  },
+  "review": {
+    "message": "Повторить"
+  }
+}
