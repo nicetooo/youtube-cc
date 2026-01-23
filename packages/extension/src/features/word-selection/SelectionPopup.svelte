@@ -292,8 +292,13 @@
   <!-- Header: Selected text + speak button -->
   <div class="popup-header">
     <div class="header-text">
-      <span class="selected-text">{text}</span>
-      {#if srcTranslit}
+      <div class="selected-text-row">
+        <span class="selected-text">{text}</span>
+        {#if detectedLang}
+          <span class="lang-badge">{detectedLang}</span>
+        {/if}
+      </div>
+      {#if srcTranslit && !isMyLanguage(detectedLang)}
         <span class="phonetic">/{srcTranslit}/</span>
       {/if}
     </div>
@@ -348,7 +353,7 @@
       <div class="translation-row">
         <div class="translation-content">
           <p class="translation">{translation}</p>
-          {#if translit}
+          {#if translit && isMyLanguage(detectedLang)}
             <span class="phonetic translation-phonetic">/{translit}/</span>
           {/if}
         </div>
@@ -402,13 +407,6 @@
               {/if}
             </div>
           {/each}
-        </div>
-      {/if}
-
-      <!-- Detected language badge -->
-      {#if detectedLang}
-        <div class="detected-lang">
-          <span class="lang-badge">{detectedLang}</span>
         </div>
       {/if}
     {/if}

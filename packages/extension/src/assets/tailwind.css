@@ -90,7 +90,7 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.4;
   overflow: hidden;
 }
@@ -111,14 +111,21 @@
   min-width: 0;
 }
 
+.cc-plus-selection-popup .selected-text-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
 .cc-plus-selection-popup .selected-text {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
   word-break: break-word;
 }
 
 .cc-plus-selection-popup .phonetic {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--popup-text-secondary);
   font-style: italic;
 }
@@ -306,24 +313,20 @@
 }
 
 .cc-plus-selection-popup .synonym-tags {
-  color: var(--popup-text-secondary);
-  font-size: 10px;
-}
-
-.cc-plus-selection-popup .detected-lang {
-  margin-top: 8px;
-  display: flex;
-  justify-content: flex-end;
+  color: var(--popup-text);
+  opacity: 0.8;
+  font-size: 11px;
 }
 
 .cc-plus-selection-popup .lang-badge {
-  padding: 2px 6px;
+  padding: 1px 5px;
   background: var(--popup-button-bg);
   color: var(--popup-text-secondary);
   border-radius: 4px;
   font-size: 10px;
   font-weight: 500;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 .cc-plus-selection-popup .popup-footer {
