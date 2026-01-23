@@ -1,5 +1,10 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
+  import {
+    getAdSelectors,
+    SELECTORS_STORAGE_KEY,
+    type AdSelectors,
+  } from "./ad-selectors";
 
   let {
     isEnlargeSkipButtonOn,
@@ -7,16 +12,26 @@
     isEnlargeSkipButtonOn: boolean;
   } = $props();
 
-  const SKIP_BUTTON_SELECTOR = ".ytp-skip-ad-button";
   const PLAYER_SELECTOR = "#movie_player";
   const STYLE_ID = "ccplus-enlarge-skip-button-style";
+
+  let selectors = $state<AdSelectors | null>(null);
+  let storageChangeHandler:
+    | ((
+        changes: { [key: string]: chrome.storage.StorageChange },
+        area: string
+      ) => void)
+    | null = null;
 
   let observer: MutationObserver | null = null;
 
   function applyEnlargeStyle() {
+    if (!selectors) return;
+
+    const skipButtonSelector = selectors.AD_SKIP_SELECTORS.SKIP_BUTTON;
     const player = document.querySelector(PLAYER_SELECTOR) as HTMLElement;
     const skipButton = document.querySelector(
-      SKIP_BUTTON_SELECTOR
+      skipButtonSelector
     ) as HTMLElement;
 
     if (!player || !skipButton) return;
@@ -36,7 +51,7 @@
     const style = document.createElement("style");
     style.id = STYLE_ID;
     style.textContent = `
-      ${SKIP_BUTTON_SELECTOR} {
+      ${skipButtonSelector} {
         width: ${newWidth}px !important;
         height: ${newHeight}px !important;
         font-size: 24px !important;
@@ -56,12 +71,14 @@
   }
 
   function checkAndApplyStyle() {
-    if (!isEnlargeSkipButtonOn) {
+    if (!isEnlargeSkipButtonOn || !selectors) {
       removeStyle();
       return;
     }
 
-    const skipButton = document.querySelector(SKIP_BUTTON_SELECTOR);
+    const skipButton = document.querySelector(
+      selectors.AD_SKIP_SELECTORS.SKIP_BUTTON
+    );
     if (skipButton) {
       applyEnlargeStyle();
     }
@@ -104,7 +121,19 @@
     }
   });
 
-  onMount(() => {
+  onMount(async () => {
+    // Load selectors from storage
+    selectors = await getAdSelectors();
+
+    // Listen for storage changes (remote updates)
+    storageChangeHandler = (changes, area) => {
+      if (area === "local" && changes[SELECTORS_STORAGE_KEY]) {
+        selectors = changes[SELECTORS_STORAGE_KEY].newValue;
+        checkAndApplyStyle();
+      }
+    };
+    chrome.storage.onChanged.addListener(storageChangeHandler);
+
     if (isEnlargeSkipButtonOn) {
       setupObserver();
       checkAndApplyStyle();
@@ -118,6 +147,11 @@
     if (observer) {
       observer.disconnect();
       observer = null;
+    }
+    // Clean up storage listener
+    if (storageChangeHandler) {
+      chrome.storage.onChanged.removeListener(storageChangeHandler);
+      storageChangeHandler = null;
     }
   });
 </script>
