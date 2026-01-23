@@ -218,16 +218,17 @@
         {#each activityData() as week, weekIndex}
           <div class="week-column">
             {#each week as day}
-              <div
-                class="day-cell"
-                class:hidden={day.hidden}
-                style="background-color: {day.hidden
-                  ? 'transparent'
-                  : getColor(day.count)}"
-                title={day.hidden
-                  ? ""
-                  : `${day.count} ${i18n.t("stats_activity_words")} - ${formatDate(day.date)}`}
-              ></div>
+              {#if day.hidden}
+                <div class="day-cell placeholder"></div>
+              {:else}
+                <div
+                  class="day-cell"
+                  style="background-color: {getColor(day.count)}"
+                  title="{day.count} {i18n.t(
+                    'stats_activity_words'
+                  )} - {formatDate(day.date)}"
+                ></div>
+              {/if}
             {/each}
           </div>
         {/each}
@@ -319,13 +320,13 @@
     transition: transform 0.1s ease;
   }
 
-  .day-cell:hover:not(.hidden) {
+  .day-cell:hover:not(.placeholder) {
     transform: scale(1.2);
     outline: 1px solid var(--text-secondary);
   }
 
-  .day-cell.hidden {
-    visibility: hidden;
+  .day-cell.placeholder {
+    background: transparent;
     cursor: default;
   }
 
