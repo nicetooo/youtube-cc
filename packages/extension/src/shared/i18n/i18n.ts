@@ -42,6 +42,8 @@ export const messages = {
     translation_error: "Translation failed",
     word_saved: "Word saved",
     retry: "Retry",
+    refresh_page: "Refresh",
+    extension_updated: "Extension updated, please refresh",
     account: "Account",
     sign_in: "Sign in",
     sign_in_google: "Sign in with Google",
@@ -95,6 +97,8 @@ export const messages = {
     translation_error: "翻译失败",
     word_saved: "已保存",
     retry: "重试",
+    refresh_page: "刷新",
+    extension_updated: "扩展已更新，请刷新页面",
     account: "账户",
     sign_in: "登录",
     sign_in_google: "使用 Google 登录",
@@ -148,6 +152,8 @@ export const messages = {
     translation_error: "翻譯失敗",
     word_saved: "已保存",
     retry: "重試",
+    refresh_page: "重新整理",
+    extension_updated: "擴充功能已更新，請重新整理頁面",
     account: "帳戶",
     sign_in: "登入",
     sign_in_google: "使用 Google 登入",
@@ -201,6 +207,8 @@ export const messages = {
     translation_error: "翻訳に失敗しました",
     word_saved: "保存しました",
     retry: "再試行",
+    refresh_page: "更新",
+    extension_updated: "拡張機能が更新されました。ページを更新してください",
     account: "アカウント",
     sign_in: "ログイン",
     sign_in_google: "Googleでログイン",
@@ -254,6 +262,9 @@ export const messages = {
     translation_error: "번역 실패",
     word_saved: "저장됨",
     retry: "다시 시도",
+    refresh_page: "새로고침",
+    extension_updated:
+      "확장 프로그램이 업데이트되었습니다. 페이지를 새로고침하세요",
     account: "계정",
     sign_in: "로그인",
     sign_in_google: "Google로 로그인",
@@ -305,6 +316,8 @@ export const messages = {
     translation_error: "अनुवाद विफल",
     word_saved: "शब्द सहेजा गया",
     retry: "पुनः प्रयास करें",
+    refresh_page: "रीफ्रेश करें",
+    extension_updated: "एक्सटेंशन अपडेट हो गया, कृपया पेज रीफ्रेश करें",
     account: "खाता",
     sign_in: "साइन इन करें",
     sign_in_google: "Google से साइन इन करें",
@@ -356,6 +369,8 @@ export const messages = {
     translation_error: "Error de traducción",
     word_saved: "Palabra guardada",
     retry: "Reintentar",
+    refresh_page: "Actualizar",
+    extension_updated: "Extensión actualizada, por favor actualice la página",
     account: "Cuenta",
     sign_in: "Iniciar sesión",
     sign_in_google: "Iniciar sesión con Google",
@@ -407,6 +422,8 @@ export const messages = {
     translation_error: "Échec de la traduction",
     word_saved: "Mot sauvegardé",
     retry: "Réessayer",
+    refresh_page: "Actualiser",
+    extension_updated: "Extension mise à jour, veuillez actualiser la page",
     account: "Compte",
     sign_in: "Se connecter",
     sign_in_google: "Se connecter avec Google",
@@ -458,6 +475,8 @@ export const messages = {
     translation_error: "فشلت الترجمة",
     word_saved: "تم حفظ الكلمة",
     retry: "إعادة المحاولة",
+    refresh_page: "تحديث",
+    extension_updated: "تم تحديث الإضافة، يرجى تحديث الصفحة",
     account: "الحساب",
     sign_in: "تسجيل الدخول",
     sign_in_google: "تسجيل الدخول بـ Google",
@@ -509,6 +528,8 @@ export const messages = {
     translation_error: "অনুবাদ ব্যর্থ",
     word_saved: "শব্দ সংরক্ষিত",
     retry: "পুনরায় চেষ্টা করুন",
+    refresh_page: "রিফ্রেশ করুন",
+    extension_updated: "এক্সটেনশন আপডেট হয়েছে, পৃষ্ঠা রিফ্রেশ করুন",
     account: "অ্যাকাউন্ট",
     sign_in: "সাইন ইন করুন",
     sign_in_google: "Google দিয়ে সাইন ইন করুন",
@@ -560,6 +581,8 @@ export const messages = {
     translation_error: "Falha na tradução",
     word_saved: "Palavra salva",
     retry: "Tentar novamente",
+    refresh_page: "Atualizar",
+    extension_updated: "Extensão atualizada, por favor atualize a página",
     account: "Conta",
     sign_in: "Entrar",
     sign_in_google: "Entrar com Google",
@@ -611,6 +634,8 @@ export const messages = {
     translation_error: "Ошибка перевода",
     word_saved: "Слово сохранено",
     retry: "Повторить",
+    refresh_page: "Обновить",
+    extension_updated: "Расширение обновлено, обновите страницу",
     account: "Аккаунт",
     sign_in: "Войти",
     sign_in_google: "Войти через Google",
@@ -634,10 +659,22 @@ export const messages = {
 
 export const i18n = (
   key: keyof (typeof messages)["en"],
-  params?: Record<string, string | number>,
-  language: string = navigator.language
+  paramsOrLanguage?: Record<string, string | number> | string,
+  language?: string
 ) => {
-  let lang = language.replace("-", "_");
+  // Handle flexible signature: i18n(key, language?) or i18n(key, params, language?)
+  let params: Record<string, string | number> | undefined;
+  let lang: string;
+
+  if (typeof paramsOrLanguage === "string") {
+    // Called as i18n(key, language)
+    params = undefined;
+    lang = paramsOrLanguage.replace("-", "_");
+  } else {
+    // Called as i18n(key, params?, language?)
+    params = paramsOrLanguage;
+    lang = (language ?? navigator.language).replace("-", "_");
+  }
 
   // Handle zh variants
   if (lang.startsWith("zh")) {

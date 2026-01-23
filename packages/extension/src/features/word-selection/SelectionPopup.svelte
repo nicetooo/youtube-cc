@@ -79,6 +79,7 @@
   let translit = $state<string | undefined>(); // Translation phonetic/pinyin
   let isLoading = $state(true);
   let error = $state<string | null>(null);
+  let isExtensionInvalidated = $state(false); // Extension updated, needs refresh
   let isSaved = $state(false);
   let isSaving = $state(false);
 
@@ -229,6 +230,7 @@
       console.error("[CC Plus] Translation error:", e);
       const err = e as TranslateError;
       error = err.message || "Translation failed";
+      isExtensionInvalidated = err.code === "EXTENSION_INVALIDATED";
     } finally {
       isLoading = false;
     }
@@ -361,14 +363,28 @@
       </div>
     {:else if error}
       <div class="error">
-        <span>{error}</span>
-        <button
-          class="retry-button"
-          onclick={(e) => {
-            e.stopPropagation();
-            doTranslate();
-          }}>{i18n("retry", myLanguage)}</button
+        <span
+          >{isExtensionInvalidated
+            ? i18n("extension_updated", myLanguage)
+            : error}</span
         >
+        {#if isExtensionInvalidated}
+          <button
+            class="retry-button refresh-button"
+            onclick={(e) => {
+              e.stopPropagation();
+              window.location.reload();
+            }}>{i18n("refresh_page", myLanguage)}</button
+          >
+        {:else}
+          <button
+            class="retry-button"
+            onclick={(e) => {
+              e.stopPropagation();
+              doTranslate();
+            }}>{i18n("retry", myLanguage)}</button
+          >
+        {/if}
       </div>
     {:else}
       <!-- Main translation with speak button -->

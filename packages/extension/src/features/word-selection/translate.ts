@@ -25,7 +25,7 @@ export interface TranslateResult {
 
 export interface TranslateError {
   message: string;
-  code: "NETWORK_ERROR" | "API_ERROR" | "EMPTY_TEXT";
+  code: "NETWORK_ERROR" | "API_ERROR" | "EMPTY_TEXT" | "EXTENSION_INVALIDATED";
 }
 
 /**
@@ -39,6 +39,14 @@ export async function translate(
 ): Promise<TranslateResult> {
   if (!text.trim()) {
     throw { message: "Empty text", code: "EMPTY_TEXT" } as TranslateError;
+  }
+
+  // Check if extension context is still valid
+  if (!chrome.runtime?.id) {
+    throw {
+      message: "Extension updated, please refresh the page",
+      code: "EXTENSION_INVALIDATED",
+    } as TranslateError;
   }
 
   console.log("[CC Plus] Sending translate request:", text, targetLang);
@@ -73,8 +81,19 @@ export async function translate(
     if ((error as TranslateError).code) {
       throw error;
     }
+    // Detect extension context invalidated error
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (
+      errorMessage.includes("Extension context invalidated") ||
+      errorMessage.includes("message port closed")
+    ) {
+      throw {
+        message: "Extension updated, please refresh the page",
+        code: "EXTENSION_INVALIDATED",
+      } as TranslateError;
+    }
     throw {
-      message: error instanceof Error ? error.message : "Network error",
+      message: errorMessage || "Network error",
       code: "NETWORK_ERROR",
     } as TranslateError;
   }
