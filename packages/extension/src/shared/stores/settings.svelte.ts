@@ -48,6 +48,8 @@ export interface ExtensionSettings {
   myLanguage: string;
   // Activity chart
   showActivityChart: boolean;
+  // Enlarge skip ad button
+  enlargeSkipButton: boolean;
 }
 
 // App store state type
@@ -73,6 +75,7 @@ const defaultSettings: ExtensionSettings = {
   targetLanguage: "en",
   myLanguage: defaultMyLanguage,
   showActivityChart: true,
+  enlargeSkipButton: false, // Enlarge skip ad button
 };
 
 /** sync store between popup & content.js */

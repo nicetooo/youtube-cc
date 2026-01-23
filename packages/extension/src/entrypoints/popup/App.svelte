@@ -175,6 +175,7 @@
       | "wideScreen"
       | "sideComment"
       | "commentSearch"
+      | "enlargeSkipButton"
   ) {
     appStore.update((s) => {
       return {
@@ -645,6 +646,29 @@
           >
             <div
               class={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${$appStore.settings.removeAds ? "left-6" : "left-1"}`}
+            ></div>
+          </div>
+        </button>
+
+        <!-- Enlarge Skip Button -->
+        <button
+          on:click={() => toggle("enlargeSkipButton")}
+          class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
+        >
+          <div class="flex flex-col text-left">
+            <span
+              class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
+              >{i18n("enlarge_skip_button")}</span
+            >
+            <span class="text-xs text-[var(--cc-text-muted)]"
+              >{i18n("enlarge_skip_button_sub")}</span
+            >
+          </div>
+          <div
+            class={`w-10 h-5 rounded-full relative transition-colors duration-300 ${($appStore.settings.enlargeSkipButton ?? false) ? "bg-[var(--cc-accent)]" : "bg-[var(--cc-toggle-off)]"}`}
+          >
+            <div
+              class={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${($appStore.settings.enlargeSkipButton ?? false) ? "left-6" : "left-1"}`}
             ></div>
           </div>
         </button>

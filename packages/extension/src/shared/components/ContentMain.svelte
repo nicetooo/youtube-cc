@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import AdSkip from "@/features/ads/AdSkip.svelte";
+  import AdSkipEnlarge from "@/features/ads/AdSkipEnlarge.svelte";
   import AdsRemove from "@/features/ads/AdsRemove.svelte";
   import CaptionList from "@/features/caption/CaptionList.svelte";
   import SideComment from "@/features/comments/SideComment.svelte";
@@ -47,6 +48,9 @@
     <WideScreen isWideScreenOn={$appStore.settings.wideScreen} {port}
     ></WideScreen>
     <AdSkip isAdSkipOn={$appStore.settings.skipAd} {port}></AdSkip>
+    <AdSkipEnlarge
+      isEnlargeSkipButtonOn={$appStore.settings.enlargeSkipButton ?? false}
+    ></AdSkipEnlarge>
     <CommentSearch
       isCommentSearchOn={$appStore.settings.commentSearch}
       isSideComment={$appStore.settings.sideComment}
