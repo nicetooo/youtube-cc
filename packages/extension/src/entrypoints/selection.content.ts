@@ -11,7 +11,8 @@ import {
   getYouTubeTimestamp,
   getPageInfo,
 } from "@/features/word-selection/context-extractor";
-import type { WordSource } from "@aspect/shared";
+import type { WordSource, DailyActivityMap } from "@aspect/shared";
+import { DAILY_ACTIVITY_KEY } from "@aspect/shared/constants";
 
 // WXT content script definition
 // Using runtime registration for optional permission support
@@ -31,6 +32,35 @@ export default defineContentScript({
     let isEnabled = true;
     let targetLanguage = "en";
     let myLanguage = getBrowserLanguage();
+
+    // Increment daily selection count
+    async function incrementSelectionCount() {
+      try {
+        const today = new Date().toISOString().split("T")[0];
+        const result = await chrome.storage.local.get(DAILY_ACTIVITY_KEY);
+        const activityMap: DailyActivityMap = result[DAILY_ACTIVITY_KEY] || {};
+
+        if (!activityMap[today]) {
+          activityMap[today] = {
+            date: today,
+            selectionCount: 0,
+            wordsAdded: 0,
+          };
+        }
+
+        activityMap[today].selectionCount += 1;
+
+        await chrome.storage.local.set({ [DAILY_ACTIVITY_KEY]: activityMap });
+        console.log(
+          "[CC Plus] Selection count for",
+          today,
+          ":",
+          activityMap[today].selectionCount
+        );
+      } catch (error) {
+        console.error("[CC Plus] Failed to increment selection count:", error);
+      }
+    }
 
     // Load settings from storage
     async function loadSettings() {
@@ -120,6 +150,9 @@ export default defineContentScript({
     ) {
       // Close existing popup
       closePopup();
+
+      // Increment selection count for daily activity tracking
+      incrementSelectionCount();
 
       // Ensure shadow container exists
       if (!shadowHost || !shadowRoot) {

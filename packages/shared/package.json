@@ -7,7 +7,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./types": "./src/types/index.ts",
-    "./firebase": "./src/firebase/index.ts"
+    "./firebase": "./src/firebase/index.ts",
+    "./constants": "./src/constants/storage-keys.ts"
   },
   "scripts": {
     "check": "tsc --noEmit"

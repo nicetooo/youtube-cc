@@ -166,6 +166,19 @@ export interface User {
   };
 }
 
+// Daily activity data for tracking user engagement
+export interface DailyActivity {
+  /** Date in YYYY-MM-DD format */
+  date: string;
+  /** Number of words selected/translated */
+  selectionCount: number;
+  /** Number of words added to vocabulary */
+  wordsAdded: number;
+}
+
+// Activity data stored by date (key is YYYY-MM-DD)
+export type DailyActivityMap = Record<string, DailyActivity>;
+
 // Input type for creating a new word
 export type CreateWordInput = {
   text: string;

@@ -108,6 +108,11 @@ export const messages = {
     stats_videos_studied: "Videos Studied",
     stats_no_videos: "No videos yet",
     stats_word_count: "{count} words",
+    stats_activity_title: "Learning Activity",
+    stats_activity_total: "{count} words added in the last year",
+    stats_activity_words: "words",
+    stats_activity_less: "Less",
+    stats_activity_more: "More",
 
     // Settings page
     settings_title: "Settings",
@@ -300,6 +305,11 @@ export const messages = {
     stats_videos_studied: "学习过的视频",
     stats_no_videos: "暂无视频",
     stats_word_count: "{count} 个单词",
+    stats_activity_title: "学习活跃度",
+    stats_activity_total: "过去一年添加了 {count} 个单词",
+    stats_activity_words: "个单词",
+    stats_activity_less: "少",
+    stats_activity_more: "多",
 
     // Settings page
     settings_title: "设置",
@@ -490,6 +500,11 @@ export const messages = {
     stats_videos_studied: "學習過的影片",
     stats_no_videos: "暫無影片",
     stats_word_count: "{count} 個單字",
+    stats_activity_title: "學習活躍度",
+    stats_activity_total: "過去一年添加了 {count} 個單字",
+    stats_activity_words: "個單字",
+    stats_activity_less: "少",
+    stats_activity_more: "多",
 
     // Settings page
     settings_title: "設定",
@@ -682,6 +697,11 @@ export const messages = {
     stats_videos_studied: "学習した動画",
     stats_no_videos: "動画がありません",
     stats_word_count: "{count} 単語",
+    stats_activity_title: "学習アクティビティ",
+    stats_activity_total: "過去1年間で {count} 単語を追加",
+    stats_activity_words: "単語",
+    stats_activity_less: "少",
+    stats_activity_more: "多",
 
     // Settings page
     settings_title: "設定",
@@ -875,6 +895,11 @@ export const messages = {
     stats_videos_studied: "학습한 동영상",
     stats_no_videos: "동영상이 없습니다",
     stats_word_count: "{count}개 단어",
+    stats_activity_title: "학습 활동",
+    stats_activity_total: "지난 1년간 {count}개 단어 추가",
+    stats_activity_words: "개 단어",
+    stats_activity_less: "적음",
+    stats_activity_more: "많음",
 
     // Settings page
     settings_title: "설정",
@@ -1072,6 +1097,11 @@ export const messages = {
     stats_videos_studied: "अध्ययन किए गए वीडियो",
     stats_no_videos: "अभी तक कोई वीडियो नहीं",
     stats_word_count: "{count} शब्द",
+    stats_activity_title: "सीखने की गतिविधि",
+    stats_activity_total: "पिछले वर्ष में {count} शब्द जोड़े",
+    stats_activity_words: "शब्द",
+    stats_activity_less: "कम",
+    stats_activity_more: "अधिक",
 
     // Settings page
     settings_title: "सेटिंग्स",
@@ -1272,6 +1302,11 @@ export const messages = {
     stats_videos_studied: "Videos Estudiados",
     stats_no_videos: "Aún no hay videos",
     stats_word_count: "{count} palabras",
+    stats_activity_title: "Actividad de Aprendizaje",
+    stats_activity_total: "{count} palabras añadidas en el último año",
+    stats_activity_words: "palabras",
+    stats_activity_less: "Menos",
+    stats_activity_more: "Más",
 
     // Settings page
     settings_title: "Configuración",
@@ -1478,6 +1513,11 @@ export const messages = {
     stats_videos_studied: "Vidéos Étudiées",
     stats_no_videos: "Pas encore de vidéos",
     stats_word_count: "{count} mots",
+    stats_activity_title: "Activité d'Apprentissage",
+    stats_activity_total: "{count} mots ajoutés l'année dernière",
+    stats_activity_words: "mots",
+    stats_activity_less: "Moins",
+    stats_activity_more: "Plus",
 
     // Settings page
     settings_title: "Paramètres",
@@ -1675,6 +1715,11 @@ export const messages = {
     stats_videos_studied: "الفيديوهات المدروسة",
     stats_no_videos: "لا توجد فيديوهات بعد",
     stats_word_count: "{count} كلمة",
+    stats_activity_title: "نشاط التعلم",
+    stats_activity_total: "تم إضافة {count} كلمة في العام الماضي",
+    stats_activity_words: "كلمة",
+    stats_activity_less: "أقل",
+    stats_activity_more: "أكثر",
 
     // Settings page
     settings_title: "الإعدادات",
@@ -1873,6 +1918,11 @@ export const messages = {
     stats_videos_studied: "অধ্যয়নকৃত ভিডিও",
     stats_no_videos: "এখনো কোনো ভিডিও নেই",
     stats_word_count: "{count}টি শব্দ",
+    stats_activity_title: "শেখার কার্যকলাপ",
+    stats_activity_total: "গত বছরে {count}টি শব্দ যোগ করা হয়েছে",
+    stats_activity_words: "টি শব্দ",
+    stats_activity_less: "কম",
+    stats_activity_more: "বেশি",
 
     // Settings page
     settings_title: "সেটিংস",
@@ -2075,6 +2125,11 @@ export const messages = {
     stats_videos_studied: "Vídeos Estudados",
     stats_no_videos: "Nenhum vídeo ainda",
     stats_word_count: "{count} palavras",
+    stats_activity_title: "Atividade de Aprendizado",
+    stats_activity_total: "{count} palavras adicionadas no último ano",
+    stats_activity_words: "palavras",
+    stats_activity_less: "Menos",
+    stats_activity_more: "Mais",
 
     // Settings page
     settings_title: "Configurações",
@@ -2276,6 +2331,11 @@ export const messages = {
     stats_videos_studied: "Изученные видео",
     stats_no_videos: "Пока нет видео",
     stats_word_count: "{count} слов",
+    stats_activity_title: "Активность обучения",
+    stats_activity_total: "Добавлено {count} слов за последний год",
+    stats_activity_words: "слов",
+    stats_activity_less: "Меньше",
+    stats_activity_more: "Больше",
 
     // Settings page
     settings_title: "Настройки",

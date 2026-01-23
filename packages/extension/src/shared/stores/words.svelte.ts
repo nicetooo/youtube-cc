@@ -1,8 +1,13 @@
 // Local word storage for the extension
 // Words are stored in chrome.storage.local and synced to Firebase when user logs in
 
-import type { Word, CreateWordInput } from "@aspect/shared";
-import { createWord, WORDS_KEY, PENDING_SYNC_KEY } from "@aspect/shared";
+import type { Word, CreateWordInput, DailyActivityMap } from "@aspect/shared";
+import {
+  createWord,
+  WORDS_KEY,
+  PENDING_SYNC_KEY,
+  DAILY_ACTIVITY_KEY,
+} from "@aspect/shared";
 
 export interface LocalWordStore {
   words: Word[];
@@ -63,6 +68,9 @@ export async function saveWord(input: CreateWordInput): Promise<Word> {
 
     // Add to pending sync queue
     await addToPendingSync(word.id);
+
+    // Increment daily wordsAdded count
+    await incrementWordsAddedCount();
 
     return word;
   } catch (error) {
@@ -182,6 +190,52 @@ export async function getWordStats(): Promise<{
       (w) => w.nextReview >= today && w.nextReview < tomorrow
     ).length,
   };
+}
+
+// ============ Daily Activity Tracking ============
+
+/**
+ * Increment the wordsAdded count for today
+ */
+async function incrementWordsAddedCount(): Promise<void> {
+  try {
+    const today = new Date().toISOString().split("T")[0];
+    const result = await chrome.storage.local.get(DAILY_ACTIVITY_KEY);
+    const activityMap: DailyActivityMap = result[DAILY_ACTIVITY_KEY] || {};
+
+    if (!activityMap[today]) {
+      activityMap[today] = {
+        date: today,
+        selectionCount: 0,
+        wordsAdded: 0,
+      };
+    }
+
+    activityMap[today].wordsAdded += 1;
+
+    await chrome.storage.local.set({ [DAILY_ACTIVITY_KEY]: activityMap });
+    console.log(
+      "[CC Plus] Words added for",
+      today,
+      ":",
+      activityMap[today].wordsAdded
+    );
+  } catch (error) {
+    console.error("[CC Plus] Failed to increment words added count:", error);
+  }
+}
+
+/**
+ * Get daily activity data
+ */
+export async function getDailyActivity(): Promise<DailyActivityMap> {
+  try {
+    const result = await chrome.storage.local.get(DAILY_ACTIVITY_KEY);
+    return result[DAILY_ACTIVITY_KEY] || {};
+  } catch (error) {
+    console.error("[CC Plus] Failed to get daily activity:", error);
+    return {};
+  }
 }
 
 // ============ Pending Sync Queue ============

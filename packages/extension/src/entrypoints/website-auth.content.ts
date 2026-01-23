@@ -116,6 +116,45 @@ export default defineContentScript({
             );
           }
         })();
+      } else if (data.type === "request-extension-activity") {
+        // Handle request for extension's daily activity data
+        console.log("[CC Plus Content] Website requesting extension activity");
+        (async () => {
+          try {
+            const DAILY_ACTIVITY_KEY = "cc_plus_daily_activity";
+            const result = await chrome.storage.local.get(DAILY_ACTIVITY_KEY);
+            const activity = result[DAILY_ACTIVITY_KEY] || {};
+            console.log(
+              "[CC Plus Content] Sending activity data to website:",
+              Object.keys(activity).length,
+              "days"
+            );
+            window.postMessage(
+              {
+                source: "ccplus-extension",
+                type: "extension-activity-response",
+                activity,
+                success: true,
+              },
+              "*"
+            );
+          } catch (e) {
+            console.error(
+              "[CC Plus Content] Failed to get extension activity:",
+              e
+            );
+            window.postMessage(
+              {
+                source: "ccplus-extension",
+                type: "extension-activity-response",
+                activity: {},
+                success: false,
+                error: (e as Error).message,
+              },
+              "*"
+            );
+          }
+        })();
       }
     });
 

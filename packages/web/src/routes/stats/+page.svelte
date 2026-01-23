@@ -2,11 +2,39 @@
   import { wordsStore } from "$lib/stores/words.svelte";
   import { authStore } from "$lib/stores/auth.svelte";
   import { i18n } from "$lib/i18n/index.svelte";
+  import ActivityHeatmap from "$lib/components/ActivityHeatmap.svelte";
+  import {
+    requestExtensionActivity,
+    getExtensionSyncState,
+  } from "$lib/stores/extension-sync.svelte";
+  import { onMount } from "svelte";
+
+  // Daily activity data type
+  type ActivityMap = Record<
+    string,
+    { date: string; selectionCount: number; wordsAdded: number }
+  >;
 
   const words = $derived(wordsStore.words);
   const stats = $derived(wordsStore.stats);
   const videos = $derived(wordsStore.videos);
   const userStats = $derived(authStore.user?.stats);
+
+  // Activity data from extension
+  let activityData = $state<ActivityMap>({});
+
+  // Load activity data from extension on mount
+  onMount(async () => {
+    const syncState = getExtensionSyncState();
+    if (syncState.extensionDetected) {
+      try {
+        activityData = await requestExtensionActivity();
+        console.log("[Stats] Loaded activity data:", activityData);
+      } catch (e) {
+        console.error("[Stats] Failed to load activity data:", e);
+      }
+    }
+  });
 
   // Generate chart data from actual words based on createdAt dates
   function generateChartData() {
@@ -123,6 +151,14 @@
       <div class="text-3xl font-bold text-accent mb-1">{stats.dueToday}</div>
       <div class="text-sm text-secondary">{i18n.t("stats_due_today")}</div>
     </div>
+  </div>
+
+  <!-- Activity heatmap -->
+  <div class="card mb-8">
+    <h2 class="text-sm font-medium text-secondary mb-4">
+      {i18n.t("stats_activity_title")}
+    </h2>
+    <ActivityHeatmap {words} activity={activityData} />
   </div>
 
   <!-- Vocabulary growth chart -->

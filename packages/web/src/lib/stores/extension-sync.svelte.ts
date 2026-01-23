@@ -2,7 +2,7 @@
 // This module handles communication with the CC Plus browser extension
 
 import { browser } from "$app/environment";
-import type { Word } from "@aspect/shared/types";
+import type { Word, DailyActivityMap } from "@aspect/shared/types";
 import { syncFromExtension } from "./indexeddb";
 
 // Extension detection state
@@ -19,6 +19,9 @@ let lastSyncResult = $state<{
 let pendingPongResolve: ((detected: boolean) => void) | null = null;
 let pendingWordsResolve: ((words: Word[]) => void) | null = null;
 let pendingWordsReject: ((error: Error) => void) | null = null;
+let pendingActivityResolve: ((activity: DailyActivityMap) => void) | null =
+  null;
+let pendingActivityReject: ((error: Error) => void) | null = null;
 
 // Callback for when sync completes
 let onSyncCompleteCallback: (() => void) | null = null;
@@ -122,6 +125,24 @@ function handleExtensionMessage(event: MessageEvent) {
       pendingWordsReject = null;
     }
   }
+
+  if (data.type === "extension-activity-response") {
+    console.log(
+      "[ExtensionSync] Received activity from extension:",
+      Object.keys(data.activity || {}).length,
+      "days, success:",
+      data.success
+    );
+    if (data.success && pendingActivityResolve) {
+      pendingActivityResolve(data.activity || {});
+      pendingActivityResolve = null;
+      pendingActivityReject = null;
+    } else if (!data.success && pendingActivityReject) {
+      pendingActivityReject(new Error(data.error || "Failed to get activity"));
+      pendingActivityResolve = null;
+      pendingActivityReject = null;
+    }
+  }
 }
 
 /**
@@ -214,6 +235,60 @@ export async function requestExtensionWords(timeout = 10000): Promise<Word[]> {
     console.log("[ExtensionSync] Requesting words from extension...");
     window.postMessage(
       { source: "ccplus-web", type: "request-extension-words" },
+      "*"
+    );
+  });
+}
+
+/**
+ * Request daily activity data from the extension
+ */
+export async function requestExtensionActivity(
+  timeout = 10000
+): Promise<DailyActivityMap> {
+  if (!browser) return {};
+
+  // Make sure extension is detected first
+  const detected = await detectExtension();
+  if (!detected) {
+    console.log(
+      "[ExtensionSync] Extension not detected, cannot request activity"
+    );
+    return {};
+  }
+
+  return new Promise((resolve, reject) => {
+    pendingActivityResolve = resolve;
+    pendingActivityReject = reject;
+
+    // Set timeout
+    const timeoutId = setTimeout(() => {
+      if (pendingActivityResolve) {
+        console.log("[ExtensionSync] Activity request timeout");
+        pendingActivityResolve = null;
+        pendingActivityReject = null;
+        resolve({}); // Return empty on timeout instead of rejecting
+      }
+    }, timeout);
+
+    // Override resolvers to clear timeout
+    const originalResolve = pendingActivityResolve;
+    const originalReject = pendingActivityReject;
+
+    pendingActivityResolve = (activity: DailyActivityMap) => {
+      clearTimeout(timeoutId);
+      originalResolve(activity);
+    };
+
+    pendingActivityReject = (error: Error) => {
+      clearTimeout(timeoutId);
+      originalReject(error);
+    };
+
+    // Send request to extension
+    console.log("[ExtensionSync] Requesting activity from extension...");
+    window.postMessage(
+      { source: "ccplus-web", type: "request-extension-activity" },
       "*"
     );
   });

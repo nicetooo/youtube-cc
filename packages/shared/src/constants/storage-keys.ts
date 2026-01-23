@@ -23,6 +23,9 @@ export const WEBSITE_USER_KEY = "cc_plus_website_user";
 /** Ad removal selectors data */
 export const AD_SELECTORS_KEY = "ad_selectors_data";
 
+/** Daily activity data (selection count per day) */
+export const DAILY_ACTIVITY_KEY = "cc_plus_daily_activity";
+
 // ============ Web Storage Keys (localStorage) ============
 
 /** User's preferred locale */

@@ -34,19 +34,18 @@
   }: Props = $props();
 
   // Clean up phonetic transcription from Google Translate
-  // Google uses non-standard characters like T͟H (with combining macron) instead of proper IPA
+  // Google uses non-standard Unicode combining characters instead of proper IPA
   function cleanPhonetic(phonetic: string | undefined): string | undefined {
     if (!phonetic) return undefined;
     return (
       phonetic
-        // Remove combining double macron below (U+035F) - used in T͟H
-        .replace(/\u035F/g, "")
-        // Common Google Translate phonetic to readable conversions
-        .replace(/T͟H/gi, "th")
-        .replace(/TH/g, "th")
-        .replace(/SH/g, "sh")
-        .replace(/CH/g, "ch")
-        .replace(/NG/g, "ŋ")
+        // Remove ALL Unicode combining diacritical marks (U+0300 - U+036F)
+        // This covers macrons, overlines, underlines, etc. that render as boxes
+        .replace(/[\u0300-\u036F]/g, "")
+        // Convert to lowercase for consistency
+        .toLowerCase()
+        // Common phonetic conversions (already lowercase now)
+        .replace(/ng/g, "ŋ")
         .trim()
     );
   }
