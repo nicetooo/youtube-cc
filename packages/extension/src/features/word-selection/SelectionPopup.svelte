@@ -33,6 +33,24 @@
     onClose,
   }: Props = $props();
 
+  // Clean up phonetic transcription from Google Translate
+  // Google uses non-standard characters like T͟H (with combining macron) instead of proper IPA
+  function cleanPhonetic(phonetic: string | undefined): string | undefined {
+    if (!phonetic) return undefined;
+    return (
+      phonetic
+        // Remove combining double macron below (U+035F) - used in T͟H
+        .replace(/\u035F/g, "")
+        // Common Google Translate phonetic to readable conversions
+        .replace(/T͟H/gi, "th")
+        .replace(/TH/g, "th")
+        .replace(/SH/g, "sh")
+        .replace(/CH/g, "ch")
+        .replace(/NG/g, "ŋ")
+        .trim()
+    );
+  }
+
   // Check if detected language matches my language
   function isMyLanguage(detected: string | undefined): boolean {
     if (!detected) return false;
@@ -304,7 +322,7 @@
         {/if}
       </div>
       {#if srcTranslit && !isMyLanguage(detectedLang)}
-        <span class="phonetic">/{srcTranslit}/</span>
+        <span class="phonetic">/{cleanPhonetic(srcTranslit)}/</span>
       {/if}
     </div>
     {#if canSpeakSource}
@@ -359,7 +377,9 @@
         <div class="translation-content">
           <p class="translation">{translation}</p>
           {#if translit && isMyLanguage(detectedLang)}
-            <span class="phonetic translation-phonetic">/{translit}/</span>
+            <span class="phonetic translation-phonetic"
+              >/{cleanPhonetic(translit)}/</span
+            >
           {/if}
         </div>
         {#if canSpeakTranslation}

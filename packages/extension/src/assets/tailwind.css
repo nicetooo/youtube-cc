@@ -128,6 +128,14 @@
   font-size: 13px;
   color: var(--popup-text-secondary);
   font-style: italic;
+  /* Use fonts that support IPA and Unicode combining characters */
+  font-family:
+    "Lucida Sans Unicode",
+    "Arial Unicode MS",
+    "Noto Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
 .cc-plus-selection-popup .speak-button {
