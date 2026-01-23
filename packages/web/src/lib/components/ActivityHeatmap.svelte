@@ -134,34 +134,28 @@
     return "#57e87a";
   }
 
-  // Month labels - show year for January to distinguish between years
+  // Month labels - only show months in current year
   const monthLabels = $derived(() => {
     const labels: { month: string; index: number }[] = [];
+    const currentYear = new Date().getFullYear();
     let lastMonth = -1;
-    let lastYear = -1;
 
     for (let i = 0; i < activityData().length; i++) {
       const week = activityData()[i];
-      if (week.length > 0) {
-        const date = new Date(week[0].date);
+      // Find first non-hidden day in the week
+      const firstVisibleDay = week.find((day) => !day.hidden);
+      if (firstVisibleDay) {
+        const date = new Date(firstVisibleDay.date);
         const month = date.getMonth();
         const year = date.getFullYear();
 
-        if (month !== lastMonth || year !== lastYear) {
-          // Show year for January or first month to distinguish years
-          const showYear = month === 0 || labels.length === 0;
+        // Only add label for current year months
+        if (year === currentYear && month !== lastMonth) {
           const monthStr = date.toLocaleDateString(bcp47Locale, {
             month: "short",
           });
-
-          labels.push({
-            month: showYear
-              ? `${monthStr} '${String(year).slice(2)}`
-              : monthStr,
-            index: i,
-          });
+          labels.push({ month: monthStr, index: i });
           lastMonth = month;
-          lastYear = year;
         }
       }
     }
