@@ -46,6 +46,8 @@ export interface ExtensionSettings {
   wordSelection: boolean;
   targetLanguage: string;
   myLanguage: string;
+  // Activity chart
+  showActivityChart: boolean;
 }
 
 // App store state type
@@ -70,6 +72,7 @@ const defaultSettings: ExtensionSettings = {
   wordSelection: true, // YouTube works without extra permission
   targetLanguage: "en",
   myLanguage: defaultMyLanguage,
+  showActivityChart: true,
 };
 
 /** sync store between popup & content.js */

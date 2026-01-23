@@ -58,6 +58,8 @@ export const messages = {
     activity_selections: "selections",
     activity_less: "Less",
     activity_more: "More",
+    show_activity: "Show Activity Chart",
+    show_activity_sub: "Display learning progress heatmap",
   },
   zh_CN: {
     display_transcription: "显示字幕",
@@ -109,6 +111,8 @@ export const messages = {
     activity_selections: "次划词",
     activity_less: "少",
     activity_more: "多",
+    show_activity: "显示活跃度图表",
+    show_activity_sub: "展示学习进度热力图",
   },
   zh_TW: {
     display_transcription: "顯示字幕",
@@ -160,6 +164,8 @@ export const messages = {
     activity_selections: "次劃詞",
     activity_less: "少",
     activity_more: "多",
+    show_activity: "顯示活躍度圖表",
+    show_activity_sub: "展示學習進度熱力圖",
   },
   ja: {
     display_transcription: "文字起こしを表示",
@@ -211,6 +217,8 @@ export const messages = {
     activity_selections: "回選択",
     activity_less: "少",
     activity_more: "多",
+    show_activity: "アクティビティを表示",
+    show_activity_sub: "学習進捗ヒートマップを表示",
   },
   ko: {
     display_transcription: "전사 표시",
@@ -262,6 +270,8 @@ export const messages = {
     activity_selections: "회 선택",
     activity_less: "적음",
     activity_more: "많음",
+    show_activity: "활동 차트 표시",
+    show_activity_sub: "학습 진도 히트맵 표시",
   },
   hi: {
     display_transcription: "ट्रांसक्रिप्शन दिखाएं",
@@ -311,6 +321,8 @@ export const messages = {
     activity_selections: "चयन",
     activity_less: "कम",
     activity_more: "अधिक",
+    show_activity: "गतिविधि चार्ट दिखाएं",
+    show_activity_sub: "सीखने की प्रगति हीटमैप प्रदर्शित करें",
   },
   es: {
     display_transcription: "Mostrar Transcripción",
@@ -360,6 +372,8 @@ export const messages = {
     activity_selections: "selecciones",
     activity_less: "Menos",
     activity_more: "Más",
+    show_activity: "Mostrar Gráfico de Actividad",
+    show_activity_sub: "Mostrar mapa de calor de progreso",
   },
   fr: {
     display_transcription: "Afficher la Transcription",
@@ -409,6 +423,8 @@ export const messages = {
     activity_selections: "sélections",
     activity_less: "Moins",
     activity_more: "Plus",
+    show_activity: "Afficher le Graphique d'Activité",
+    show_activity_sub: "Afficher la carte thermique de progression",
   },
   ar: {
     display_transcription: "عرض النص",
@@ -458,6 +474,8 @@ export const messages = {
     activity_selections: "تحديدات",
     activity_less: "أقل",
     activity_more: "أكثر",
+    show_activity: "عرض مخطط النشاط",
+    show_activity_sub: "عرض خريطة حرارية لتقدم التعلم",
   },
   bn: {
     display_transcription: "ট্রান্সক্রিপশন দেখান",
@@ -507,6 +525,8 @@ export const messages = {
     activity_selections: "টি নির্বাচন",
     activity_less: "কম",
     activity_more: "বেশি",
+    show_activity: "কার্যকলাপ চার্ট দেখান",
+    show_activity_sub: "শেখার অগ্রগতি হিটম্যাপ প্রদর্শন করুন",
   },
   pt: {
     display_transcription: "Exibir Transcrição",
@@ -556,6 +576,8 @@ export const messages = {
     activity_selections: "seleções",
     activity_less: "Menos",
     activity_more: "Mais",
+    show_activity: "Mostrar Gráfico de Atividade",
+    show_activity_sub: "Exibir mapa de calor de progresso",
   },
   ru: {
     display_transcription: "Показать Транскрипцию",
@@ -605,6 +627,8 @@ export const messages = {
     activity_selections: "выборов",
     activity_less: "Меньше",
     activity_more: "Больше",
+    show_activity: "Показать График Активности",
+    show_activity_sub: "Показать тепловую карту прогресса",
   },
 };
 

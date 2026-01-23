@@ -197,6 +197,17 @@
     chrome.runtime.sendMessage({ type: "update-selection-script" });
   }
 
+  // Toggle show activity chart
+  function toggleShowActivityChart() {
+    appStore.update((s) => ({
+      ...s,
+      settings: {
+        ...s.settings,
+        showActivityChart: !s.settings.showActivityChart,
+      },
+    }));
+  }
+
   // Enable word selection on all websites (requires permission)
   async function enableAllSitesSelection() {
     if (hasWordSelectionPermission) return; // Already enabled
@@ -1039,7 +1050,32 @@
         </div>
 
         <div class="space-y-3">
-          <MiniHeatmap />
+          <!-- Show Activity Chart Toggle -->
+          <button
+            on:click={toggleShowActivityChart}
+            class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
+          >
+            <div class="flex flex-col text-left">
+              <span
+                class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
+                >{i18n("show_activity")}</span
+              >
+              <span class="text-xs text-[var(--cc-text-muted)]"
+                >{i18n("show_activity_sub")}</span
+              >
+            </div>
+            <div
+              class={`w-10 h-5 rounded-full relative transition-colors duration-300 ${($appStore.settings.showActivityChart ?? true) ? "bg-[var(--cc-accent)]" : "bg-[var(--cc-toggle-off)]"}`}
+            >
+              <div
+                class={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${($appStore.settings.showActivityChart ?? true) ? "left-6" : "left-1"}`}
+              ></div>
+            </div>
+          </button>
+
+          {#if $appStore.settings.showActivityChart ?? true}
+            <MiniHeatmap />
+          {/if}
         </div>
       </section>
     {/if}
