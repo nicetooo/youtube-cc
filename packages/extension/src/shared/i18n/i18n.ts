@@ -1,3 +1,12 @@
+// RTL (right-to-left) languages
+export const rtlLanguages = ["ar", "iw", "fa", "ur", "ps", "sd", "ug", "yi"];
+
+// Check if a language code is RTL
+export function isRtlLanguage(langCode: string): boolean {
+  const baseLang = langCode.split("-")[0].split("_")[0];
+  return rtlLanguages.includes(baseLang);
+}
+
 export const messages = {
   en: {
     display_transcription: "Display Transcription",
