@@ -197,6 +197,11 @@
         const result2 = await translate(text, myLanguage);
         translation = result2.translation;
         translit = result2.translit; // Translation phonetic
+        // Get source phonetic from second translation if first didn't have it
+        // (happens when targetLanguage equals source language, e.g., en->en)
+        if (!srcTranslit && result2.srcTranslit) {
+          srcTranslit = result2.srcTranslit;
+        }
         // Prefer definitions from first translation (English POS tags),
         // fallback to second translation if first has none
         if (!definitions || definitions.length === 0) {
