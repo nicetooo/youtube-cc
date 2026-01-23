@@ -52,6 +52,18 @@ export const messages = {
     home_feature_review: "Smart Review",
     home_feature_review_desc:
       "SM-2 algorithm schedules reviews at optimal intervals",
+    home_feature_wide_screen: "Wide Screen",
+    home_feature_wide_screen_desc: "Maximize immersion with theater mode",
+    home_feature_clean: "Clean Interface",
+    home_feature_clean_desc: "Remove ads and distractions for focused viewing",
+    home_feature_side_comments: "Side Comments",
+    home_feature_side_comments_desc:
+      "Move comments to the right for better layout",
+    home_feature_comment_search: "Comment Search",
+    home_feature_comment_search_desc: "Search and filter comments easily",
+    home_feature_word_selection: "Word Selection",
+    home_feature_word_selection_desc:
+      "Select any text to translate and save words",
 
     // Words page
     words_title: "My Vocabulary",
@@ -226,6 +238,16 @@ export const messages = {
     home_feature_sync_desc: "生词在扩展和网站之间自动同步",
     home_feature_review: "智能复习",
     home_feature_review_desc: "SM-2 算法在最佳时间安排复习",
+    home_feature_wide_screen: "宽屏模式",
+    home_feature_wide_screen_desc: "剧院模式最大化沉浸体验",
+    home_feature_clean: "界面净化",
+    home_feature_clean_desc: "移除广告和干扰，专注观看",
+    home_feature_side_comments: "侧边评论",
+    home_feature_side_comments_desc: "将评论移至右侧，优化布局",
+    home_feature_comment_search: "评论搜索",
+    home_feature_comment_search_desc: "轻松搜索和过滤评论",
+    home_feature_word_selection: "划词翻译",
+    home_feature_word_selection_desc: "选中文字即可翻译并保存生词",
 
     // Words page
     words_title: "我的生词",
@@ -398,6 +420,16 @@ export const messages = {
     home_feature_sync_desc: "生詞在擴充和網站之間自動同步",
     home_feature_review: "智慧複習",
     home_feature_review_desc: "SM-2 演算法在最佳時間安排複習",
+    home_feature_wide_screen: "寬屏模式",
+    home_feature_wide_screen_desc: "劇院模式最大化沉浸體驗",
+    home_feature_clean: "介面淨化",
+    home_feature_clean_desc: "移除廣告和干擾，專注觀看",
+    home_feature_side_comments: "側邊評論",
+    home_feature_side_comments_desc: "將評論移至右側，優化佈局",
+    home_feature_comment_search: "評論搜尋",
+    home_feature_comment_search_desc: "輕鬆搜尋和過濾評論",
+    home_feature_word_selection: "劃詞翻譯",
+    home_feature_word_selection_desc: "選中文字即可翻譯並保存生詞",
 
     // Words page
     words_title: "我的生詞",
@@ -572,6 +604,16 @@ export const messages = {
     home_feature_review: "スマート復習",
     home_feature_review_desc:
       "SM-2アルゴリズムが最適な間隔で復習をスケジュール",
+    home_feature_wide_screen: "ワイドスクリーン",
+    home_feature_wide_screen_desc: "シアターモードで没入感を最大化",
+    home_feature_clean: "インターフェース浄化",
+    home_feature_clean_desc: "広告や邪魔を排除して集中視聴",
+    home_feature_side_comments: "サイドコメント",
+    home_feature_side_comments_desc: "コメントを右側に移動してレイアウト最適化",
+    home_feature_comment_search: "コメント検索",
+    home_feature_comment_search_desc: "コメントを簡単に検索・フィルタリング",
+    home_feature_word_selection: "選択翻訳",
+    home_feature_word_selection_desc: "テキストを選択して翻訳・単語保存",
 
     // Words page
     words_title: "私の単語",
@@ -746,6 +788,17 @@ export const messages = {
     home_feature_sync_desc: "단어가 확장 프로그램과 웹사이트 간에 동기화",
     home_feature_review: "스마트 복습",
     home_feature_review_desc: "SM-2 알고리즘이 최적의 간격으로 복습 일정 관리",
+    home_feature_wide_screen: "와이드 스크린",
+    home_feature_wide_screen_desc: "시어터 모드로 몰입감 극대화",
+    home_feature_clean: "인터페이스 정화",
+    home_feature_clean_desc: "광고와 방해 요소를 제거하여 집중 시청",
+    home_feature_side_comments: "사이드 댓글",
+    home_feature_side_comments_desc:
+      "댓글을 오른쪽으로 이동하여 레이아웃 최적화",
+    home_feature_comment_search: "댓글 검색",
+    home_feature_comment_search_desc: "댓글을 쉽게 검색하고 필터링",
+    home_feature_word_selection: "선택 번역",
+    home_feature_word_selection_desc: "텍스트를 선택하여 번역하고 단어 저장",
 
     // Words page
     words_title: "내 단어장",
@@ -922,6 +975,19 @@ export const messages = {
     home_feature_review: "स्मार्ट समीक्षा",
     home_feature_review_desc:
       "SM-2 एल्गोरिथम इष्टतम अंतराल पर समीक्षा शेड्यूल करता है",
+    home_feature_wide_screen: "वाइड स्क्रीन",
+    home_feature_wide_screen_desc: "थिएटर मोड से इमर्शन अधिकतम करें",
+    home_feature_clean: "इंटरफ़ेस साफ़ करें",
+    home_feature_clean_desc: "विज्ञापन और विकर्षण हटाएं, केंद्रित देखें",
+    home_feature_side_comments: "साइड टिप्पणियां",
+    home_feature_side_comments_desc:
+      "बेहतर लेआउट के लिए टिप्पणियां दाईं ओर ले जाएं",
+    home_feature_comment_search: "टिप्पणी खोजें",
+    home_feature_comment_search_desc:
+      "आसानी से टिप्पणियां खोजें और फ़िल्टर करें",
+    home_feature_word_selection: "शब्द चयन",
+    home_feature_word_selection_desc:
+      "अनुवाद और शब्द सहेजने के लिए टेक्स्ट चुनें",
 
     // Words page
     words_title: "मेरी शब्दावली",
@@ -1101,6 +1167,19 @@ export const messages = {
     home_feature_review: "Repaso Inteligente",
     home_feature_review_desc:
       "El algoritmo SM-2 programa repasos en intervalos óptimos",
+    home_feature_wide_screen: "Pantalla Ancha",
+    home_feature_wide_screen_desc: "Maximiza la inmersión con modo teatro",
+    home_feature_clean: "Interfaz Limpia",
+    home_feature_clean_desc:
+      "Elimina anuncios y distracciones para ver enfocado",
+    home_feature_side_comments: "Comentarios Laterales",
+    home_feature_side_comments_desc:
+      "Mueve los comentarios a la derecha para mejor diseño",
+    home_feature_comment_search: "Buscar Comentarios",
+    home_feature_comment_search_desc: "Busca y filtra comentarios fácilmente",
+    home_feature_word_selection: "Selección de Palabras",
+    home_feature_word_selection_desc:
+      "Selecciona texto para traducir y guardar palabras",
 
     // Words page
     words_title: "Mi Vocabulario",
@@ -1282,6 +1361,20 @@ export const messages = {
     home_feature_review: "Révision Intelligente",
     home_feature_review_desc:
       "L'algorithme SM-2 planifie les révisions à intervalles optimaux",
+    home_feature_wide_screen: "Écran Large",
+    home_feature_wide_screen_desc: "Maximisez l'immersion avec le mode cinéma",
+    home_feature_clean: "Interface Épurée",
+    home_feature_clean_desc:
+      "Supprimez les publicités et distractions pour une vue concentrée",
+    home_feature_side_comments: "Commentaires Latéraux",
+    home_feature_side_comments_desc:
+      "Déplacez les commentaires à droite pour une meilleure mise en page",
+    home_feature_comment_search: "Recherche de Commentaires",
+    home_feature_comment_search_desc:
+      "Recherchez et filtrez les commentaires facilement",
+    home_feature_word_selection: "Sélection de Mots",
+    home_feature_word_selection_desc:
+      "Sélectionnez du texte pour traduire et sauvegarder des mots",
 
     // Words page
     words_title: "Mon Vocabulaire",
@@ -1462,6 +1555,16 @@ export const messages = {
     home_feature_sync_desc: "تتم مزامنة مفرداتك بين الإضافة والموقع",
     home_feature_review: "مراجعة ذكية",
     home_feature_review_desc: "خوارزمية SM-2 تجدول المراجعات بفترات مثالية",
+    home_feature_wide_screen: "شاشة عريضة",
+    home_feature_wide_screen_desc: "عظّم الانغماس مع وضع المسرح",
+    home_feature_clean: "واجهة نظيفة",
+    home_feature_clean_desc: "أزل الإعلانات والمشتتات للمشاهدة المركزة",
+    home_feature_side_comments: "التعليقات الجانبية",
+    home_feature_side_comments_desc: "انقل التعليقات إلى اليمين لتخطيط أفضل",
+    home_feature_comment_search: "البحث في التعليقات",
+    home_feature_comment_search_desc: "ابحث وفلتر التعليقات بسهولة",
+    home_feature_word_selection: "تحديد الكلمات",
+    home_feature_word_selection_desc: "حدد النص للترجمة وحفظ الكلمات",
 
     // Words page
     words_title: "مفرداتي",
@@ -1639,6 +1742,19 @@ export const messages = {
     home_feature_review: "স্মার্ট পর্যালোচনা",
     home_feature_review_desc:
       "SM-2 অ্যালগরিদম সর্বোত্তম বিরতিতে পর্যালোচনা নির্ধারণ করে",
+    home_feature_wide_screen: "ওয়াইড স্ক্রিন",
+    home_feature_wide_screen_desc: "থিয়েটার মোডে ইমার্শন সর্বাধিক করুন",
+    home_feature_clean: "ক্লিন ইন্টারফেস",
+    home_feature_clean_desc:
+      "বিজ্ঞাপন এবং বিভ্রান্তি সরিয়ে মনোযোগ দিয়ে দেখুন",
+    home_feature_side_comments: "সাইড মন্তব্য",
+    home_feature_side_comments_desc: "ভালো লেআউটের জন্য মন্তব্য ডানদিকে সরান",
+    home_feature_comment_search: "মন্তব্য অনুসন্ধান",
+    home_feature_comment_search_desc:
+      "সহজেই মন্তব্য অনুসন্ধান এবং ফিল্টার করুন",
+    home_feature_word_selection: "শব্দ নির্বাচন",
+    home_feature_word_selection_desc:
+      "অনুবাদ এবং শব্দ সংরক্ষণ করতে টেক্সট নির্বাচন করুন",
 
     // Words page
     words_title: "আমার শব্দভাণ্ডার",
@@ -1819,6 +1935,19 @@ export const messages = {
     home_feature_review: "Revisão Inteligente",
     home_feature_review_desc:
       "O algoritmo SM-2 agenda revisões em intervalos ideais",
+    home_feature_wide_screen: "Tela Ampla",
+    home_feature_wide_screen_desc: "Maximize a imersão com modo cinema",
+    home_feature_clean: "Interface Limpa",
+    home_feature_clean_desc:
+      "Remova anúncios e distrações para visualização focada",
+    home_feature_side_comments: "Comentários Laterais",
+    home_feature_side_comments_desc:
+      "Mova comentários para a direita para melhor layout",
+    home_feature_comment_search: "Buscar Comentários",
+    home_feature_comment_search_desc: "Busque e filtre comentários facilmente",
+    home_feature_word_selection: "Seleção de Palavras",
+    home_feature_word_selection_desc:
+      "Selecione texto para traduzir e salvar palavras",
 
     // Words page
     words_title: "Meu Vocabulário",
@@ -2000,6 +2129,19 @@ export const messages = {
     home_feature_review: "Умное повторение",
     home_feature_review_desc:
       "Алгоритм SM-2 планирует повторения с оптимальными интервалами",
+    home_feature_wide_screen: "Широкий экран",
+    home_feature_wide_screen_desc: "Максимум погружения в режиме театра",
+    home_feature_clean: "Чистый интерфейс",
+    home_feature_clean_desc:
+      "Удалите рекламу и отвлечения для сосредоточенного просмотра",
+    home_feature_side_comments: "Боковые комментарии",
+    home_feature_side_comments_desc:
+      "Переместите комментарии вправо для лучшей компоновки",
+    home_feature_comment_search: "Поиск комментариев",
+    home_feature_comment_search_desc: "Легко ищите и фильтруйте комментарии",
+    home_feature_word_selection: "Выделение слов",
+    home_feature_word_selection_desc:
+      "Выделите текст для перевода и сохранения слов",
 
     // Words page
     words_title: "Мой словарь",
