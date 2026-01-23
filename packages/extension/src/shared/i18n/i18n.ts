@@ -548,43 +548,34 @@ export const messages = {
   },
 };
 
-// Detect locale from language string (shared logic with website)
-function detectLocale(language: string): keyof typeof messages {
-  let lang = language.replace("-", "_");
-
-  // Handle zh variants
-  if (lang === "zh" || lang.startsWith("zh_Hans")) {
-    return "zh_CN";
-  }
-  if (
-    lang.startsWith("zh_Hant") ||
-    lang.includes("TW") ||
-    lang.includes("HK")
-  ) {
-    return "zh_TW";
-  }
-  if (lang.startsWith("zh")) {
-    return "zh_CN"; // Default Chinese to Simplified
-  }
-
-  // Direct match
-  if (lang in messages) {
-    return lang as keyof typeof messages;
-  }
-
-  // Base language match (e.g., en_GB -> en)
-  const baseLang = lang.split("_")[0];
-  if (baseLang in messages) {
-    return baseLang as keyof typeof messages;
-  }
-
-  return "en";
-}
-
 export const i18n = (
   key: keyof (typeof messages)["en"],
   language: string = navigator.language
 ) => {
-  const locale = detectLocale(language);
-  return messages[locale][key] || messages["en"][key];
+  let lang = language.replace("-", "_");
+
+  // Handle zh variants
+  if (lang.startsWith("zh")) {
+    if (lang.includes("TW") || lang.includes("HK")) {
+      lang = "zh_TW";
+    } else {
+      lang = "zh_CN";
+    }
+  }
+
+  // @ts-ignore - Direct match
+  if (messages[lang] && messages[lang][key]) {
+    // @ts-ignore
+    return messages[lang][key];
+  }
+
+  // Fallback for sub-languages (e.g., en-GB -> en)
+  const baseLang = lang.split("_")[0];
+  // @ts-ignore
+  if (messages[baseLang] && messages[baseLang][key]) {
+    // @ts-ignore
+    return messages[baseLang][key];
+  }
+
+  return messages["en"][key];
 };

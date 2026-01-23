@@ -10,52 +10,38 @@ import { LOCALE_KEY } from "@aspect/shared";
 
 const DEFAULT_LOCALE: Locale = "en";
 
-function detectBrowserLocale(): Locale {
-  if (!browser) return DEFAULT_LOCALE;
-
-  // Get browser language and normalize
-  let lang = navigator.language.replace("-", "_");
-
-  // Handle zh variants (match extension behavior)
-  if (lang === "zh" || lang.startsWith("zh_Hans")) {
-    return "zh_CN";
-  }
-  if (
-    lang.startsWith("zh_Hant") ||
-    lang.includes("TW") ||
-    lang.includes("HK")
-  ) {
-    return "zh_TW";
-  }
-  if (lang.startsWith("zh")) {
-    return "zh_CN"; // Default Chinese to Simplified
-  }
-
-  // Direct match
-  if (isValidLocale(lang)) {
-    return lang;
-  }
-
-  // Base language match (e.g., en_GB -> en)
-  const baseLang = lang.split("_")[0];
-  if (isValidLocale(baseLang)) {
-    return baseLang;
-  }
-
-  return DEFAULT_LOCALE;
-}
-
 function detectLocale(): Locale {
   if (!browser) return DEFAULT_LOCALE;
 
-  // Check localStorage first (user's explicit choice)
+  // Check localStorage first
   const stored = localStorage.getItem(LOCALE_KEY);
   if (stored && isValidLocale(stored)) {
     return stored;
   }
 
-  // Auto-detect from browser
-  return detectBrowserLocale();
+  // Detect from browser
+  const browserLang = navigator.language.replace("-", "_");
+
+  // Direct match
+  if (isValidLocale(browserLang)) {
+    return browserLang;
+  }
+
+  // Handle zh variants
+  if (browserLang.startsWith("zh")) {
+    if (browserLang.includes("TW") || browserLang.includes("HK")) {
+      return "zh_TW";
+    }
+    return "zh_CN";
+  }
+
+  // Base language match (e.g., en-GB -> en)
+  const baseLang = browserLang.split("_")[0];
+  if (isValidLocale(baseLang)) {
+    return baseLang;
+  }
+
+  return DEFAULT_LOCALE;
 }
 
 function isValidLocale(locale: string): locale is Locale {
