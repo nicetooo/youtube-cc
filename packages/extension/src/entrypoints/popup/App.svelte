@@ -746,248 +746,253 @@
           </div>
         </button>
 
-        <!-- All Sites Word Selection (requires permission) -->
-        <button
-          on:click={enableAllSitesSelection}
-          disabled={permissionLoading || hasWordSelectionPermission}
-          class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group disabled:opacity-60"
-        >
-          <div class="flex flex-col text-left">
-            <span
-              class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
-              >{i18n("all_sites_selection")}</span
+        <!-- Translation-related settings (only show when word selection is enabled) -->
+        {#if $appStore.settings.wordSelection ?? true}
+          <!-- All Sites Word Selection (requires permission) -->
+          <button
+            on:click={enableAllSitesSelection}
+            disabled={permissionLoading || hasWordSelectionPermission}
+            class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group disabled:opacity-60"
+          >
+            <div class="flex flex-col text-left">
+              <span
+                class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
+                >{i18n("all_sites_selection")}</span
+              >
+              <span class="text-xs text-[var(--cc-text-muted)]"
+                >{i18n("all_sites_selection_sub")}</span
+              >
+            </div>
+            {#if permissionLoading}
+              <div
+                class="w-5 h-5 border-2 border-[var(--cc-text-muted)] border-t-transparent rounded-full animate-spin"
+              ></div>
+            {:else if hasWordSelectionPermission}
+              <svg
+                class="w-5 h-5 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            {:else}
+              <svg
+                class="w-5 h-5 text-[var(--cc-text-muted)] group-hover:text-[var(--cc-text)] transition-colors"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            {/if}
+          </button>
+
+          <!-- My Language Selector -->
+          <div class="relative lang-dropdown">
+            <button
+              on:click={toggleMyLangDropdown}
+              class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
             >
-            <span class="text-xs text-[var(--cc-text-muted)]"
-              >{i18n("all_sites_selection_sub")}</span
-            >
+              <div class="flex flex-col text-left">
+                <span
+                  class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
+                  >{i18n("my_language")}</span
+                >
+                <span class="text-xs text-[var(--cc-text-muted)]"
+                  >{i18n("my_language_sub")}</span
+                >
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-sm text-[var(--cc-text-secondary)]">
+                  {getCurrentLangLabel(
+                    $appStore.settings.myLanguage ?? defaultMyLanguage
+                  )}
+                </span>
+                <svg
+                  class={`w-4 h-4 text-[var(--cc-text-muted)] transition-transform ${showMyLangDropdown ? "-rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </button>
+
+            <!-- Dropdown Menu (opens upward) -->
+            {#if showMyLangDropdown}
+              <div
+                class="absolute bottom-full left-0 right-0 mb-2 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border-hover)] shadow-xl z-50 overflow-hidden flex flex-col"
+                style="max-height: 320px;"
+                transition:fade={{ duration: 150 }}
+              >
+                <!-- Search Input -->
+                <div class="p-2 border-b border-[var(--cc-border)]">
+                  <div class="relative">
+                    <svg
+                      class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--cc-text-muted)]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
+                    </svg>
+                    <input
+                      bind:this={myLangInputRef}
+                      bind:value={myLangSearch}
+                      type="text"
+                      placeholder={i18n("search_language")}
+                      class="w-full pl-8 pr-3 py-2 text-sm bg-[var(--cc-bg)] border border-[var(--cc-border)] rounded-lg text-[var(--cc-text)] placeholder-[var(--cc-text-muted)] focus:outline-none focus:border-[var(--cc-accent)]"
+                      on:click|stopPropagation
+                    />
+                  </div>
+                </div>
+                <!-- Language List -->
+                <div class="overflow-y-auto flex-1 custom-scrollbar">
+                  {#each filteredMyLanguages as lang}
+                    {@const isSelected =
+                      ($appStore.settings.myLanguage ?? defaultMyLanguage) ===
+                      lang.code}
+                    <button
+                      on:click={() => selectMyLanguage(lang.code)}
+                      style="padding: 10px 16px; font-size: 14px; {isSelected
+                        ? 'background: var(--cc-accent); color: white;'
+                        : 'color: var(--cc-text);'}"
+                      class="block w-full text-left transition-colors lang-option"
+                    >
+                      {lang.label}
+                    </button>
+                  {/each}
+                  {#if filteredMyLanguages.length === 0}
+                    <div
+                      class="px-4 py-3 text-sm text-[var(--cc-text-muted)] text-center"
+                    >
+                      {i18n("no_results")}
+                    </div>
+                  {/if}
+                </div>
+              </div>
+            {/if}
           </div>
-          {#if permissionLoading}
-            <div
-              class="w-5 h-5 border-2 border-[var(--cc-text-muted)] border-t-transparent rounded-full animate-spin"
-            ></div>
-          {:else if hasWordSelectionPermission}
-            <svg
-              class="w-5 h-5 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          {:else}
-            <svg
-              class="w-5 h-5 text-[var(--cc-text-muted)] group-hover:text-[var(--cc-text)] transition-colors"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-              />
-            </svg>
-          {/if}
-        </button>
 
-        <!-- My Language Selector -->
-        <div class="relative lang-dropdown">
-          <button
-            on:click={toggleMyLangDropdown}
-            class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
-          >
-            <div class="flex flex-col text-left">
-              <span
-                class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
-                >{i18n("my_language")}</span
-              >
-              <span class="text-xs text-[var(--cc-text-muted)]"
-                >{i18n("my_language_sub")}</span
-              >
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-sm text-[var(--cc-text-secondary)]">
-                {getCurrentLangLabel(
-                  $appStore.settings.myLanguage ?? defaultMyLanguage
-                )}
-              </span>
-              <svg
-                class={`w-4 h-4 text-[var(--cc-text-muted)] transition-transform ${showMyLangDropdown ? "-rotate-180" : ""}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </div>
-          </button>
-
-          <!-- Dropdown Menu (opens upward) -->
-          {#if showMyLangDropdown}
-            <div
-              class="absolute bottom-full left-0 right-0 mb-2 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border-hover)] shadow-xl z-50 overflow-hidden flex flex-col"
-              style="max-height: 320px;"
-              transition:fade={{ duration: 150 }}
+          <!-- Target Language Selector -->
+          <div class="relative lang-dropdown">
+            <button
+              on:click={toggleTargetLangDropdown}
+              class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
             >
-              <!-- Search Input -->
-              <div class="p-2 border-b border-[var(--cc-border)]">
-                <div class="relative">
-                  <svg
-                    class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--cc-text-muted)]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                  <input
-                    bind:this={myLangInputRef}
-                    bind:value={myLangSearch}
-                    type="text"
-                    placeholder={i18n("search_language")}
-                    class="w-full pl-8 pr-3 py-2 text-sm bg-[var(--cc-bg)] border border-[var(--cc-border)] rounded-lg text-[var(--cc-text)] placeholder-[var(--cc-text-muted)] focus:outline-none focus:border-[var(--cc-accent)]"
-                    on:click|stopPropagation
+              <div class="flex flex-col text-left">
+                <span
+                  class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
+                  >{i18n("target_language")}</span
+                >
+                <span class="text-xs text-[var(--cc-text-muted)]"
+                  >{i18n("target_language_sub")}</span
+                >
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-sm text-[var(--cc-text-secondary)]">
+                  {getCurrentLangLabel(
+                    $appStore.settings.targetLanguage ?? "en"
+                  )}
+                </span>
+                <svg
+                  class={`w-4 h-4 text-[var(--cc-text-muted)] transition-transform ${showTargetLangDropdown ? "-rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
                   />
+                </svg>
+              </div>
+            </button>
+
+            <!-- Dropdown Menu (opens upward) -->
+            {#if showTargetLangDropdown}
+              <div
+                class="absolute bottom-full left-0 right-0 mb-2 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border-hover)] shadow-xl z-50 overflow-hidden flex flex-col"
+                style="max-height: 320px;"
+                transition:fade={{ duration: 150 }}
+              >
+                <!-- Search Input -->
+                <div class="p-2 border-b border-[var(--cc-border)]">
+                  <div class="relative">
+                    <svg
+                      class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--cc-text-muted)]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
+                    </svg>
+                    <input
+                      bind:this={targetLangInputRef}
+                      bind:value={targetLangSearch}
+                      type="text"
+                      placeholder={i18n("search_language")}
+                      class="w-full pl-8 pr-3 py-2 text-sm bg-[var(--cc-bg)] border border-[var(--cc-border)] rounded-lg text-[var(--cc-text)] placeholder-[var(--cc-text-muted)] focus:outline-none focus:border-[var(--cc-accent)]"
+                      on:click|stopPropagation
+                    />
+                  </div>
+                </div>
+                <!-- Language List -->
+                <div class="overflow-y-auto flex-1 custom-scrollbar">
+                  {#each filteredTargetLanguages as lang}
+                    {@const isSelected =
+                      ($appStore.settings.targetLanguage ?? "en") === lang.code}
+                    <button
+                      on:click={() => selectTargetLanguage(lang.code)}
+                      style="padding: 10px 16px; font-size: 14px; {isSelected
+                        ? 'background: var(--cc-accent); color: white;'
+                        : 'color: var(--cc-text);'}"
+                      class="block w-full text-left transition-colors lang-option"
+                    >
+                      {lang.label}
+                    </button>
+                  {/each}
+                  {#if filteredTargetLanguages.length === 0}
+                    <div
+                      class="px-4 py-3 text-sm text-[var(--cc-text-muted)] text-center"
+                    >
+                      {i18n("no_results")}
+                    </div>
+                  {/if}
                 </div>
               </div>
-              <!-- Language List -->
-              <div class="overflow-y-auto flex-1 custom-scrollbar">
-                {#each filteredMyLanguages as lang}
-                  {@const isSelected =
-                    ($appStore.settings.myLanguage ?? defaultMyLanguage) ===
-                    lang.code}
-                  <button
-                    on:click={() => selectMyLanguage(lang.code)}
-                    style="padding: 10px 16px; font-size: 14px; {isSelected
-                      ? 'background: var(--cc-accent); color: white;'
-                      : 'color: var(--cc-text);'}"
-                    class="block w-full text-left transition-colors lang-option"
-                  >
-                    {lang.label}
-                  </button>
-                {/each}
-                {#if filteredMyLanguages.length === 0}
-                  <div
-                    class="px-4 py-3 text-sm text-[var(--cc-text-muted)] text-center"
-                  >
-                    {i18n("no_results")}
-                  </div>
-                {/if}
-              </div>
-            </div>
-          {/if}
-        </div>
-
-        <!-- Target Language Selector -->
-        <div class="relative lang-dropdown">
-          <button
-            on:click={toggleTargetLangDropdown}
-            class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group"
-          >
-            <div class="flex flex-col text-left">
-              <span
-                class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
-                >{i18n("target_language")}</span
-              >
-              <span class="text-xs text-[var(--cc-text-muted)]"
-                >{i18n("target_language_sub")}</span
-              >
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-sm text-[var(--cc-text-secondary)]">
-                {getCurrentLangLabel($appStore.settings.targetLanguage ?? "en")}
-              </span>
-              <svg
-                class={`w-4 h-4 text-[var(--cc-text-muted)] transition-transform ${showTargetLangDropdown ? "-rotate-180" : ""}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </div>
-          </button>
-
-          <!-- Dropdown Menu (opens upward) -->
-          {#if showTargetLangDropdown}
-            <div
-              class="absolute bottom-full left-0 right-0 mb-2 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border-hover)] shadow-xl z-50 overflow-hidden flex flex-col"
-              style="max-height: 320px;"
-              transition:fade={{ duration: 150 }}
-            >
-              <!-- Search Input -->
-              <div class="p-2 border-b border-[var(--cc-border)]">
-                <div class="relative">
-                  <svg
-                    class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--cc-text-muted)]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                  <input
-                    bind:this={targetLangInputRef}
-                    bind:value={targetLangSearch}
-                    type="text"
-                    placeholder={i18n("search_language")}
-                    class="w-full pl-8 pr-3 py-2 text-sm bg-[var(--cc-bg)] border border-[var(--cc-border)] rounded-lg text-[var(--cc-text)] placeholder-[var(--cc-text-muted)] focus:outline-none focus:border-[var(--cc-accent)]"
-                    on:click|stopPropagation
-                  />
-                </div>
-              </div>
-              <!-- Language List -->
-              <div class="overflow-y-auto flex-1 custom-scrollbar">
-                {#each filteredTargetLanguages as lang}
-                  {@const isSelected =
-                    ($appStore.settings.targetLanguage ?? "en") === lang.code}
-                  <button
-                    on:click={() => selectTargetLanguage(lang.code)}
-                    style="padding: 10px 16px; font-size: 14px; {isSelected
-                      ? 'background: var(--cc-accent); color: white;'
-                      : 'color: var(--cc-text);'}"
-                    class="block w-full text-left transition-colors lang-option"
-                  >
-                    {lang.label}
-                  </button>
-                {/each}
-                {#if filteredTargetLanguages.length === 0}
-                  <div
-                    class="px-4 py-3 text-sm text-[var(--cc-text-muted)] text-center"
-                  >
-                    {i18n("no_results")}
-                  </div>
-                {/if}
-              </div>
-            </div>
-          {/if}
-        </div>
+            {/if}
+          </div>
+        {/if}
 
         <!-- View Words Button -->
         <button
