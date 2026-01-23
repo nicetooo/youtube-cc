@@ -58,7 +58,12 @@
     }
 
     // Generate data for the current year (Jan 1 - Dec 31)
-    const weeks: { date: string; count: number; dayOfWeek: number }[][] = [];
+    const weeks: {
+      date: string;
+      count: number;
+      dayOfWeek: number;
+      hidden: boolean;
+    }[][] = [];
 
     // Start from Jan 1 of current year
     const startDate = new Date(currentYear, 0, 1);
@@ -71,7 +76,12 @@
       alignedStart.setDate(alignedStart.getDate() - alignedStart.getDay());
     }
 
-    let currentWeek: { date: string; count: number; dayOfWeek: number }[] = [];
+    let currentWeek: {
+      date: string;
+      count: number;
+      dayOfWeek: number;
+      hidden: boolean;
+    }[] = [];
     const current = new Date(alignedStart);
 
     while (current <= endDate || currentWeek.length > 0) {
@@ -83,6 +93,7 @@
         date: dateStr,
         count: isInYear ? dayCountMap.get(dateStr) || 0 : 0,
         dayOfWeek,
+        hidden: !isInYear,
       });
 
       if (dayOfWeek === 6) {
@@ -215,10 +226,13 @@
             {#each week as day}
               <div
                 class="day-cell"
-                style="background-color: {getColor(day.count)}"
-                title="{day.count} {i18n.t(
-                  'stats_activity_words'
-                )} - {formatDate(day.date)}"
+                class:hidden={day.hidden}
+                style="background-color: {day.hidden
+                  ? 'transparent'
+                  : getColor(day.count)}"
+                title={day.hidden
+                  ? ""
+                  : `${day.count} ${i18n.t("stats_activity_words")} - ${formatDate(day.date)}`}
               ></div>
             {/each}
           </div>
@@ -311,9 +325,14 @@
     transition: transform 0.1s ease;
   }
 
-  .day-cell:hover {
+  .day-cell:hover:not(.hidden) {
     transform: scale(1.2);
     outline: 1px solid var(--text-secondary);
+  }
+
+  .day-cell.hidden {
+    visibility: hidden;
+    cursor: default;
   }
 
   .heatmap-legend {
