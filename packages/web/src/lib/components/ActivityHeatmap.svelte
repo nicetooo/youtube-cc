@@ -30,11 +30,10 @@
     return `${year}-${month}-${day}`;
   }
 
-  // Generate activity data for the past year (52 weeks + current week)
+  // Generate activity data for the current calendar year (Jan 1 - Dec 31)
   const activityData = $derived(() => {
     const now = new Date();
-    const oneYearAgo = new Date(now);
-    oneYearAgo.setFullYear(now.getFullYear() - 1);
+    const currentYear = now.getFullYear();
 
     // Count words added per day (from words list)
     const wordsAddedMap = new Map<string, number>();
@@ -54,43 +53,47 @@
     // Add selection counts from activity data
     for (const [date, data] of Object.entries(activity)) {
       const existing = dayCountMap.get(date) || 0;
-      // Use selectionCount as the primary activity indicator
-      const activityData = data as { selectionCount?: number };
-      dayCountMap.set(date, existing + (activityData.selectionCount || 0));
+      const actData = data as { selectionCount?: number };
+      dayCountMap.set(date, existing + (actData.selectionCount || 0));
     }
 
-    // Generate data for the last 52 weeks (364 days)
+    // Generate data for the current year (Jan 1 - Dec 31)
     const weeks: { date: string; count: number; dayOfWeek: number }[][] = [];
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
-    // Start from 52 weeks ago, aligned to Sunday
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - 364 - today.getDay());
+    // Start from Jan 1 of current year
+    const startDate = new Date(currentYear, 0, 1);
+    // End at Dec 31 of current year
+    const endDate = new Date(currentYear, 11, 31);
+
+    // Align to previous Sunday if Jan 1 is not Sunday
+    const alignedStart = new Date(startDate);
+    if (alignedStart.getDay() !== 0) {
+      alignedStart.setDate(alignedStart.getDate() - alignedStart.getDay());
+    }
 
     let currentWeek: { date: string; count: number; dayOfWeek: number }[] = [];
+    const current = new Date(alignedStart);
 
-    for (let i = 0; i <= 364 + today.getDay(); i++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i);
-      const dateStr = toLocalDateString(date); // Use local date, not UTC!
-      const dayOfWeek = date.getDay();
+    while (current <= endDate || currentWeek.length > 0) {
+      const dateStr = toLocalDateString(current);
+      const dayOfWeek = current.getDay();
+      const isInYear = current.getFullYear() === currentYear;
 
       currentWeek.push({
         date: dateStr,
-        count: dayCountMap.get(dateStr) || 0,
+        count: isInYear ? dayCountMap.get(dateStr) || 0 : 0,
         dayOfWeek,
       });
 
       if (dayOfWeek === 6) {
         weeks.push(currentWeek);
         currentWeek = [];
-      }
-    }
 
-    // Push remaining days
-    if (currentWeek.length > 0) {
-      weeks.push(currentWeek);
+        // Stop after completing the week that contains Dec 31
+        if (current > endDate) break;
+      }
+
+      current.setDate(current.getDate() + 1);
     }
 
     return weeks;
@@ -107,34 +110,47 @@
     return Math.max(max, 1);
   });
 
-  // Get color based on activity level (0-4)
+  // Get color based on activity level - brighter colors for dark theme
   function getColor(count: number): string {
     if (count === 0) return "var(--bg-tertiary)";
     const max = maxCount();
     const ratio = count / max;
 
-    if (ratio <= 0.25) return "#0e4429";
-    if (ratio <= 0.5) return "#006d32";
-    if (ratio <= 0.75) return "#26a641";
-    return "#39d353";
+    // Use brighter greens for better visibility on dark backgrounds
+    if (ratio <= 0.25) return "#196c35";
+    if (ratio <= 0.5) return "#239a4d";
+    if (ratio <= 0.75) return "#2fcb5f";
+    return "#57e87a";
   }
 
-  // Month labels
+  // Month labels - show year for January to distinguish between years
   const monthLabels = $derived(() => {
     const labels: { month: string; index: number }[] = [];
     let lastMonth = -1;
+    let lastYear = -1;
 
     for (let i = 0; i < activityData().length; i++) {
       const week = activityData()[i];
       if (week.length > 0) {
         const date = new Date(week[0].date);
         const month = date.getMonth();
-        if (month !== lastMonth) {
+        const year = date.getFullYear();
+
+        if (month !== lastMonth || year !== lastYear) {
+          // Show year for January or first month to distinguish years
+          const showYear = month === 0 || labels.length === 0;
+          const monthStr = date.toLocaleDateString(bcp47Locale, {
+            month: "short",
+          });
+
           labels.push({
-            month: date.toLocaleDateString(bcp47Locale, { month: "short" }),
+            month: showYear
+              ? `${monthStr} '${String(year).slice(2)}`
+              : monthStr,
             index: i,
           });
           lastMonth = month;
+          lastYear = year;
         }
       }
     }
@@ -183,10 +199,10 @@
     </div>
 
     <div class="heatmap-content">
-      <!-- Month labels -->
+      <!-- Month labels - simplified -->
       <div class="month-labels">
-        {#each monthLabels() as { month, index }}
-          <span class="text-xs text-tertiary" style="grid-column: {index + 1}">
+        {#each monthLabels() as { month }}
+          <span class="text-xs text-tertiary">
             {month}
           </span>
         {/each}
@@ -219,10 +235,10 @@
         class="legend-cell"
         style="background-color: var(--bg-tertiary)"
       ></div>
-      <div class="legend-cell" style="background-color: #0e4429"></div>
-      <div class="legend-cell" style="background-color: #006d32"></div>
-      <div class="legend-cell" style="background-color: #26a641"></div>
-      <div class="legend-cell" style="background-color: #39d353"></div>
+      <div class="legend-cell" style="background-color: #196c35"></div>
+      <div class="legend-cell" style="background-color: #239a4d"></div>
+      <div class="legend-cell" style="background-color: #2fcb5f"></div>
+      <div class="legend-cell" style="background-color: #57e87a"></div>
     </div>
     <span class="text-xs text-tertiary">{i18n.t("stats_activity_more")}</span>
   </div>
@@ -240,20 +256,19 @@
   .heatmap-container {
     display: flex;
     gap: 0.5rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
   }
 
   .day-labels {
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 2px;
     padding-top: 20px;
+    flex-shrink: 0;
   }
 
   .day-labels span {
-    height: 11px;
-    line-height: 11px;
+    height: 10px;
+    line-height: 10px;
     font-size: 9px;
   }
 
@@ -263,11 +278,11 @@
   }
 
   .month-labels {
-    display: grid;
-    grid-template-columns: repeat(53, 11px);
-    gap: 2px;
+    display: flex;
+    justify-content: space-between;
     height: 16px;
     margin-bottom: 4px;
+    padding-right: 2px;
   }
 
   .month-labels span {
@@ -278,17 +293,19 @@
   .heatmap-grid {
     display: flex;
     gap: 2px;
+    justify-content: space-between;
   }
 
   .week-column {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    flex: 1;
   }
 
   .day-cell {
-    width: 11px;
-    height: 11px;
+    aspect-ratio: 1;
+    width: 100%;
     border-radius: 2px;
     cursor: pointer;
     transition: transform 0.1s ease;
