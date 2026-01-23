@@ -36,6 +36,14 @@
     }
   });
 
+  // Get local date string in YYYY-MM-DD format
+  function toLocalDateString(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
   // Generate chart data from actual words based on createdAt dates
   function generateChartData() {
     const data: { date: string; value: number }[] = [];
@@ -54,7 +62,7 @@
     // Calculate cumulative count for each day a word was added
     let cumulativeCount = 0;
     for (const word of sortedWords) {
-      const date = new Date(word.createdAt).toISOString().split("T")[0];
+      const date = toLocalDateString(new Date(word.createdAt));
       cumulativeCount++;
       dateCountMap.set(date, cumulativeCount);
     }
@@ -64,7 +72,7 @@
     for (let i = 29; i >= 0; i--) {
       const date = new Date(now);
       date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split("T")[0];
+      const dateStr = toLocalDateString(date);
 
       // Find the cumulative count for this date or earlier
       if (dateCountMap.has(dateStr)) {

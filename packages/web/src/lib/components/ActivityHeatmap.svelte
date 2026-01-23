@@ -22,6 +22,14 @@
   // Convert locale format from underscore to hyphen (zh_CN -> zh-CN)
   const bcp47Locale = $derived(i18n.locale.replace("_", "-"));
 
+  // Get local date string in YYYY-MM-DD format (matches storage format)
+  function toLocalDateString(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
   // Generate activity data for the past year (52 weeks + current week)
   const activityData = $derived(() => {
     const now = new Date();
@@ -31,7 +39,7 @@
     // Count words added per day (from words list)
     const wordsAddedMap = new Map<string, number>();
     for (const word of words) {
-      const date = new Date(word.createdAt).toISOString().split("T")[0];
+      const date = toLocalDateString(new Date(word.createdAt));
       wordsAddedMap.set(date, (wordsAddedMap.get(date) || 0) + 1);
     }
 
@@ -65,7 +73,7 @@
     for (let i = 0; i <= 364 + today.getDay(); i++) {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + i);
-      const dateStr = date.toISOString().split("T")[0];
+      const dateStr = toLocalDateString(date); // Use local date, not UTC!
       const dayOfWeek = date.getDay();
 
       currentWeek.push({
