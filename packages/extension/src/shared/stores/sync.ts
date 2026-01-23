@@ -8,11 +8,13 @@ import {
   SYNC_USER_KEY,
   WEBSITE_USER_KEY,
 } from "@aspect/shared";
-import type { Word } from "@aspect/shared";
+import type { Word, DailyActivityMap } from "@aspect/shared";
+import { DAILY_ACTIVITY_KEY } from "@aspect/shared/constants";
 import {
   getWords as getLocalWords,
   getWordsToSync,
   clearPendingSync,
+  getDailyActivity as getLocalActivity,
 } from "./words.svelte";
 
 // Website URL patterns for finding the tab
@@ -105,6 +107,9 @@ export async function syncWords(
 
     // 2. Download words from Firebase that we don't have locally
     await downloadNewWords(userId);
+
+    // 3. Sync activity data (upload local, download remote, merge)
+    await syncActivity();
 
     // Update last sync time
     await chrome.storage.local.set({ [LAST_SYNC_KEY]: Date.now() });
@@ -450,4 +455,149 @@ export async function getWebsiteUser(): Promise<WebsiteUser | null> {
   } catch {
     return null;
   }
+}
+
+// ============ Activity Sync ============
+
+/**
+ * Sync activity data between local storage and Firebase
+ * 1. Upload local activity to Firebase (merge with existing)
+ * 2. Download Firebase activity and merge with local
+ */
+async function syncActivity(): Promise<void> {
+  console.log("[CC Plus Sync] Syncing activity data...");
+
+  try {
+    // Get local activity data
+    const localActivity = await getLocalActivity();
+
+    if (Object.keys(localActivity).length > 0) {
+      // Upload local activity to Firebase
+      const uploadSuccess = await uploadActivityToWebsite(localActivity);
+      if (uploadSuccess) {
+        console.log("[CC Plus Sync] Activity uploaded successfully");
+      } else {
+        console.warn("[CC Plus Sync] Failed to upload activity");
+      }
+    }
+
+    // Download and merge activity from Firebase
+    const remoteActivity = await downloadActivityFromWebsite();
+    if (remoteActivity && Object.keys(remoteActivity).length > 0) {
+      await mergeActivityToLocal(localActivity, remoteActivity);
+      console.log("[CC Plus Sync] Activity downloaded and merged");
+    }
+  } catch (error) {
+    console.error("[CC Plus Sync] Activity sync failed:", error);
+    // Don't throw - activity sync failure shouldn't block word sync
+  }
+}
+
+/**
+ * Upload activity data to Firebase via website bridge
+ */
+async function uploadActivityToWebsite(
+  activity: DailyActivityMap
+): Promise<boolean> {
+  const tab = await findWebsiteTab();
+  if (!tab || !tab.id) {
+    console.warn("[CC Plus Sync] Website tab not found for activity upload");
+    return false;
+  }
+
+  return new Promise((resolve) => {
+    const timeout = setTimeout(() => {
+      console.warn("[CC Plus Sync] Activity upload timeout");
+      resolve(false);
+    }, 10000);
+
+    const handler = (message: { type: string; success?: boolean }) => {
+      if (message.type === "website-activity-upload-response") {
+        clearTimeout(timeout);
+        chrome.runtime.onMessage.removeListener(handler);
+        resolve(message.success ?? false);
+      }
+    };
+    chrome.runtime.onMessage.addListener(handler);
+
+    chrome.tabs
+      .sendMessage(tab.id!, { type: "upload-activity", activity })
+      .catch(() => {
+        clearTimeout(timeout);
+        chrome.runtime.onMessage.removeListener(handler);
+        resolve(false);
+      });
+  });
+}
+
+/**
+ * Download activity data from Firebase via website bridge
+ */
+async function downloadActivityFromWebsite(): Promise<DailyActivityMap | null> {
+  const tab = await findWebsiteTab();
+  if (!tab || !tab.id) {
+    console.warn("[CC Plus Sync] Website tab not found for activity download");
+    return null;
+  }
+
+  return new Promise((resolve) => {
+    const timeout = setTimeout(() => {
+      console.warn("[CC Plus Sync] Activity download timeout");
+      resolve(null);
+    }, 10000);
+
+    const handler = (message: {
+      type: string;
+      activity?: DailyActivityMap;
+      success?: boolean;
+    }) => {
+      if (message.type === "website-activity-download-response") {
+        clearTimeout(timeout);
+        chrome.runtime.onMessage.removeListener(handler);
+        resolve(message.success ? message.activity || {} : null);
+      }
+    };
+    chrome.runtime.onMessage.addListener(handler);
+
+    chrome.tabs
+      .sendMessage(tab.id!, { type: "download-activity" })
+      .catch(() => {
+        clearTimeout(timeout);
+        chrome.runtime.onMessage.removeListener(handler);
+        resolve(null);
+      });
+  });
+}
+
+/**
+ * Merge remote activity with local activity
+ * Takes the maximum values for each date to preserve all data
+ */
+async function mergeActivityToLocal(
+  localActivity: DailyActivityMap,
+  remoteActivity: DailyActivityMap
+): Promise<void> {
+  const merged: DailyActivityMap = { ...localActivity };
+
+  for (const [date, remote] of Object.entries(remoteActivity)) {
+    if (!merged[date]) {
+      merged[date] = remote;
+    } else {
+      // Take maximum values
+      merged[date] = {
+        date,
+        selectionCount: Math.max(
+          merged[date].selectionCount || 0,
+          remote.selectionCount || 0
+        ),
+        wordsAdded: Math.max(
+          merged[date].wordsAdded || 0,
+          remote.wordsAdded || 0
+        ),
+      };
+    }
+  }
+
+  // Save merged data to local storage
+  await chrome.storage.local.set({ [DAILY_ACTIVITY_KEY]: merged });
 }

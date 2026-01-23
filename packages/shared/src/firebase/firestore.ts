@@ -16,7 +16,7 @@ import {
   type Unsubscribe,
 } from "firebase/firestore";
 import { db } from "./config";
-import type { Word, UserSettings, UserStats } from "../types";
+import type { Word, UserSettings, UserStats, DailyActivityMap } from "../types";
 
 // ============ Words ============
 
@@ -296,6 +296,84 @@ export async function updateStreak(userId: string): Promise<void> {
       "stats.lastStudyDate": today,
     });
   }
+}
+
+// ============ Daily Activity ============
+
+/**
+ * Get user's daily activity data from Firebase
+ */
+export async function getDailyActivity(
+  userId: string
+): Promise<DailyActivityMap> {
+  const activityRef = doc(db, "users", userId, "data", "activity");
+  const snapshot = await getDoc(activityRef);
+
+  if (!snapshot.exists()) return {};
+  return (snapshot.data().days as DailyActivityMap) || {};
+}
+
+/**
+ * Save/merge daily activity data to Firebase
+ * Merges with existing data to preserve activity from other devices
+ */
+export async function saveDailyActivity(
+  userId: string,
+  activityMap: DailyActivityMap
+): Promise<void> {
+  const activityRef = doc(db, "users", userId, "data", "activity");
+
+  // Get existing data to merge
+  const snapshot = await getDoc(activityRef);
+  const existingData: DailyActivityMap = snapshot.exists()
+    ? (snapshot.data().days as DailyActivityMap) || {}
+    : {};
+
+  // Merge: for each date, take the maximum counts
+  const mergedData: DailyActivityMap = { ...existingData };
+
+  for (const [date, activity] of Object.entries(activityMap)) {
+    if (!mergedData[date]) {
+      mergedData[date] = activity;
+    } else {
+      // Take maximum values to avoid data loss from concurrent updates
+      mergedData[date] = {
+        date,
+        selectionCount: Math.max(
+          mergedData[date].selectionCount || 0,
+          activity.selectionCount || 0
+        ),
+        wordsAdded: Math.max(
+          mergedData[date].wordsAdded || 0,
+          activity.wordsAdded || 0
+        ),
+      };
+    }
+  }
+
+  await setDoc(activityRef, {
+    days: mergedData,
+    updatedAt: serverTimestamp(),
+  });
+}
+
+/**
+ * Subscribe to real-time activity updates
+ */
+export function subscribeToDailyActivity(
+  userId: string,
+  callback: (activity: DailyActivityMap) => void
+): Unsubscribe {
+  const activityRef = doc(db, "users", userId, "data", "activity");
+
+  return onSnapshot(activityRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = (snapshot.data().days as DailyActivityMap) || {};
+      callback(data);
+    } else {
+      callback({});
+    }
+  });
 }
 
 export { db };

@@ -71,6 +71,32 @@ export default defineContentScript({
           wordId: data.wordId,
           error: data.error,
         });
+      } else if (data.type === "activity-upload-response") {
+        // Forward activity upload response to background
+        console.log(
+          "[CC Plus Content] Activity upload result:",
+          data.success,
+          data.error || ""
+        );
+        chrome.runtime.sendMessage({
+          type: "website-activity-upload-response",
+          success: data.success,
+          error: data.error,
+        });
+      } else if (data.type === "activity-download-response") {
+        // Forward activity download response to background
+        console.log(
+          "[CC Plus Content] Activity download result:",
+          data.success,
+          Object.keys(data.activity || {}).length,
+          "days"
+        );
+        chrome.runtime.sendMessage({
+          type: "website-activity-download-response",
+          success: data.success,
+          activity: data.activity,
+          error: data.error,
+        });
       } else if (data.type === "ping") {
         // Handle ping request (for extension detection)
         console.log("[CC Plus Content] Received ping from website");
@@ -178,6 +204,28 @@ export default defineContentScript({
             type: "upload-word",
             word: message.word,
           },
+          "*"
+        );
+        sendResponse({ success: true });
+      } else if (message.type === "upload-activity") {
+        console.log(
+          "[CC Plus Content] Forwarding activity upload to website:",
+          Object.keys(message.activity || {}).length,
+          "days"
+        );
+        window.postMessage(
+          {
+            source: "ccplus-extension",
+            type: "upload-activity",
+            activity: message.activity,
+          },
+          "*"
+        );
+        sendResponse({ success: true });
+      } else if (message.type === "download-activity") {
+        console.log("[CC Plus Content] Requesting activity from website");
+        window.postMessage(
+          { source: "ccplus-extension", type: "download-activity" },
           "*"
         );
         sendResponse({ success: true });

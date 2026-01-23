@@ -214,6 +214,101 @@ function createAuthStore() {
           }
         }
       }
+
+      // Handle upload-activity request
+      if (event.data?.type === "upload-activity" && event.data?.activity) {
+        console.log(
+          "[CC Plus Web] Extension uploading activity:",
+          Object.keys(event.data.activity).length,
+          "days"
+        );
+        if (firebaseUser && !firebaseUser.isAnonymous) {
+          try {
+            const { saveDailyActivity } =
+              await import("@aspect/shared/firebase");
+            await saveDailyActivity(firebaseUser.uid, event.data.activity);
+            console.log("[CC Plus Web] Activity uploaded successfully");
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "activity-upload-response",
+                success: true,
+              },
+              "*"
+            );
+          } catch (e) {
+            console.error("[CC Plus Web] Failed to upload activity:", e);
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "activity-upload-response",
+                success: false,
+                error: (e as Error).message,
+              },
+              "*"
+            );
+          }
+        } else {
+          window.postMessage(
+            {
+              source: "ccplus-web",
+              type: "activity-upload-response",
+              success: false,
+              error: "Not logged in or anonymous user",
+            },
+            "*"
+          );
+        }
+      }
+
+      // Handle download-activity request
+      if (event.data?.type === "download-activity") {
+        console.log("[CC Plus Web] Extension requesting activity");
+        if (firebaseUser && !firebaseUser.isAnonymous) {
+          try {
+            const { getDailyActivity } =
+              await import("@aspect/shared/firebase");
+            const activity = await getDailyActivity(firebaseUser.uid);
+            console.log(
+              "[CC Plus Web] Sending activity to extension:",
+              Object.keys(activity).length,
+              "days"
+            );
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "activity-download-response",
+                activity,
+                success: true,
+              },
+              "*"
+            );
+          } catch (e) {
+            console.error("[CC Plus Web] Failed to fetch activity:", e);
+            window.postMessage(
+              {
+                source: "ccplus-web",
+                type: "activity-download-response",
+                activity: {},
+                success: false,
+                error: (e as Error).message,
+              },
+              "*"
+            );
+          }
+        } else {
+          window.postMessage(
+            {
+              source: "ccplus-web",
+              type: "activity-download-response",
+              activity: {},
+              success: false,
+              error: "Not logged in or anonymous user",
+            },
+            "*"
+          );
+        }
+      }
     });
   }
 

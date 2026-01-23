@@ -30,4 +30,8 @@ export {
   getUserStats,
   updateUserStats,
   updateStreak,
+  // Daily activity
+  getDailyActivity,
+  saveDailyActivity,
+  subscribeToDailyActivity,
 } from "./firestore";
