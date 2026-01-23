@@ -548,30 +548,43 @@ export const messages = {
   },
 };
 
+// Detect locale from language string (shared logic with website)
+function detectLocale(language: string): keyof typeof messages {
+  let lang = language.replace("-", "_");
+
+  // Handle zh variants
+  if (lang === "zh" || lang.startsWith("zh_Hans")) {
+    return "zh_CN";
+  }
+  if (
+    lang.startsWith("zh_Hant") ||
+    lang.includes("TW") ||
+    lang.includes("HK")
+  ) {
+    return "zh_TW";
+  }
+  if (lang.startsWith("zh")) {
+    return "zh_CN"; // Default Chinese to Simplified
+  }
+
+  // Direct match
+  if (lang in messages) {
+    return lang as keyof typeof messages;
+  }
+
+  // Base language match (e.g., en_GB -> en)
+  const baseLang = lang.split("_")[0];
+  if (baseLang in messages) {
+    return baseLang as keyof typeof messages;
+  }
+
+  return "en";
+}
+
 export const i18n = (
   key: keyof (typeof messages)["en"],
   language: string = navigator.language
 ) => {
-  let lang = language.replace("-", "_");
-  if (lang === "zh") {
-    lang = "zh_CN";
-  }
-
-  // @ts-ignore
-  if (messages[lang] && messages[lang][key]) {
-    // @ts-ignore
-    return messages[lang][key];
-  }
-
-  // Fallback for sub-languages (e.g., en-GB -> en)
-  const baseLang = lang.split("_")[0];
-  // @ts-ignore
-  if (messages[baseLang] && messages[baseLang][key]) {
-    // @ts-ignore
-    return messages[baseLang][key];
-  }
-
-  // Fallback for zh-HK -> zh_TW etc if needed, but for now strict map
-
-  return messages["en"][key];
+  const locale = detectLocale(language);
+  return messages[locale][key] || messages["en"][key];
 };
