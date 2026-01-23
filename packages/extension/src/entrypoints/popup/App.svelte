@@ -17,6 +17,7 @@
     hasAllUrlsPermission,
     requestAllUrlsPermission,
   } from "@/shared/utils/permissions";
+  import MiniHeatmap from "./MiniHeatmap.svelte";
 
   // Simplified Firebase user info type
   interface AuthUser {
@@ -1019,6 +1020,24 @@
         </button>
       </div>
     </section>
+
+    <!-- Section: Activity (shown when word selection is enabled) -->
+    {#if $appStore.settings.wordSelection}
+      <section transition:fade>
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-1 h-3 bg-green-500 rounded-full"></div>
+          <h2
+            class="text-[11px] font-bold text-[var(--cc-text-secondary)] uppercase tracking-[0.2em]"
+          >
+            {i18n("activity_title")}
+          </h2>
+        </div>
+
+        <div class="space-y-3">
+          <MiniHeatmap />
+        </div>
+      </section>
+    {/if}
 
     <!-- Section: Account -->
     <section transition:fade>

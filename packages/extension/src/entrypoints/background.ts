@@ -159,11 +159,63 @@ async function unregisterAllSitesSelectionScript(): Promise<boolean> {
 }
 
 /**
+ * Inject selection script into existing tabs that match the pattern
+ * This is needed because dynamically registered scripts only run on NEW page loads
+ */
+async function injectSelectionScriptIntoExistingTabs(
+  patterns: string[]
+): Promise<void> {
+  try {
+    // Query all tabs matching the patterns
+    const tabs = await chrome.tabs.query({ url: patterns });
+
+    for (const tab of tabs) {
+      if (tab.id === undefined) continue;
+
+      try {
+        // Check if script is already injected by looking for our marker
+        const [result] = await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: () =>
+            !!(window as unknown as { __ccPlusSelectionInjected?: boolean })
+              .__ccPlusSelectionInjected,
+        });
+
+        if (result?.result) {
+          console.log(
+            `[CC Plus] Selection script already injected in tab ${tab.id}`
+          );
+          continue;
+        }
+
+        // Inject the script
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ["content-scripts/selection.js"],
+        });
+
+        console.log(`[CC Plus] Injected selection script into tab ${tab.id}`);
+      } catch (error) {
+        // Ignore errors for tabs we can't access (e.g., chrome:// pages)
+        console.log(
+          `[CC Plus] Could not inject into tab ${tab.id}:`,
+          error instanceof Error ? error.message : error
+        );
+      }
+    }
+  } catch (error) {
+    console.error("[CC Plus] Failed to inject into existing tabs:", error);
+  }
+}
+
+/**
  * Update selection script registration based on permission and settings
  * - YouTube: always available when wordSelection is enabled
  * - All sites: only when user has granted <all_urls> permission
  */
-async function updateSelectionScriptState(): Promise<void> {
+async function updateSelectionScriptState(
+  injectIntoExisting = false
+): Promise<void> {
   const hasAllUrlsPerm = await hasAllUrlsPermission();
   const { settings } = await chrome.storage.local.get("settings");
   const wordSelectionEnabled = settings?.wordSelection ?? true;
@@ -171,11 +223,19 @@ async function updateSelectionScriptState(): Promise<void> {
   console.log("[CC Plus] Updating selection scripts:", {
     wordSelectionEnabled,
     hasAllUrlsPerm,
+    injectIntoExisting,
   });
 
   // YouTube selection script - no extra permission needed
   if (wordSelectionEnabled) {
     await registerYouTubeSelectionScript();
+    // Inject into existing YouTube tabs if requested
+    if (injectIntoExisting) {
+      await injectSelectionScriptIntoExistingTabs([
+        "*://www.youtube.com/*",
+        "*://youtube.com/*",
+      ]);
+    }
   } else {
     await unregisterYouTubeSelectionScript();
   }
@@ -183,6 +243,13 @@ async function updateSelectionScriptState(): Promise<void> {
   // All sites selection script - requires <all_urls> permission
   if (wordSelectionEnabled && hasAllUrlsPerm) {
     await registerAllSitesSelectionScript();
+    // Inject into existing tabs if requested (only non-YouTube since those are handled above)
+    if (injectIntoExisting) {
+      await injectSelectionScriptIntoExistingTabs([
+        "http://*/*",
+        "https://*/*",
+      ]);
+    }
   } else {
     await unregisterAllSitesSelectionScript();
   }
@@ -196,14 +263,16 @@ export default defineBackground(() => {
 
   // Clean up legacy scripts then initialize based on current permission/settings
   // This ensures stale scripts from previous versions are removed
+  // Also inject into existing tabs on startup (e.g., after extension update)
   cleanupLegacyScripts().then(() => {
-    updateSelectionScriptState();
+    updateSelectionScriptState(true); // Inject into existing tabs
   });
 
   // Listen for permission changes
   onPermissionChange((hasPermission) => {
     console.log("[CC Plus] Permission changed:", hasPermission);
-    updateSelectionScriptState();
+    // When permission is granted, inject into existing tabs
+    updateSelectionScriptState(hasPermission);
   });
 
   // Listen for settings changes
@@ -216,7 +285,8 @@ export default defineBackground(() => {
           "[CC Plus] wordSelection setting changed:",
           newWordSelection
         );
-        updateSelectionScriptState();
+        // When word selection is enabled, inject into existing tabs
+        updateSelectionScriptState(newWordSelection === true);
       }
     }
   });
@@ -288,7 +358,8 @@ export default defineBackground(() => {
 
     // Update selection script state (after permission granted/revoked)
     if (message.type === "update-selection-script") {
-      updateSelectionScriptState()
+      // Inject into existing tabs when explicitly requested (e.g., from popup toggle)
+      updateSelectionScriptState(true)
         .then(() => sendResponse({ success: true }))
         .catch(() => sendResponse({ success: false }));
       return true;

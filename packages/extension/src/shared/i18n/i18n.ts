@@ -53,6 +53,11 @@ export const messages = {
     anonymous: "Guest",
     search_language: "Search language...",
     no_results: "No results found",
+    activity_title: "Learning Activity",
+    activity_last_weeks: "Last {weeks} weeks",
+    activity_selections: "selections",
+    activity_less: "Less",
+    activity_more: "More",
   },
   zh_CN: {
     display_transcription: "显示字幕",
@@ -99,6 +104,11 @@ export const messages = {
     anonymous: "游客",
     search_language: "搜索语言...",
     no_results: "未找到结果",
+    activity_title: "学习活跃度",
+    activity_last_weeks: "最近 {weeks} 周",
+    activity_selections: "次划词",
+    activity_less: "少",
+    activity_more: "多",
   },
   zh_TW: {
     display_transcription: "顯示字幕",
@@ -145,6 +155,11 @@ export const messages = {
     anonymous: "訪客",
     search_language: "搜尋語言...",
     no_results: "未找到結果",
+    activity_title: "學習活躍度",
+    activity_last_weeks: "最近 {weeks} 週",
+    activity_selections: "次劃詞",
+    activity_less: "少",
+    activity_more: "多",
   },
   ja: {
     display_transcription: "文字起こしを表示",
@@ -191,6 +206,11 @@ export const messages = {
     anonymous: "ゲスト",
     search_language: "言語を検索...",
     no_results: "結果が見つかりません",
+    activity_title: "学習アクティビティ",
+    activity_last_weeks: "過去{weeks}週間",
+    activity_selections: "回選択",
+    activity_less: "少",
+    activity_more: "多",
   },
   ko: {
     display_transcription: "전사 표시",
@@ -237,6 +257,11 @@ export const messages = {
     anonymous: "게스트",
     search_language: "언어 검색...",
     no_results: "결과 없음",
+    activity_title: "학습 활동",
+    activity_last_weeks: "최근 {weeks}주",
+    activity_selections: "회 선택",
+    activity_less: "적음",
+    activity_more: "많음",
   },
   hi: {
     display_transcription: "ट्रांसक्रिप्शन दिखाएं",
@@ -281,6 +306,11 @@ export const messages = {
     anonymous: "अतिथि",
     search_language: "भाषा खोजें...",
     no_results: "कोई परिणाम नहीं मिला",
+    activity_title: "सीखने की गतिविधि",
+    activity_last_weeks: "पिछले {weeks} सप्ताह",
+    activity_selections: "चयन",
+    activity_less: "कम",
+    activity_more: "अधिक",
   },
   es: {
     display_transcription: "Mostrar Transcripción",
@@ -325,6 +355,11 @@ export const messages = {
     anonymous: "Invitado",
     search_language: "Buscar idioma...",
     no_results: "No se encontraron resultados",
+    activity_title: "Actividad de Aprendizaje",
+    activity_last_weeks: "Últimas {weeks} semanas",
+    activity_selections: "selecciones",
+    activity_less: "Menos",
+    activity_more: "Más",
   },
   fr: {
     display_transcription: "Afficher la Transcription",
@@ -369,6 +404,11 @@ export const messages = {
     anonymous: "Invité",
     search_language: "Rechercher une langue...",
     no_results: "Aucun résultat trouvé",
+    activity_title: "Activité d'Apprentissage",
+    activity_last_weeks: "{weeks} dernières semaines",
+    activity_selections: "sélections",
+    activity_less: "Moins",
+    activity_more: "Plus",
   },
   ar: {
     display_transcription: "عرض النص",
@@ -413,6 +453,11 @@ export const messages = {
     anonymous: "ضيف",
     search_language: "البحث عن لغة...",
     no_results: "لم يتم العثور على نتائج",
+    activity_title: "نشاط التعلم",
+    activity_last_weeks: "آخر {weeks} أسابيع",
+    activity_selections: "تحديدات",
+    activity_less: "أقل",
+    activity_more: "أكثر",
   },
   bn: {
     display_transcription: "ট্রান্সক্রিপশন দেখান",
@@ -457,6 +502,11 @@ export const messages = {
     anonymous: "অতিথি",
     search_language: "ভাষা অনুসন্ধান করুন...",
     no_results: "কোন ফলাফল পাওয়া যায়নি",
+    activity_title: "শেখার কার্যকলাপ",
+    activity_last_weeks: "গত {weeks} সপ্তাহ",
+    activity_selections: "টি নির্বাচন",
+    activity_less: "কম",
+    activity_more: "বেশি",
   },
   pt: {
     display_transcription: "Exibir Transcrição",
@@ -501,6 +551,11 @@ export const messages = {
     anonymous: "Convidado",
     search_language: "Pesquisar idioma...",
     no_results: "Nenhum resultado encontrado",
+    activity_title: "Atividade de Aprendizado",
+    activity_last_weeks: "Últimas {weeks} semanas",
+    activity_selections: "seleções",
+    activity_less: "Menos",
+    activity_more: "Mais",
   },
   ru: {
     display_transcription: "Показать Транскрипцию",
@@ -545,11 +600,17 @@ export const messages = {
     anonymous: "Гость",
     search_language: "Поиск языка...",
     no_results: "Результаты не найдены",
+    activity_title: "Активность обучения",
+    activity_last_weeks: "Последние {weeks} недель",
+    activity_selections: "выборов",
+    activity_less: "Меньше",
+    activity_more: "Больше",
   },
 };
 
 export const i18n = (
   key: keyof (typeof messages)["en"],
+  params?: Record<string, string | number>,
   language: string = navigator.language
 ) => {
   let lang = language.replace("-", "_");
@@ -563,19 +624,30 @@ export const i18n = (
     }
   }
 
+  let message: string;
+
   // @ts-ignore - Direct match
   if (messages[lang] && messages[lang][key]) {
     // @ts-ignore
-    return messages[lang][key];
-  }
-
-  // Fallback for sub-languages (e.g., en-GB -> en)
-  const baseLang = lang.split("_")[0];
-  // @ts-ignore
-  if (messages[baseLang] && messages[baseLang][key]) {
+    message = messages[lang][key];
+  } else {
+    // Fallback for sub-languages (e.g., en-GB -> en)
+    const baseLang = lang.split("_")[0];
     // @ts-ignore
-    return messages[baseLang][key];
+    if (messages[baseLang] && messages[baseLang][key]) {
+      // @ts-ignore
+      message = messages[baseLang][key];
+    } else {
+      message = messages["en"][key];
+    }
   }
 
-  return messages["en"][key];
+  // Replace {key} placeholders with params
+  if (params) {
+    return message.replace(/\{(\w+)\}/g, (_, k) =>
+      String(params[k] ?? `{${k}}`)
+    );
+  }
+
+  return message;
 };

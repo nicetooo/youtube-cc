@@ -26,6 +26,18 @@ export default defineContentScript({
   cssInjectionMode: "manual",
 
   main() {
+    // Prevent double injection (for manual injection into existing tabs)
+    if (
+      (window as unknown as { __ccPlusSelectionInjected?: boolean })
+        .__ccPlusSelectionInjected
+    ) {
+      console.log("[CC Plus] Selection script already injected, skipping");
+      return;
+    }
+    (
+      window as unknown as { __ccPlusSelectionInjected?: boolean }
+    ).__ccPlusSelectionInjected = true;
+
     let popupInstance: ReturnType<typeof mount> | null = null;
     let shadowHost: HTMLDivElement | null = null;
     let shadowRoot: ShadowRoot | null = null;
