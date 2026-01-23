@@ -244,3 +244,33 @@ select.input option {
 .animate-fade-in {
   animation: fadeIn 0.2s ease-out;
 }
+
+/* RTL Support */
+[dir="rtl"] {
+  /* Flip text alignment */
+  text-align: right;
+}
+
+[dir="rtl"] select.input {
+  /* Move dropdown arrow to left side */
+  background-position: left 0.75rem center;
+  padding-right: 0.875rem;
+  padding-left: 2.5rem;
+}
+
+/* Utility classes for directional spacing */
+.ms-auto {
+  margin-inline-start: auto;
+}
+
+.me-auto {
+  margin-inline-end: auto;
+}
+
+.ps-4 {
+  padding-inline-start: 1rem;
+}
+
+.pe-4 {
+  padding-inline-end: 1rem;
+}

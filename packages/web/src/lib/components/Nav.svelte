@@ -28,7 +28,7 @@
             {i18n.t(link.labelKey)}
             {#if link.href === "/review" && wordsStore.dueForReview.length > 0}
               <span
-                class="ml-1 px-1.5 py-0.5 text-xs bg-accent text-white rounded-full"
+                class="ms-1 px-1.5 py-0.5 text-xs bg-accent text-white rounded-full"
               >
                 {wordsStore.dueForReview.length}
               </span>

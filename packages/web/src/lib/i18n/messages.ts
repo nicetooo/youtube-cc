@@ -28,6 +28,9 @@ export const localeNames: Record<Locale, string> = {
   ru: "Русский",
 };
 
+// RTL (right-to-left) languages
+export const rtlLocales: Locale[] = ["ar"];
+
 export const messages = {
   en: {
     // Nav

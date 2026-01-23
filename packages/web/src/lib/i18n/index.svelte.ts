@@ -2,6 +2,7 @@ import { browser } from "$app/environment";
 import {
   messages,
   localeNames,
+  rtlLocales,
   type Locale,
   type MessageKey,
 } from "./messages";
@@ -47,18 +48,31 @@ function isValidLocale(locale: string): locale is Locale {
   return locale in messages;
 }
 
+function isRtlLocale(locale: Locale): boolean {
+  return rtlLocales.includes(locale);
+}
+
+function updateDocumentDirection(locale: Locale) {
+  if (!browser) return;
+  const dir = isRtlLocale(locale) ? "rtl" : "ltr";
+  document.documentElement.dir = dir;
+  document.documentElement.lang = locale.replace("_", "-");
+}
+
 function createI18nStore() {
   let locale = $state<Locale>(DEFAULT_LOCALE);
 
   // Initialize on browser
   if (browser) {
     locale = detectLocale();
+    updateDocumentDirection(locale);
   }
 
   function setLocale(newLocale: Locale) {
     locale = newLocale;
     if (browser) {
       localStorage.setItem(LOCALE_KEY, newLocale);
+      updateDocumentDirection(newLocale);
     }
   }
 
@@ -86,6 +100,9 @@ function createI18nStore() {
     },
     get localeNames() {
       return localeNames;
+    },
+    get isRtl() {
+      return isRtlLocale(locale);
     },
     setLocale,
     t,
