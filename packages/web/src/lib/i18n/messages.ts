@@ -220,6 +220,14 @@ export const messages = {
     terms_changes_text:
       "We may update these Terms from time to time. Continued use of the service after changes constitutes acceptance.",
     terms_back: "Back to Settings",
+
+    // PWA Install
+    pwa_install_title: "Install CC Plus",
+    pwa_install_hint: "Add to home screen for quick access",
+    pwa_install_button: "Install",
+    pwa_install_ios_hint: "Add to home screen for the best experience",
+    pwa_install_ios_step1: "Tap the share button",
+    pwa_install_ios_step2: 'Select "Add to Home Screen"',
   },
 
   zh_CN: {
@@ -402,6 +410,14 @@ export const messages = {
     terms_changes_text:
       "我们可能会不时更新这些条款。在变更后继续使用服务即表示接受新条款。",
     terms_back: "返回设置",
+
+    // PWA Install
+    pwa_install_title: "安装 CC Plus",
+    pwa_install_hint: "添加到主屏幕，快速访问",
+    pwa_install_button: "安装",
+    pwa_install_ios_hint: "添加到主屏幕以获得最佳体验",
+    pwa_install_ios_step1: "点击分享按钮",
+    pwa_install_ios_step2: "选择「添加到主屏幕」",
   },
 
   zh_TW: {
@@ -584,6 +600,14 @@ export const messages = {
     terms_changes_text:
       "我們可能會不時更新這些條款。在變更後繼續使用服務即表示接受新條款。",
     terms_back: "返回設定",
+
+    // PWA Install
+    pwa_install_title: "安裝 CC Plus",
+    pwa_install_hint: "新增到主畫面，快速存取",
+    pwa_install_button: "安裝",
+    pwa_install_ios_hint: "新增到主畫面以獲得最佳體驗",
+    pwa_install_ios_step1: "點擊分享按鈕",
+    pwa_install_ios_step2: "選擇「加入主畫面」",
   },
 
   ja: {
@@ -769,6 +793,14 @@ export const messages = {
     terms_changes_text:
       "これらの規約は随時更新される場合があります。変更後もサービスを継続使用することで、新しい規約に同意したものとみなされます。",
     terms_back: "設定に戻る",
+
+    // PWA Install
+    pwa_install_title: "CC Plus をインストール",
+    pwa_install_hint: "ホーム画面に追加してすばやくアクセス",
+    pwa_install_button: "インストール",
+    pwa_install_ios_hint: "ホーム画面に追加して最高の体験を",
+    pwa_install_ios_step1: "共有ボタンをタップ",
+    pwa_install_ios_step2: "「ホーム画面に追加」を選択",
   },
 
   ko: {
@@ -954,6 +986,14 @@ export const messages = {
     terms_changes_text:
       "이 약관은 수시로 업데이트될 수 있습니다. 변경 후에도 서비스를 계속 사용하면 새로운 약관에 동의하는 것으로 간주됩니다.",
     terms_back: "설정으로 돌아가기",
+
+    // PWA Install
+    pwa_install_title: "CC Plus 설치",
+    pwa_install_hint: "홈 화면에 추가하여 빠르게 접근",
+    pwa_install_button: "설치",
+    pwa_install_ios_hint: "홈 화면에 추가하여 최고의 경험을",
+    pwa_install_ios_step1: "공유 버튼을 탭하세요",
+    pwa_install_ios_step2: '"홈 화면에 추가" 선택',
   },
 
   hi: {
@@ -1145,6 +1185,14 @@ export const messages = {
     terms_changes_text:
       "हम समय-समय पर इन शर्तों को अपडेट कर सकते हैं। परिवर्तनों के बाद सेवा का निरंतर उपयोग स्वीकृति का गठन करता है।",
     terms_back: "सेटिंग्स पर वापस जाएं",
+
+    // PWA Install
+    pwa_install_title: "CC Plus इंस्टॉल करें",
+    pwa_install_hint: "त्वरित पहुंच के लिए होम स्क्रीन में जोड़ें",
+    pwa_install_button: "इंस्टॉल करें",
+    pwa_install_ios_hint: "बेहतर अनुभव के लिए होम स्क्रीन में जोड़ें",
+    pwa_install_ios_step1: "शेयर बटन पर टैप करें",
+    pwa_install_ios_step2: '"होम स्क्रीन में जोड़ें" चुनें',
   },
 
   es: {
@@ -1339,6 +1387,15 @@ export const messages = {
     terms_changes_text:
       "Podemos actualizar estos Términos de vez en cuando. El uso continuado del servicio después de los cambios constituye aceptación.",
     terms_back: "Volver a Configuración",
+
+    // PWA Install
+    pwa_install_title: "Instalar CC Plus",
+    pwa_install_hint: "Agregar a la pantalla de inicio para acceso rápido",
+    pwa_install_button: "Instalar",
+    pwa_install_ios_hint:
+      "Agregar a la pantalla de inicio para mejor experiencia",
+    pwa_install_ios_step1: "Toca el botón de compartir",
+    pwa_install_ios_step2: 'Selecciona "Agregar a pantalla de inicio"',
   },
 
   fr: {
@@ -1536,6 +1593,15 @@ export const messages = {
     terms_changes_text:
       "Nous pouvons mettre à jour ces Conditions de temps en temps. L'utilisation continue du service après les modifications constitue une acceptation.",
     terms_back: "Retour aux Paramètres",
+
+    // PWA Install
+    pwa_install_title: "Installer CC Plus",
+    pwa_install_hint: "Ajouter à l'écran d'accueil pour un accès rapide",
+    pwa_install_button: "Installer",
+    pwa_install_ios_hint:
+      "Ajouter à l'écran d'accueil pour une meilleure expérience",
+    pwa_install_ios_step1: "Appuyez sur le bouton de partage",
+    pwa_install_ios_step2: "Sélectionnez \"Sur l'écran d'accueil\"",
   },
 
   ar: {
@@ -1720,6 +1786,14 @@ export const messages = {
     terms_changes_text:
       "قد نقوم بتحديث هذه الشروط من وقت لآخر. الاستمرار في استخدام الخدمة بعد التغييرات يشكل قبولاً.",
     terms_back: "العودة للإعدادات",
+
+    // PWA Install
+    pwa_install_title: "تثبيت CC Plus",
+    pwa_install_hint: "أضف إلى الشاشة الرئيسية للوصول السريع",
+    pwa_install_button: "تثبيت",
+    pwa_install_ios_hint: "أضف إلى الشاشة الرئيسية لأفضل تجربة",
+    pwa_install_ios_step1: "اضغط على زر المشاركة",
+    pwa_install_ios_step2: 'اختر "إضافة إلى الشاشة الرئيسية"',
   },
 
   bn: {
@@ -1913,6 +1987,14 @@ export const messages = {
     terms_changes_text:
       "আমরা সময়ে সময়ে এই শর্তাবলী আপডেট করতে পারি। পরিবর্তনের পরে সেবার অব্যাহত ব্যবহার গ্রহণযোগ্যতা গঠন করে।",
     terms_back: "সেটিংসে ফিরে যান",
+
+    // PWA Install
+    pwa_install_title: "CC Plus ইনস্টল করুন",
+    pwa_install_hint: "দ্রুত অ্যাক্সেসের জন্য হোম স্ক্রিনে যোগ করুন",
+    pwa_install_button: "ইনস্টল করুন",
+    pwa_install_ios_hint: "সেরা অভিজ্ঞতার জন্য হোম স্ক্রিনে যোগ করুন",
+    pwa_install_ios_step1: "শেয়ার বোতামে ট্যাপ করুন",
+    pwa_install_ios_step2: '"হোম স্ক্রিনে যোগ করুন" নির্বাচন করুন',
   },
 
   pt: {
@@ -2107,6 +2189,14 @@ export const messages = {
     terms_changes_text:
       "Podemos atualizar estes Termos de tempos em tempos. O uso continuado do serviço após as alterações constitui aceitação.",
     terms_back: "Voltar às Configurações",
+
+    // PWA Install
+    pwa_install_title: "Instalar CC Plus",
+    pwa_install_hint: "Adicionar à tela inicial para acesso rápido",
+    pwa_install_button: "Instalar",
+    pwa_install_ios_hint: "Adicionar à tela inicial para melhor experiência",
+    pwa_install_ios_step1: "Toque no botão de compartilhar",
+    pwa_install_ios_step2: 'Selecione "Adicionar à Tela de Início"',
   },
 
   ru: {
@@ -2298,6 +2388,14 @@ export const messages = {
     terms_changes_text:
       "Мы можем время от времени обновлять эти Условия. Продолжение использования сервиса после изменений означает принятие.",
     terms_back: "Назад к настройкам",
+
+    // PWA Install
+    pwa_install_title: "Установить CC Plus",
+    pwa_install_hint: "Добавить на главный экран для быстрого доступа",
+    pwa_install_button: "Установить",
+    pwa_install_ios_hint: "Добавить на главный экран для лучшего опыта",
+    pwa_install_ios_step1: "Нажмите кнопку «Поделиться»",
+    pwa_install_ios_step2: "Выберите «На экран Домой»",
   },
 } as const;
 

@@ -2,6 +2,7 @@
   import "../app.css";
   import Nav from "$lib/components/Nav.svelte";
   import PWAReloadPrompt from "$lib/components/PWAReloadPrompt.svelte";
+  import PWAInstallPrompt from "$lib/components/PWAInstallPrompt.svelte";
   import { page } from "$app/stores";
   import { authStore } from "$lib/stores/auth.svelte";
   import { wordsStore } from "$lib/stores/words.svelte";
@@ -30,4 +31,5 @@
   </main>
 
   <PWAReloadPrompt />
+  <PWAInstallPrompt />
 </div>

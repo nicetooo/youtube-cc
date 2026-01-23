@@ -1,5 +1,23 @@
 /// <reference types="vite-plugin-pwa/client" />
 
+declare global {
+  // BeforeInstallPromptEvent for PWA install prompt
+  interface BeforeInstallPromptEvent extends Event {
+    readonly platforms: string[];
+    readonly userChoice: Promise<{
+      outcome: "accepted" | "dismissed";
+      platform: string;
+    }>;
+    prompt(): Promise<void>;
+  }
+
+  interface WindowEventMap {
+    beforeinstallprompt: BeforeInstallPromptEvent;
+  }
+}
+
+export {};
+
 declare module "virtual:pwa-register" {
   export interface RegisterSWOptions {
     immediate?: boolean;
