@@ -14,6 +14,7 @@
   let hasChat = $state(false);
   let disconnect: (() => void) | null = null;
   let portMessageHandler: ((message: any) => void) | null = null;
+  let prevIsSideComment: boolean | null = null;
 
   function observeMutations(node: HTMLDivElement) {
     const observer = new MutationObserver(() => {
@@ -136,6 +137,12 @@
   };
 
   $effect(() => {
+    // 只有值真正变化时才执行
+    if (prevIsSideComment === isSideComment) {
+      return;
+    }
+    prevIsSideComment = isSideComment;
+
     if (isSideComment) {
       setUp();
     } else {
