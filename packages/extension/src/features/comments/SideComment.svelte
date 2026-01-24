@@ -12,6 +12,7 @@
 
   let captionListHeight = $state(0);
   let hasChat = $state(false);
+  let isWatchPage = $state(false); // 追踪是否在视频观看页面
   let disconnect: (() => void) | null = null;
   let portMessageHandler: ((message: any) => void) | null = null;
   let prevIsSideComment: boolean | null = null;
@@ -34,12 +35,16 @@
 
   const setUp = async () => {
     if (!isSideComment) {
+      isWatchPage = false;
       return;
     }
 
     if (location.pathname !== "/watch") {
+      isWatchPage = false;
       return;
     }
+
+    isWatchPage = true;
 
     await waitFor(() => document.querySelector(".html5-main-video"));
     await waitFor(() => document.querySelector("ytd-watch-flexy"));
@@ -100,6 +105,7 @@
   };
 
   const recover = async () => {
+    isWatchPage = false;
     // recovery also needs to be careful not to run on non-watch pages if SPA navigation happened
     if (location.pathname !== "/watch") {
       return;
@@ -189,7 +195,7 @@
     border-radius: 12px;
     padding:12px;
     margin-bottom:12px;
-    display: ${isSideComment && !hasChat ? "flex" : "none"};
+    display: ${isSideComment && !hasChat && isWatchPage ? "flex" : "none"};
     border: 1px solid var(--yt-spec-10-percent-layer);
     background: ${window.getComputedStyle(document.documentElement).backgroundColor};
     `}
