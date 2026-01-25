@@ -18,7 +18,10 @@ export default defineContentScript({
         // Function to attach container to #secondary
         const attachToSecondary = async () => {
           const sec = await waitFor<HTMLDivElement>(
-            () => document.getElementById("secondary") as HTMLDivElement,
+            () =>
+              document.querySelector(
+                "ytd-watch-flexy #secondary"
+              ) as HTMLDivElement,
             0
           );
           if (sec && !sec.contains(container)) {

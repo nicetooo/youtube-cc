@@ -78,7 +78,8 @@
       () => document.querySelector("#above-the-fold") as HTMLDivElement
     );
     const secondaryColumn = await waitFor<HTMLDivElement>(
-      () => document.querySelector("#secondary") as HTMLDivElement
+      () =>
+        document.querySelector("ytd-watch-flexy #secondary") as HTMLDivElement
     );
 
     const sideComment = await waitFor<HTMLDivElement>(
@@ -123,7 +124,8 @@
       () => document.querySelector("#above-the-fold") as HTMLDivElement
     );
     const secondaryColumn = await waitFor<HTMLDivElement>(
-      () => document.querySelector("#secondary") as HTMLDivElement
+      () =>
+        document.querySelector("ytd-watch-flexy #secondary") as HTMLDivElement
     );
 
     // unexpected: if we are not in our modified state, do not recover blindly
