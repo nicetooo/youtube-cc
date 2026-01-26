@@ -2,6 +2,7 @@
 import tailwindStyles from "~/assets/tailwind.css?inline";
 import { mount, unmount } from "svelte";
 import SelectionPopup from "@/features/word-selection/SelectionPopup.svelte";
+import SelectionTrigger from "@/features/word-selection/SelectionTrigger.svelte";
 import { getBrowserLanguage } from "@/shared/stores/settings.svelte";
 import {
   extractSentenceContext,
@@ -39,11 +40,18 @@ export default defineContentScript({
     ).__ccPlusSelectionInjected = true;
 
     let popupInstance: ReturnType<typeof mount> | null = null;
+    let triggerInstance: ReturnType<typeof mount> | null = null;
     let shadowHost: HTMLDivElement | null = null;
     let shadowRoot: ShadowRoot | null = null;
     let isEnabled = true;
     let targetLanguage = "en";
     let myLanguage = getBrowserLanguage();
+
+    // Pending selection data (stored when trigger icon is shown, used when popup opens)
+    let pendingText = "";
+    let pendingContext = "";
+    let pendingSource: WordSource | null = null;
+    let pendingPopupPosition = { x: 0, y: 0 };
 
     // Increment daily selection count
     async function incrementSelectionCount() {
@@ -98,9 +106,9 @@ export default defineContentScript({
             targetLanguage = newSettings.targetLanguage ?? "en";
             myLanguage = newSettings.myLanguage ?? getBrowserLanguage();
 
-            // If disabled, close any open popup
+            // If disabled, close any open trigger/popup
             if (!isEnabled) {
-              closePopup();
+              closeAll();
             }
           }
         }
@@ -136,21 +144,95 @@ export default defineContentScript({
       return { host, root };
     }
 
+    // Close trigger icon
+    function closeTrigger() {
+      if (triggerInstance) {
+        unmount(triggerInstance);
+        triggerInstance = null;
+      }
+      if (shadowRoot) {
+        const triggerWrapper = shadowRoot.querySelector("[data-cc-trigger]");
+        if (triggerWrapper) {
+          triggerWrapper.remove();
+        }
+      }
+    }
+
     // Close popup
     function closePopup() {
       if (popupInstance) {
         unmount(popupInstance);
         popupInstance = null;
       }
-      // Clear shadow root content except styles
+      // Clear shadow root content except styles and trigger wrapper
       if (shadowRoot) {
         const children = Array.from(shadowRoot.children);
         children.forEach((child) => {
-          if (child.tagName !== "STYLE") {
+          if (
+            child.tagName !== "STYLE" &&
+            !(child as HTMLElement).dataset?.ccTrigger
+          ) {
             child.remove();
           }
         });
       }
+    }
+
+    // Close everything (trigger + popup)
+    function closeAll() {
+      closeTrigger();
+      closePopup();
+    }
+
+    // Show trigger icon near the selection
+    function showTriggerIcon(
+      text: string,
+      context: string,
+      source: WordSource,
+      triggerPosition: { x: number; y: number },
+      popupPosition: { x: number; y: number }
+    ) {
+      // Close existing trigger and popup
+      closeAll();
+
+      // Store pending selection data for when user clicks the trigger
+      pendingText = text;
+      pendingContext = context;
+      pendingSource = source;
+      pendingPopupPosition = popupPosition;
+
+      // Ensure shadow container exists
+      if (!shadowHost || !shadowRoot) {
+        const container = createShadowContainer();
+        shadowHost = container.host;
+        shadowRoot = container.root;
+      }
+
+      // Create wrapper element for trigger inside shadow DOM
+      const wrapper = document.createElement("div");
+      wrapper.style.pointerEvents = "auto";
+      wrapper.dataset.ccTrigger = "true";
+      shadowRoot.appendChild(wrapper);
+
+      // Mount trigger component
+      triggerInstance = mount(SelectionTrigger, {
+        target: wrapper,
+        props: {
+          position: triggerPosition,
+          onClick: () => {
+            // User clicked the icon - now show the full translation popup
+            closeTrigger();
+            if (pendingSource) {
+              showPopup(
+                pendingText,
+                pendingContext,
+                pendingSource,
+                pendingPopupPosition
+              );
+            }
+          },
+        },
+      });
     }
 
     // Show popup with translation
@@ -163,7 +245,7 @@ export default defineContentScript({
       // Close existing popup
       closePopup();
 
-      // Increment selection count for daily activity tracking
+      // Increment selection count only when user actually requests translation
       incrementSelectionCount();
 
       // Ensure shadow container exists
@@ -222,8 +304,14 @@ export default defineContentScript({
       const range = selection.getRangeAt(0);
       const rect = range.getBoundingClientRect();
 
-      // Position popup below the selection (fixed positioning, no scroll offset needed)
-      const position = {
+      // Trigger icon position: right side of selection, vertically centered
+      const triggerPosition = {
+        x: rect.right + 4,
+        y: rect.top + (rect.height - 28) / 2,
+      };
+
+      // Popup position: below the selection (used when user clicks the trigger)
+      const popupPosition = {
         x: rect.left,
         y: rect.bottom + 8,
       };
@@ -260,8 +348,8 @@ export default defineContentScript({
         };
       }
 
-      // Show popup
-      showPopup(text, context, source, position);
+      // Show trigger icon instead of popup directly
+      showTriggerIcon(text, context, source, triggerPosition, popupPosition);
     }
 
     // Debounced selection handler
@@ -302,31 +390,31 @@ export default defineContentScript({
         }
       });
 
-      // Close popup when clicking outside
+      // Close trigger/popup when clicking outside
       document.addEventListener("mousedown", (e) => {
         // Use composedPath to correctly detect clicks inside Shadow DOM
         const path = e.composedPath();
-        const isClickInsidePopup = shadowHost && path.includes(shadowHost);
+        const isClickInsideHost = shadowHost && path.includes(shadowHost);
 
-        if (shadowHost && !isClickInsidePopup) {
-          // Don't close immediately, let the popup's click handler work first
+        if (shadowHost && !isClickInsideHost) {
+          // Don't close immediately, let the click handler work first
           setTimeout(() => {
             const selection = window.getSelection();
             if (!selection || selection.isCollapsed) {
-              closePopup();
+              closeAll();
             }
           }, 0);
         }
       });
 
-      // Close popup on scroll
+      // Close on scroll
       let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
       window.addEventListener(
         "scroll",
         () => {
           if (scrollTimeout) clearTimeout(scrollTimeout);
           scrollTimeout = setTimeout(() => {
-            closePopup();
+            closeAll();
           }, 100);
         },
         { passive: true }

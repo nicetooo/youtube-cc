@@ -10,6 +10,7 @@
   } from "./translate";
   import { saveWord } from "@/shared/stores/words.svelte";
   import { i18n } from "@/shared/i18n/i18n";
+  import { detectDarkMode, onDarkModeChange } from "./theme-detect";
   import type { WordSource } from "@aspect/shared";
 
   // Props
@@ -89,11 +90,8 @@
     canSpeak(isMyLanguage(detectedLang) ? targetLanguage : myLanguage)
   );
 
-  // Theme detection
-  let isDarkMode = $state(
-    typeof window !== "undefined" &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-  );
+  // Theme detection - supports system, YouTube, and common dark mode patterns
+  let isDarkMode = $state(detectDarkMode());
 
   // Popup element for positioning
   let popupEl: HTMLDivElement | undefined = $state();
@@ -107,12 +105,10 @@
   });
 
   onMount(() => {
-    // Listen for theme changes
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleThemeChange = (e: MediaQueryListEvent) => {
-      isDarkMode = e.matches;
-    };
-    mediaQuery.addEventListener("change", handleThemeChange);
+    // Listen for theme changes (system, YouTube dark attribute, etc.)
+    const cleanupTheme = onDarkModeChange((dark) => {
+      isDarkMode = dark;
+    });
 
     // Translate the text
     doTranslate();
@@ -143,7 +139,7 @@
     }, 100);
 
     return () => {
-      mediaQuery.removeEventListener("change", handleThemeChange);
+      cleanupTheme();
       document.removeEventListener("keydown", handleKeydown);
       document.removeEventListener("mousedown", handleClickOutside);
     };
