@@ -9,7 +9,8 @@
       "ytd-ad-slot-renderer",
       "#player-ads",
       "ytd-engagement-panel-section-list-renderer:has(ytd-ad-slot-renderer)",
-      "#panels panel-ad-header-image-lockup-view-model"
+      "#panels panel-ad-header-image-lockup-view-model",
+      "#header > panel-ad-header-image-lockup-view-model"
     ],
     "RESULTS": ["ytd-ad-slot-renderer"],
     "GLOBAL": ["ytd-ad-slot-renderer", "ytd-promoted-sparkles-web-renderer"]
