@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "CC Plus - YouTube 視聴体験の強化"
+  },
+  "extDescription": {
+    "message": "インタラクティブなバイリンガル字幕、コメント検索、サイドコメント、ワイドスクリーン、広告除去でYouTube視聴体験を強化。"
+  },
+  "display_transcription": {
+    "message": "字幕を表示"
+  },
+  "search_transcription": {
+    "message": "字幕を検索"
+  },
+  "transcription": {
+    "message": "字幕"
+  },
+  "wide_screen": {
+    "message": "ワイドスクリーン"
+  },
+  "remove_ad_items": {
+    "message": "広告要素を削除"
+  },
+  "side_comments": {
+    "message": "サイドコメント"
+  },
+  "search_comment": {
+    "message": "コメントを検索"
+  },
+  "transcription_sub": {
+    "message": "インタラクティブなサイドバー字幕"
+  },
+  "wide_screen_sub": {
+    "message": "没入感を自動的に最大化"
+  },
+  "remove_ad_items_sub": {
+    "message": "バナーとUI要素をすっきり"
+  },
+  "side_comments_sub": {
+    "message": "コメントを右側に移動"
+  },
+  "search_comment_sub": {
+    "message": "コメントの検索とフィルタリング"
+  }
+}

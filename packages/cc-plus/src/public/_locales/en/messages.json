@@ -1,0 +1,50 @@
+{
+  "extName": {
+    "message": "CC Plus - YouTube Enhancement"
+  },
+  "extDescription": {
+    "message": "Interactive bilingual subtitles, comment search, side comments, wide screen mode & ad-free YouTube experience."
+  },
+  "display_transcription": {
+    "message": "Display Transcription"
+  },
+  "search_transcription": {
+    "message": "Search Transcription"
+  },
+  "transcription": {
+    "message": "Transcription"
+  },
+  "wide_screen": {
+    "message": "Wide Screen"
+  },
+  "remove_ad_items": {
+    "message": "Remove Ad Items"
+  },
+  "enlarge_skip_button": {
+    "message": "Enlarge Skip Button"
+  },
+  "side_comments": {
+    "message": "Side Comments"
+  },
+  "search_comment": {
+    "message": "Search Comment"
+  },
+  "transcription_sub": {
+    "message": "Interactive sidebar transcript"
+  },
+  "wide_screen_sub": {
+    "message": "Maximize immersion automatically"
+  },
+  "remove_ad_items_sub": {
+    "message": "Cleaner banners & UI elements"
+  },
+  "enlarge_skip_button_sub": {
+    "message": "Make skip ad button bigger"
+  },
+  "side_comments_sub": {
+    "message": "Shift comments to the right"
+  },
+  "search_comment_sub": {
+    "message": "Search and filter comments"
+  }
+}

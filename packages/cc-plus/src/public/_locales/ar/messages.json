@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "CC Plus - تحسين يوتيوب"
+  },
+  "extDescription": {
+    "message": "ترجمات ثنائية اللغة تفاعلية، البحث في التعليقات، التعليقات الجانبية، شاشة عريضة وتجربة يوتيوب بدون إعلانات."
+  },
+  "display_transcription": {
+    "message": "عرض النص"
+  },
+  "search_transcription": {
+    "message": "البحث في النص"
+  },
+  "transcription": {
+    "message": "النص"
+  },
+  "wide_screen": {
+    "message": "شاشة عريضة"
+  },
+  "remove_ad_items": {
+    "message": "إزالة الإعلانات"
+  },
+  "side_comments": {
+    "message": "التعليقات الجانبية"
+  },
+  "search_comment": {
+    "message": "البحث في التعليقات"
+  },
+  "transcription_sub": {
+    "message": "نص تفاعلي في الشريط الجانبي"
+  },
+  "wide_screen_sub": {
+    "message": "تعظيم الانغماس تلقائياً"
+  },
+  "remove_ad_items_sub": {
+    "message": "لافتات وعناصر واجهة أنظف"
+  },
+  "side_comments_sub": {
+    "message": "نقل التعليقات إلى اليمين"
+  },
+  "search_comment_sub": {
+    "message": "البحث وتصفية التعليقات"
+  }
+}

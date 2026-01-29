@@ -1,0 +1,35 @@
+{
+  "extName": {
+    "message": "CC Words - 번역 및 단어장"
+  },
+  "extDescription": {
+    "message": "텍스트 선택 번역, 간격 반복 학습 단어장. 텍스트를 선택하여 번역, 단어 저장, 플래시카드로 학습."
+  },
+  "word_selection": {
+    "message": "텍스트 선택 번역"
+  },
+  "word_selection_sub": {
+    "message": "텍스트를 선택하여 번역하고 단어 저장"
+  },
+  "save_word": {
+    "message": "단어 저장"
+  },
+  "word_saved": {
+    "message": "저장됨"
+  },
+  "translation": {
+    "message": "번역"
+  },
+  "context": {
+    "message": "문맥"
+  },
+  "source": {
+    "message": "출처"
+  },
+  "vocabulary": {
+    "message": "단어장"
+  },
+  "review": {
+    "message": "복습"
+  }
+}

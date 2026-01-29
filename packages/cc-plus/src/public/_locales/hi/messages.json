@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "CC Plus - YouTube एन्हांसमेंट"
+  },
+  "extDescription": {
+    "message": "इंटरैक्टिव द्विभाषी उपशीर्षक, टिप्पणी खोज, साइड टिप्पणियां, वाइड स्क्रीन और विज्ञापन-मुक्त YouTube अनुभव।"
+  },
+  "display_transcription": {
+    "message": "ट्रांसक्रिप्शन दिखाएं"
+  },
+  "search_transcription": {
+    "message": "ट्रांसक्रिप्शन खोजें"
+  },
+  "transcription": {
+    "message": "ट्रांसक्रिप्शन"
+  },
+  "wide_screen": {
+    "message": "वाइड स्क्रीन"
+  },
+  "remove_ad_items": {
+    "message": "विज्ञापन आइटम हटाएं"
+  },
+  "side_comments": {
+    "message": "साइड टिप्पणियां"
+  },
+  "search_comment": {
+    "message": "टिप्पणी खोजें"
+  },
+  "transcription_sub": {
+    "message": "इंटरैक्टिव साइडबार ट्रांसक्रिप्ट"
+  },
+  "wide_screen_sub": {
+    "message": "स्वचालित रूप से इमर्शन को अधिकतम करें"
+  },
+  "remove_ad_items_sub": {
+    "message": "क्लीनर बैनर और UI एलिमेंट्स"
+  },
+  "side_comments_sub": {
+    "message": "टिप्पणियों को दाईं ओर शिफ्ट करें"
+  },
+  "search_comment_sub": {
+    "message": "टिप्पणियां खोजें और फ़िल्टर करें"
+  }
+}

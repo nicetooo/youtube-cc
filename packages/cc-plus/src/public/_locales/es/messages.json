@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "CC Plus - Mejora de YouTube"
+  },
+  "extDescription": {
+    "message": "Subtítulos bilingües interactivos, búsqueda de comentarios, comentarios laterales, pantalla ancha y experiencia YouTube sin anuncios."
+  },
+  "display_transcription": {
+    "message": "Mostrar Transcripción"
+  },
+  "search_transcription": {
+    "message": "Buscar Transcripción"
+  },
+  "transcription": {
+    "message": "Transcripción"
+  },
+  "wide_screen": {
+    "message": "Pantalla Ancha"
+  },
+  "remove_ad_items": {
+    "message": "Eliminar Anuncios"
+  },
+  "side_comments": {
+    "message": "Comentarios Laterales"
+  },
+  "search_comment": {
+    "message": "Buscar Comentario"
+  },
+  "transcription_sub": {
+    "message": "Transcripción interactiva en la barra lateral"
+  },
+  "wide_screen_sub": {
+    "message": "Maximiza la inmersión automáticamente"
+  },
+  "remove_ad_items_sub": {
+    "message": "Banners y elementos de UI más limpios"
+  },
+  "side_comments_sub": {
+    "message": "Mover comentarios a la derecha"
+  },
+  "search_comment_sub": {
+    "message": "Buscar y filtrar comentarios"
+  }
+}

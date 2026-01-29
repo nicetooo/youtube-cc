@@ -1,0 +1,35 @@
+{
+  "extName": {
+    "message": "CC Words - ترجمة ومنشئ المفردات"
+  },
+  "extDescription": {
+    "message": "ترجمة تحديد النص، منشئ مفردات مع التكرار المتباعد."
+  },
+  "word_selection": {
+    "message": "ترجمة النص المحدد"
+  },
+  "word_selection_sub": {
+    "message": "حدد النص للترجمة وحفظ الكلمات"
+  },
+  "save_word": {
+    "message": "حفظ الكلمة"
+  },
+  "word_saved": {
+    "message": "تم حفظ الكلمة"
+  },
+  "translation": {
+    "message": "الترجمة"
+  },
+  "context": {
+    "message": "السياق"
+  },
+  "source": {
+    "message": "المصدر"
+  },
+  "vocabulary": {
+    "message": "المفردات"
+  },
+  "review": {
+    "message": "مراجعة"
+  }
+}

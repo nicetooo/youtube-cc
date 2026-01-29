@@ -4,9 +4,11 @@
   "version": "1.5.0",
   "type": "module",
   "scripts": {
-    "dev:ext": "pnpm --filter youtube-cc dev",
+    "dev:ext": "pnpm --filter cc-plus dev",
+    "dev:words": "pnpm --filter cc-words dev",
     "dev:web": "pnpm --filter @aspect/web dev",
-    "build:ext": "pnpm --filter youtube-cc build",
+    "build:ext": "pnpm --filter cc-plus build",
+    "build:words": "pnpm --filter cc-words build",
     "build:web": "pnpm --filter @aspect/web build",
     "build:all": "pnpm -r build",
     "check": "pnpm -r check",

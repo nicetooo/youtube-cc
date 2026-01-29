@@ -1,0 +1,35 @@
+{
+  "extName": {
+    "message": "CC Words - अनुवाद और शब्दावली"
+  },
+  "extDescription": {
+    "message": "टेक्स्ट चयन अनुवाद, स्पेस्ड रिपीटिशन के साथ शब्दावली निर्माता।"
+  },
+  "word_selection": {
+    "message": "टेक्स्ट चयन अनुवाद"
+  },
+  "word_selection_sub": {
+    "message": "अनुवाद करने और शब्द सहेजने के लिए टेक्स्ट चुनें"
+  },
+  "save_word": {
+    "message": "शब्द सहेजें"
+  },
+  "word_saved": {
+    "message": "शब्द सहेजा गया"
+  },
+  "translation": {
+    "message": "अनुवाद"
+  },
+  "context": {
+    "message": "संदर्भ"
+  },
+  "source": {
+    "message": "स्रोत"
+  },
+  "vocabulary": {
+    "message": "शब्दावली"
+  },
+  "review": {
+    "message": "समीक्षा"
+  }
+}

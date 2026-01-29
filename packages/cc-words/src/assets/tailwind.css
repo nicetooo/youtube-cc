@@ -1,0 +1,447 @@
+/* 
+  In Tailwind v4, `@import "tailwindcss";` includes Preflight (global CSS reset).
+  This global reset breaks YouTube's native styles (like SVG alignment and layout).
+  
+  We skip global preflight and only import the theme and utilities.
+*/
+
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
+
+/* 
+  Manual "Scoped Preflight":
+  We apply essential resets ONLY to our own extension components 
+  using the `.cc-plus-style-root` class. This prevents our CSS 
+  from bleeding into the rest of YouTube.
+*/
+
+.cc-plus-style-root {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+  color: #f1f1f1;
+}
+
+/* Reset common elements inside our root to look consistent */
+.cc-plus-style-root *,
+.cc-plus-style-root ::before,
+.cc-plus-style-root ::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: currentColor;
+}
+
+.cc-plus-style-root button {
+  cursor: pointer;
+  background-color: transparent;
+  background-image: none;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  text-transform: none;
+}
+
+.cc-plus-style-root h1,
+.cc-plus-style-root h2,
+.cc-plus-style-root p {
+  margin: 0;
+}
+
+.cc-plus-style-root svg {
+  display: block;
+}
+
+/* 
+  Selection Popup Styles
+  These need to be here (not in Svelte <style>) so they get injected into Shadow DOM
+*/
+.cc-plus-selection-popup {
+  position: fixed;
+  z-index: 2147483647;
+  min-width: 160px;
+  max-width: 280px;
+  background: var(--popup-bg);
+  color: var(--popup-text);
+  border: 1px solid var(--popup-border);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+.cc-plus-selection-popup .popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 6px;
+  gap: 6px;
+}
+
+.cc-plus-selection-popup .header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cc-plus-selection-popup .selected-text-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cc-plus-selection-popup .selected-text {
+  font-weight: 600;
+  font-size: 15px;
+  word-break: break-word;
+}
+
+.cc-plus-selection-popup .phonetic {
+  font-size: 13px;
+  color: var(--popup-text-secondary);
+  font-style: italic;
+  /* Use fonts that support IPA and Unicode combining characters */
+  font-family:
+    "Lucida Sans Unicode",
+    "Arial Unicode MS",
+    "Noto Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+.cc-plus-selection-popup .speak-button {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--popup-button-bg);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--popup-text-secondary);
+  transition: all 0.15s ease;
+}
+
+.cc-plus-selection-popup .speak-button:hover {
+  background: var(--popup-button-hover);
+  color: var(--popup-text);
+}
+
+.cc-plus-selection-popup .divider {
+  height: 1px;
+  background: var(--popup-border);
+  margin: 0 10px;
+}
+
+.cc-plus-selection-popup .popup-content {
+  padding: 8px 10px;
+  min-height: 24px;
+}
+
+.cc-plus-selection-popup .loading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--popup-text-secondary);
+  font-size: 12px;
+}
+
+.cc-plus-selection-popup .spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--popup-border);
+  border-top-color: var(--popup-accent);
+  border-radius: 50%;
+  animation: cc-plus-spin 0.8s linear infinite;
+}
+
+.cc-plus-selection-popup .spinner.small {
+  width: 12px;
+  height: 12px;
+}
+
+@keyframes cc-plus-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cc-plus-selection-popup .error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  color: var(--popup-accent);
+  font-size: 12px;
+}
+
+.cc-plus-selection-popup .retry-button {
+  padding: 3px 6px;
+  background: var(--popup-button-bg);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--popup-text);
+  transition: background 0.15s ease;
+}
+
+.cc-plus-selection-popup .retry-button:hover {
+  background: var(--popup-button-hover);
+}
+
+.cc-plus-selection-popup .translation-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cc-plus-selection-popup .translation-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.cc-plus-selection-popup .translation {
+  margin: 0;
+  color: var(--popup-text);
+  word-break: break-word;
+}
+
+.cc-plus-selection-popup .translation-phonetic {
+  display: block;
+  margin-top: 2px;
+}
+
+.cc-plus-selection-popup .speak-button.small {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.cc-plus-selection-popup .speak-button.small .icon {
+  width: 12px;
+  height: 12px;
+}
+
+.cc-plus-selection-popup .definitions {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--popup-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cc-plus-selection-popup .definition-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cc-plus-selection-popup .definition-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.cc-plus-selection-popup .pos-tag {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  background: var(--popup-accent);
+  color: white;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+.cc-plus-selection-popup .terms {
+  color: var(--popup-text);
+  word-break: break-word;
+  font-weight: 500;
+}
+
+.cc-plus-selection-popup .synonyms-list {
+  margin-inline-start: 8px;
+  padding-inline-start: 8px;
+  border-inline-start: 2px solid var(--popup-border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cc-plus-selection-popup .synonym-entry {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.cc-plus-selection-popup .synonym-word {
+  color: var(--popup-text);
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cc-plus-selection-popup .synonym-tags {
+  color: var(--popup-text);
+  opacity: 0.8;
+  font-size: 11px;
+}
+
+.cc-plus-selection-popup .lang-badge {
+  padding: 1px 5px;
+  background: var(--popup-button-bg);
+  color: var(--popup-text-secondary);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.cc-plus-selection-popup .popup-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px 8px;
+}
+
+.cc-plus-selection-popup .save-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: var(--popup-accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.cc-plus-selection-popup .save-button:hover:not(:disabled) {
+  background: var(--popup-accent-hover);
+}
+
+.cc-plus-selection-popup .save-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cc-plus-selection-popup .save-button.saved {
+  background: #16a34a;
+}
+
+.cc-plus-selection-popup .close-button {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--popup-button-bg);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--popup-text-secondary);
+  transition: all 0.15s ease;
+}
+
+.cc-plus-selection-popup .close-button:hover {
+  background: var(--popup-button-hover);
+  color: var(--popup-text);
+}
+
+.cc-plus-selection-popup .icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Selection trigger icon - shown on text selection, click to translate */
+.cc-plus-selection-trigger {
+  position: fixed;
+  z-index: 2147483647;
+  width: 28px;
+  height: 28px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #555555;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition:
+    box-shadow 0.15s ease,
+    color 0.15s ease;
+}
+
+.cc-plus-selection-trigger:hover {
+  color: #dc2626;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+}
+
+.cc-plus-selection-trigger:active {
+  opacity: 0.8;
+}
+
+.cc-plus-selection-trigger.dark {
+  background: #2a2a2a;
+  color: #aaaaaa;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.cc-plus-selection-trigger.dark:hover {
+  color: #dc2626;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+}
+
+.cc-plus-selection-trigger .trigger-icon {
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}

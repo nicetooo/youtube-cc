@@ -1,0 +1,35 @@
+{
+  "extName": {
+    "message": "CC Words - 翻訳と単語帳"
+  },
+  "extDescription": {
+    "message": "テキスト選択翻訳、間隔反復学習による単語帳。テキストを選択して翻訳、単語を保存、フラッシュカードで学習。"
+  },
+  "word_selection": {
+    "message": "テキスト選択翻訳"
+  },
+  "word_selection_sub": {
+    "message": "テキストを選択して翻訳・単語を保存"
+  },
+  "save_word": {
+    "message": "単語を保存"
+  },
+  "word_saved": {
+    "message": "保存しました"
+  },
+  "translation": {
+    "message": "翻訳"
+  },
+  "context": {
+    "message": "文脈"
+  },
+  "source": {
+    "message": "出典"
+  },
+  "vocabulary": {
+    "message": "単語帳"
+  },
+  "review": {
+    "message": "復習"
+  }
+}

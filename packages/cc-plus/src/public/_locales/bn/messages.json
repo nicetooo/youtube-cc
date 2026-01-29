@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "CC Plus - YouTube উন্নতি"
+  },
+  "extDescription": {
+    "message": "ইন্টারঅ্যাক্টিভ দ্বিভাষিক সাবটাইটেল, মন্তব্য অনুসন্ধান, সাইড মন্তব্য, ওয়াইড স্ক্রিন এবং বিজ্ঞাপন-মুক্ত YouTube অভিজ্ঞতা।"
+  },
+  "display_transcription": {
+    "message": "ট্রান্সক্রিপশন দেখান"
+  },
+  "search_transcription": {
+    "message": "ট্রান্সক্রিপশন অনুসন্ধান করুন"
+  },
+  "transcription": {
+    "message": "ট্রান্সক্রিপশন"
+  },
+  "wide_screen": {
+    "message": "ওয়াইড স্ক্রিন"
+  },
+  "remove_ad_items": {
+    "message": "বিজ্ঞাপন সরান"
+  },
+  "side_comments": {
+    "message": "সাইড মন্তব্য"
+  },
+  "search_comment": {
+    "message": "মন্তব্য অনুসন্ধান করুন"
+  },
+  "transcription_sub": {
+    "message": "ইন্টারঅ্যাক্টিভ সাইডবার ট্রান্সক্রিপ্ট"
+  },
+  "wide_screen_sub": {
+    "message": "স্বয়ংক্রিয়ভাবে ইমার্শন সর্বাধিক করুন"
+  },
+  "remove_ad_items_sub": {
+    "message": "ক্লিনার ব্যানার এবং UI উপাদান"
+  },
+  "side_comments_sub": {
+    "message": "মন্তব্য ডানদিকে সরান"
+  },
+  "search_comment_sub": {
+    "message": "মন্তব্য অনুসন্ধান এবং ফিল্টার করুন"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "extName": {
+    "message": "CC Words - 划词翻译与生词本"
+  },
+  "extDescription": {
+    "message": "划词翻译、生词本与间隔重复复习。选中任意文字即可翻译、保存生词，通过闪卡学习。"
+  },
+  "word_selection": {
+    "message": "划词翻译"
+  },
+  "word_selection_sub": {
+    "message": "选中文字即可翻译并保存生词"
+  },
+  "save_word": {
+    "message": "保存生词"
+  },
+  "word_saved": {
+    "message": "已保存"
+  },
+  "translation": {
+    "message": "翻译"
+  },
+  "context": {
+    "message": "上下文"
+  },
+  "source": {
+    "message": "来源"
+  },
+  "vocabulary": {
+    "message": "生词本"
+  },
+  "review": {
+    "message": "复习"
+  }
+}

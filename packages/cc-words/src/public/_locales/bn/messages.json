@@ -1,0 +1,35 @@
+{
+  "extName": {
+    "message": "CC Words - অনুবাদ ও শব্দভাণ্ডার"
+  },
+  "extDescription": {
+    "message": "টেক্সট নির্বাচন অনুবাদ, স্পেসড রিপিটিশন সহ শব্দভাণ্ডার নির্মাতা।"
+  },
+  "word_selection": {
+    "message": "টেক্সট সিলেকশন অনুবাদ"
+  },
+  "word_selection_sub": {
+    "message": "অনুবাদ করতে এবং শব্দ সংরক্ষণ করতে টেক্সট নির্বাচন করুন"
+  },
+  "save_word": {
+    "message": "শব্দ সংরক্ষণ করুন"
+  },
+  "word_saved": {
+    "message": "শব্দ সংরক্ষিত"
+  },
+  "translation": {
+    "message": "অনুবাদ"
+  },
+  "context": {
+    "message": "প্রসঙ্গ"
+  },
+  "source": {
+    "message": "উৎস"
+  },
+  "vocabulary": {
+    "message": "শব্দভাণ্ডার"
+  },
+  "review": {
+    "message": "পর্যালোচনা"
+  }
+}

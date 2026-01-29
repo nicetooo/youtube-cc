@@ -2,9 +2,10 @@
 
 ## 项目概述
 
-**CC Plus** - YouTube 学习增强平台，包含浏览器扩展和配套网站。
+**CC Plus** - YouTube 学习增强平台，包含两个浏览器扩展和配套网站。
 
-- **扩展:** 交互式双语字幕、生词收藏、划词翻译、宽屏模式、广告移除、评论增强
+- **CC Plus (cc-plus):** 交互式双语字幕、宽屏模式、广告移除、评论增强
+- **CC Words (cc-words):** 划词翻译、生词收藏、Firebase 同步、活动统计
 - **网站:** 生词管理、复习系统、用户账号 (youtube-cc.com)
 
 ## 技术栈
@@ -21,18 +22,32 @@
 
 ```
 packages/
-├── extension/                    # Chrome 扩展
+├── cc-plus/                      # CC Plus - YouTube 增强扩展
 │   ├── src/
 │   │   ├── entrypoints/
-│   │   │   ├── background.ts     # 后台脚本、同步服务
+│   │   │   ├── background.ts     # 后台脚本 (广告选择器、字幕拦截、Tab 管理)
 │   │   │   ├── content.ts        # YouTube 页面注入
-│   │   │   ├── website-auth.content.ts  # 网站桥接脚本
-│   │   │   ├── selection.content.ts     # 划词翻译
-│   │   │   └── popup/            # 弹出页面
+│   │   │   └── popup/            # 弹出页面 (YouTube 功能开关)
 │   │   ├── features/             # caption/, ads/, comments/, player/
 │   │   ├── shared/
 │   │   │   ├── stores/
-│   │   │   │   ├── settings.svelte.ts   # 设置状态
+│   │   │   │   └── settings.svelte.ts   # YouTube 设置状态
+│   │   │   └── i18n/             # 多语言
+│   │   └── public/               # 图标、语言包
+│   └── wxt.config.ts
+│
+├── cc-words/                     # CC Words - 划词翻译与生词本扩展
+│   ├── src/
+│   │   ├── entrypoints/
+│   │   │   ├── background.ts     # 后台脚本 (翻译代理、同步服务、选词脚本管理)
+│   │   │   ├── selection.content.ts     # 划词翻译内容脚本
+│   │   │   ├── website-auth.content.ts  # 网站桥接脚本
+│   │   │   └── popup/            # 弹出页面 (翻译设置、账号、活动)
+│   │   ├── features/
+│   │   │   └── word-selection/   # 翻译弹窗、上下文提取
+│   │   ├── shared/
+│   │   │   ├── stores/
+│   │   │   │   ├── settings.svelte.ts   # 翻译相关设置
 │   │   │   │   ├── words.svelte.ts      # 本地生词存储
 │   │   │   │   └── sync.ts              # Firebase 同步服务
 │   │   │   └── i18n/             # 多语言
@@ -65,11 +80,13 @@ packages/
 
 ```bash
 # 开发
-pnpm dev:ext              # 开发扩展 (热重载)
+pnpm dev:ext              # 开发 CC Plus 扩展 (热重载)
+pnpm dev:words            # 开发 CC Words 扩展 (热重载)
 pnpm dev:web              # 开发网站 → http://localhost:5188
 
 # 构建
-pnpm build:ext            # 构建扩展 → packages/extension/.output/chrome-mv3
+pnpm build:ext            # 构建 CC Plus → packages/cc-plus/.output/chrome-mv3
+pnpm build:words          # 构建 CC Words → packages/cc-words/.output/chrome-mv3
 pnpm build:web            # 构建网站
 pnpm build:all            # 构建全部
 
@@ -81,12 +98,18 @@ pnpm format               # Prettier 格式化
 
 ## 开发流程
 
-### 扩展开发
+### CC Plus 扩展开发
 
 1. `pnpm build:ext` 创建初始构建
-2. Chrome 加载 `packages/extension/.output/chrome-mv3`
+2. Chrome 加载 `packages/cc-plus/.output/chrome-mv3`
 3. `pnpm dev:ext` 启动热重载
 4. `Cmd+Shift+R` 刷新 YouTube 页面
+
+### CC Words 扩展开发
+
+1. `pnpm build:words` 创建初始构建
+2. Chrome 加载 `packages/cc-words/.output/chrome-mv3`
+3. `pnpm dev:words` 启动热重载
 
 ### 网站开发
 
@@ -189,12 +212,23 @@ interface Word {
 
 ## 关键文件
 
-### 扩展
+### CC Plus 扩展
+
+| 文件                               | 说明                 |
+| ---------------------------------- | -------------------- |
+| `entrypoints/background.ts`        | 后台脚本、广告选择器 |
+| `entrypoints/content.ts`           | YouTube 页面注入     |
+| `entrypoints/popup/App.svelte`     | 弹出页面 UI          |
+| `shared/stores/settings.svelte.ts` | 设置状态管理         |
+| `shared/i18n/i18n.ts`              | 多语言支持           |
+
+### CC Words 扩展
 
 | 文件                                  | 说明                         |
 | ------------------------------------- | ---------------------------- |
 | `entrypoints/background.ts`           | 后台脚本、消息处理、同步触发 |
 | `entrypoints/website-auth.content.ts` | 网站桥接、认证状态同步       |
+| `entrypoints/selection.content.ts`    | 划词翻译内容脚本             |
 | `entrypoints/popup/App.svelte`        | 弹出页面 UI                  |
 | `shared/stores/words.svelte.ts`       | 本地生词 CRUD                |
 | `shared/stores/sync.ts`               | Firebase 同步服务            |
@@ -226,14 +260,17 @@ interface Word {
 
 支持语言: 英语、简体中文、繁体中文、日语、韩语
 
-- 扩展语言文件: `packages/extension/src/public/_locales/*/messages.json`
-- 扩展 i18n: `packages/extension/src/shared/i18n/i18n.ts`
+- CC Plus 语言文件: `packages/cc-plus/src/public/_locales/*/messages.json`
+- CC Plus i18n: `packages/cc-plus/src/shared/i18n/i18n.ts`
+- CC Words 语言文件: `packages/cc-words/src/public/_locales/*/messages.json`
+- CC Words i18n: `packages/cc-words/src/shared/i18n/i18n.ts`
 - 网站 i18n: `packages/web/src/lib/i18n/`
 
 ## 代码规范
 
 - 使用 Svelte 5 runes 语法 (`$state`, `$derived`, `$effect`)
-- 扩展组件按功能放在 `packages/extension/src/features/`
+- CC Plus 组件按功能放在 `packages/cc-plus/src/features/`
+- CC Words 组件按功能放在 `packages/cc-words/src/features/`
 - 共享类型放在 `packages/shared/src/types/`
 - 使用 TypeScript 严格模式
 - 样式遵循 Tailwind + YouTube 深色主题 (#0f0f0f, #1a1a1a, #f1f1f1)
@@ -255,7 +292,8 @@ interface Word {
 ### 扩展
 
 - Chrome Web Store 发布
-- `pnpm build:ext && pnpm --filter youtube-cc zip`
+- `pnpm build:ext && pnpm --filter cc-plus zip`
+- `pnpm build:words && pnpm --filter cc-words zip`
 - 发布前改 popup 跳转链接为生产地址
 
 ### 网站
@@ -267,5 +305,5 @@ interface Word {
 
 1. **端口配置**: 网站开发端口为 `5188`，扩展中相关匹配规则已配置
 2. **扩展调试**: 使用 `pnpm build:ext` 而非 `dev:ext`，因为 content script 需要完整构建
-3. **同步调试**: 打开 DevTools Console 查看 `[CC Plus]` 前缀的日志
+3. **同步调试**: 打开 DevTools Console 查看 `[CC Plus]` 或 `[CC Words]` 前缀的日志
 4. **IndexedDB 查看**: DevTools → Application → IndexedDB → `ccplus-words`

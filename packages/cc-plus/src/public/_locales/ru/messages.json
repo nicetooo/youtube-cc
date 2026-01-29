@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "CC Plus - Улучшение YouTube"
+  },
+  "extDescription": {
+    "message": "Интерактивные двуязычные субтитры, поиск комментариев, боковые комментарии, широкий экран и YouTube без рекламы."
+  },
+  "display_transcription": {
+    "message": "Показать Транскрипцию"
+  },
+  "search_transcription": {
+    "message": "Поиск Транскрипции"
+  },
+  "transcription": {
+    "message": "Транскрипция"
+  },
+  "wide_screen": {
+    "message": "Широкий Экран"
+  },
+  "remove_ad_items": {
+    "message": "Удалить Рекламу"
+  },
+  "side_comments": {
+    "message": "Боковые Комментарии"
+  },
+  "search_comment": {
+    "message": "Поиск Комментария"
+  },
+  "transcription_sub": {
+    "message": "Интерактивная транскрипция на боковой панели"
+  },
+  "wide_screen_sub": {
+    "message": "Автоматически максимизирует погружение"
+  },
+  "remove_ad_items_sub": {
+    "message": "Более чистые баннеры и элементы интерфейса"
+  },
+  "side_comments_sub": {
+    "message": "Переместить комментарии вправо"
+  },
+  "search_comment_sub": {
+    "message": "Поиск и фильтрация комментариев"
+  }
+}

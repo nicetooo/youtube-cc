@@ -1,0 +1,35 @@
+{
+  "extName": {
+    "message": "CC Words - Tradução e Vocabulário"
+  },
+  "extDescription": {
+    "message": "Tradução por seleção de texto, construtor de vocabulário com repetição espaçada."
+  },
+  "word_selection": {
+    "message": "Tradução por Seleção"
+  },
+  "word_selection_sub": {
+    "message": "Selecione texto para traduzir e salvar palavras"
+  },
+  "save_word": {
+    "message": "Salvar Palavra"
+  },
+  "word_saved": {
+    "message": "Palavra Salva"
+  },
+  "translation": {
+    "message": "Tradução"
+  },
+  "context": {
+    "message": "Contexto"
+  },
+  "source": {
+    "message": "Fonte"
+  },
+  "vocabulary": {
+    "message": "Vocabulário"
+  },
+  "review": {
+    "message": "Revisar"
+  }
+}

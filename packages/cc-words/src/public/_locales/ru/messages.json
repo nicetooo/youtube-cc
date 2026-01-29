@@ -1,0 +1,35 @@
+{
+  "extName": {
+    "message": "CC Words - Перевод и Словарь"
+  },
+  "extDescription": {
+    "message": "Перевод выделенного текста, словарь с интервальным повторением."
+  },
+  "word_selection": {
+    "message": "Перевод Выделением"
+  },
+  "word_selection_sub": {
+    "message": "Выделите текст для перевода и сохранения слов"
+  },
+  "save_word": {
+    "message": "Сохранить Слово"
+  },
+  "word_saved": {
+    "message": "Слово Сохранено"
+  },
+  "translation": {
+    "message": "Перевод"
+  },
+  "context": {
+    "message": "Контекст"
+  },
+  "source": {
+    "message": "Источник"
+  },
+  "vocabulary": {
+    "message": "Словарь"
+  },
+  "review": {
+    "message": "Повторить"
+  }
+}

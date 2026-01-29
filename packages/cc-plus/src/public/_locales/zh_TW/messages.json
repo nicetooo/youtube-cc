@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "CC Plus - YouTube 增強"
+  },
+  "extDescription": {
+    "message": "互動式雙語字幕、留言搜尋、側邊留言、寬螢幕模式、去廣告，全方位提升 YouTube 觀看體驗。"
+  },
+  "display_transcription": {
+    "message": "顯示字幕"
+  },
+  "search_transcription": {
+    "message": "搜尋字幕"
+  },
+  "transcription": {
+    "message": "字幕"
+  },
+  "wide_screen": {
+    "message": "寬螢幕"
+  },
+  "remove_ad_items": {
+    "message": "移除廣告元素"
+  },
+  "side_comments": {
+    "message": "側邊留言"
+  },
+  "search_comment": {
+    "message": "搜尋留言"
+  },
+  "transcription_sub": {
+    "message": "互動式側邊欄字幕"
+  },
+  "wide_screen_sub": {
+    "message": "自動最大化沉浸感"
+  },
+  "remove_ad_items_sub": {
+    "message": "更清爽的橫幅和介面"
+  },
+  "side_comments_sub": {
+    "message": "將留言移至右側"
+  },
+  "search_comment_sub": {
+    "message": "搜尋和篩選留言"
+  }
+}

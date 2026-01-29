@@ -1,0 +1,35 @@
+{
+  "extName": {
+    "message": "CC Words - Translate & Vocabulary Builder"
+  },
+  "extDescription": {
+    "message": "Text selection translation, vocabulary builder with spaced repetition. Select any text to translate, save words, and learn with flashcards."
+  },
+  "word_selection": {
+    "message": "Text Selection Translation"
+  },
+  "word_selection_sub": {
+    "message": "Select text to translate & save words"
+  },
+  "save_word": {
+    "message": "Save Word"
+  },
+  "word_saved": {
+    "message": "Word Saved"
+  },
+  "translation": {
+    "message": "Translation"
+  },
+  "context": {
+    "message": "Context"
+  },
+  "source": {
+    "message": "Source"
+  },
+  "vocabulary": {
+    "message": "Vocabulary"
+  },
+  "review": {
+    "message": "Review"
+  }
+}
