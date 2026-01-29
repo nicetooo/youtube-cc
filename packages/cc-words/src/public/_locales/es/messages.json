@@ -1,9 +1,9 @@
 {
   "extName": {
-    "message": "CC Words - Traductor y Constructor de Vocabulario"
+    "message": "CC Words - Traductor y Vocabulario"
   },
   "extDescription": {
-    "message": "Traducción por selección de texto, constructor de vocabulario con repetición espaciada."
+    "message": "Selecciona texto para traducir, guárdalo en vocabulario y repasa con tarjetas de repetición espaciada. Todos los sitios."
   },
   "word_selection": {
     "message": "Traducción por Selección"

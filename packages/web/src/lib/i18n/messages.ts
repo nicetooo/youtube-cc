@@ -44,7 +44,8 @@ export const messages = {
     home_title: "Learn Languages with YouTube",
     home_subtitle:
       "Save vocabulary from videos, review with spaced repetition, and master new words effortlessly.",
-    home_get_extension: "Get Extension",
+    home_get_cc_plus: "Get CC Plus",
+    home_get_cc_words: "Get CC Words",
     home_view_words: "View My Words",
     home_feature_captions: "Interactive Captions",
     home_feature_captions_desc:
@@ -246,7 +247,8 @@ export const messages = {
     // Home page
     home_title: "用 YouTube 学语言",
     home_subtitle: "从视频中收藏生词，用间隔重复复习，轻松掌握新词汇。",
-    home_get_extension: "获取扩展",
+    home_get_cc_plus: "获取 CC Plus",
+    home_get_cc_words: "获取 CC Words",
     home_view_words: "查看生词",
     home_feature_captions: "互动字幕",
     home_feature_captions_desc: "点击字幕中的任意单词即可保存",
@@ -441,7 +443,8 @@ export const messages = {
     // Home page
     home_title: "用 YouTube 學語言",
     home_subtitle: "從影片中收藏生詞，用間隔重複複習，輕鬆掌握新詞彙。",
-    home_get_extension: "取得擴充",
+    home_get_cc_plus: "取得 CC Plus",
+    home_get_cc_words: "取得 CC Words",
     home_view_words: "查看生詞",
     home_feature_captions: "互動字幕",
     home_feature_captions_desc: "點擊字幕中的任意單字即可儲存",
@@ -637,7 +640,8 @@ export const messages = {
     home_title: "YouTubeで言語を学ぶ",
     home_subtitle:
       "動画から単語を保存し、間隔反復で復習し、新しい単語を楽に習得。",
-    home_get_extension: "拡張機能を入手",
+    home_get_cc_plus: "CC Plus を入手",
+    home_get_cc_words: "CC Words を入手",
     home_view_words: "単語を見る",
     home_feature_captions: "インタラクティブ字幕",
     home_feature_captions_desc: "字幕の任意の単語をクリックして保存",
@@ -835,7 +839,8 @@ export const messages = {
     home_title: "YouTube로 언어 배우기",
     home_subtitle:
       "동영상에서 단어를 저장하고, 간격 반복으로 복습하며, 새로운 단어를 쉽게 습득하세요.",
-    home_get_extension: "확장 프로그램 설치",
+    home_get_cc_plus: "CC Plus 설치",
+    home_get_cc_words: "CC Words 설치",
     home_view_words: "내 단어 보기",
     home_feature_captions: "인터랙티브 자막",
     home_feature_captions_desc: "자막의 아무 단어나 클릭하여 저장",
@@ -1033,7 +1038,8 @@ export const messages = {
     home_title: "YouTube के साथ भाषाएं सीखें",
     home_subtitle:
       "वीडियो से शब्दावली सहेजें, स्पेस्ड रिपीटिशन के साथ समीक्षा करें, और आसानी से नए शब्द सीखें।",
-    home_get_extension: "एक्सटेंशन प्राप्त करें",
+    home_get_cc_plus: "CC Plus प्राप्त करें",
+    home_get_cc_words: "CC Words प्राप्त करें",
     home_view_words: "मेरे शब्द देखें",
     home_feature_captions: "इंटरैक्टिव कैप्शन",
     home_feature_captions_desc: "सबटाइटल में किसी भी शब्द पर क्लिक करके सहेजें",
@@ -1237,7 +1243,8 @@ export const messages = {
     home_title: "Aprende idiomas con YouTube",
     home_subtitle:
       "Guarda vocabulario de videos, repasa con repetición espaciada y domina palabras nuevas sin esfuerzo.",
-    home_get_extension: "Obtener Extensión",
+    home_get_cc_plus: "Obtener CC Plus",
+    home_get_cc_words: "Obtener CC Words",
     home_view_words: "Ver Mis Palabras",
     home_feature_captions: "Subtítulos Interactivos",
     home_feature_captions_desc:
@@ -1445,7 +1452,8 @@ export const messages = {
     home_title: "Apprenez les langues avec YouTube",
     home_subtitle:
       "Enregistrez du vocabulaire depuis des vidéos, révisez avec la répétition espacée et maîtrisez de nouveaux mots facilement.",
-    home_get_extension: "Obtenir l'Extension",
+    home_get_cc_plus: "Obtenir CC Plus",
+    home_get_cc_words: "Obtenir CC Words",
     home_view_words: "Voir Mes Mots",
     home_feature_captions: "Sous-titres Interactifs",
     home_feature_captions_desc:
@@ -1656,7 +1664,8 @@ export const messages = {
     home_title: "تعلم اللغات مع YouTube",
     home_subtitle:
       "احفظ المفردات من الفيديوهات، راجع بالتكرار المتباعد، وأتقن كلمات جديدة بسهولة.",
-    home_get_extension: "احصل على الإضافة",
+    home_get_cc_plus: "احصل على CC Plus",
+    home_get_cc_words: "احصل على CC Words",
     home_view_words: "عرض كلماتي",
     home_feature_captions: "ترجمات تفاعلية",
     home_feature_captions_desc: "انقر على أي كلمة في الترجمات لحفظها فوراً",
@@ -1853,7 +1862,8 @@ export const messages = {
     home_title: "YouTube দিয়ে ভাষা শিখুন",
     home_subtitle:
       "ভিডিও থেকে শব্দভাণ্ডার সংরক্ষণ করুন, স্পেসড রিপিটিশন দিয়ে পর্যালোচনা করুন এবং সহজেই নতুন শব্দ আয়ত্ত করুন।",
-    home_get_extension: "এক্সটেনশন পান",
+    home_get_cc_plus: "CC Plus পান",
+    home_get_cc_words: "CC Words পান",
     home_view_words: "আমার শব্দ দেখুন",
     home_feature_captions: "ইন্টারঅ্যাক্টিভ ক্যাপশন",
     home_feature_captions_desc:
@@ -2059,7 +2069,8 @@ export const messages = {
     home_title: "Aprenda idiomas com o YouTube",
     home_subtitle:
       "Salve vocabulário de vídeos, revise com repetição espaçada e domine novas palavras sem esforço.",
-    home_get_extension: "Obter Extensão",
+    home_get_cc_plus: "Obter CC Plus",
+    home_get_cc_words: "Obter CC Words",
     home_view_words: "Ver Minhas Palavras",
     home_feature_captions: "Legendas Interativas",
     home_feature_captions_desc:
@@ -2266,7 +2277,8 @@ export const messages = {
     home_title: "Изучайте языки с YouTube",
     home_subtitle:
       "Сохраняйте словарный запас из видео, повторяйте с интервальным повторением и легко осваивайте новые слова.",
-    home_get_extension: "Получить расширение",
+    home_get_cc_plus: "Получить CC Plus",
+    home_get_cc_words: "Получить CC Words",
     home_view_words: "Мои слова",
     home_feature_captions: "Интерактивные субтитры",
     home_feature_captions_desc:

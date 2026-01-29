@@ -39,12 +39,20 @@
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a
-            href="https://chromewebstore.google.com/detail/youtube-cc/gagahifolmmnnppdoohdbkibammhkpeb"
+            href="https://chromewebstore.google.com/detail/cc-plus/gagahifolmmnnppdoohdbkibammhkpeb"
             target="_blank"
             rel="noopener"
             class="btn btn-primary px-6 py-3"
           >
-            {i18n.t("home_get_extension")}
+            {i18n.t("home_get_cc_plus")}
+          </a>
+          <a
+            href="https://chromewebstore.google.com/detail/cc-words/cpkcognabaapedhhcjbidpojofmnmgpb"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-primary px-6 py-3 !bg-emerald-600 hover:!bg-emerald-700"
+          >
+            {i18n.t("home_get_cc_words")}
           </a>
           <a href="/words" class="btn btn-secondary px-6 py-3">
             {i18n.t("home_view_words")}
