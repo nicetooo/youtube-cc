@@ -58,7 +58,7 @@ const defaultSettings: ExtensionSettings = {
   wordSelection: true, // Default on for this dedicated extension
   targetLanguage: "en",
   myLanguage: defaultMyLanguage,
-  showActivityChart: true,
+  showActivityChart: false,
 };
 
 /** sync store between popup & content.js */

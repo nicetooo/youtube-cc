@@ -4,18 +4,12 @@ import {
   handleWebsiteAuth,
   handleWebsiteWordsResponse,
 } from "@/shared/stores/sync";
-import {
-  hasAllUrlsPermission,
-  onPermissionChange,
-} from "@/shared/utils/permissions";
 
-// Content script IDs for word selection
-const SELECTION_SCRIPT_YOUTUBE = "ccplus-words-selection-youtube";
-const SELECTION_SCRIPT_ALL = "ccplus-words-selection-all";
+// Content script ID for word selection
+const SELECTION_SCRIPT_ID = "ccplus-words-selection";
 
 // Track registration state
-let isYouTubeScriptRegistered = false;
-let isAllSitesScriptRegistered = false;
+let isScriptRegistered = false;
 
 /**
  * Clean up any legacy or stale registered scripts on startup
@@ -23,7 +17,6 @@ let isAllSitesScriptRegistered = false;
  */
 async function cleanupLegacyScripts(): Promise<void> {
   try {
-    // Get all currently registered scripts
     const scripts = await chrome.scripting.getRegisteredContentScripts();
     const ourScriptIds = scripts
       .filter(
@@ -38,143 +31,76 @@ async function cleanupLegacyScripts(): Promise<void> {
       await chrome.scripting.unregisterContentScripts({ ids: ourScriptIds });
     }
 
-    // Reset state
-    isYouTubeScriptRegistered = false;
-    isAllSitesScriptRegistered = false;
+    isScriptRegistered = false;
   } catch (error) {
     console.error("[CC Words] Failed to cleanup scripts:", error);
   }
 }
 
 /**
- * Register selection script for YouTube only (no extra permission needed)
+ * Register selection script for all sites
  */
-async function registerYouTubeSelectionScript(): Promise<boolean> {
-  if (isYouTubeScriptRegistered) return true;
+async function registerSelectionScript(): Promise<boolean> {
+  if (isScriptRegistered) return true;
 
   try {
     await chrome.scripting.registerContentScripts([
       {
-        id: SELECTION_SCRIPT_YOUTUBE,
-        matches: ["*://www.youtube.com/*", "*://youtube.com/*"],
-        js: ["content-scripts/selection.js"],
-        runAt: "document_end",
-      },
-    ]);
-    isYouTubeScriptRegistered = true;
-    console.log("[CC Words] YouTube selection script registered");
-    return true;
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.includes("Duplicate script ID")
-    ) {
-      isYouTubeScriptRegistered = true;
-      return true;
-    }
-    console.error(
-      "[CC Words] Failed to register YouTube selection script:",
-      error
-    );
-    return false;
-  }
-}
-
-/**
- * Register selection script for all sites (requires <all_urls> permission)
- */
-async function registerAllSitesSelectionScript(): Promise<boolean> {
-  if (isAllSitesScriptRegistered) return true;
-
-  try {
-    await chrome.scripting.registerContentScripts([
-      {
-        id: SELECTION_SCRIPT_ALL,
+        id: SELECTION_SCRIPT_ID,
         matches: ["http://*/*", "https://*/*"],
-        excludeMatches: ["*://www.youtube.com/*", "*://youtube.com/*"],
         js: ["content-scripts/selection.js"],
         runAt: "document_end",
       },
     ]);
-    isAllSitesScriptRegistered = true;
-    console.log("[CC Words] All sites selection script registered");
+    isScriptRegistered = true;
+    console.log("[CC Words] Selection script registered");
     return true;
   } catch (error) {
     if (
       error instanceof Error &&
       error.message.includes("Duplicate script ID")
     ) {
-      isAllSitesScriptRegistered = true;
+      isScriptRegistered = true;
       return true;
     }
-    console.error(
-      "[CC Words] Failed to register all sites selection script:",
-      error
-    );
+    console.error("[CC Words] Failed to register selection script:", error);
     return false;
   }
 }
 
 /**
- * Unregister YouTube selection script
+ * Unregister selection script
  */
-async function unregisterYouTubeSelectionScript(): Promise<boolean> {
-  if (!isYouTubeScriptRegistered) return true;
+async function unregisterSelectionScript(): Promise<boolean> {
+  if (!isScriptRegistered) return true;
 
   try {
     await chrome.scripting.unregisterContentScripts({
-      ids: [SELECTION_SCRIPT_YOUTUBE],
+      ids: [SELECTION_SCRIPT_ID],
     });
-    isYouTubeScriptRegistered = false;
-    console.log("[CC Words] YouTube selection script unregistered");
+    isScriptRegistered = false;
+    console.log("[CC Words] Selection script unregistered");
     return true;
   } catch (error) {
-    console.error(
-      "[CC Words] Failed to unregister YouTube selection script:",
-      error
-    );
+    console.error("[CC Words] Failed to unregister selection script:", error);
     return false;
   }
 }
 
 /**
- * Unregister all sites selection script
+ * Inject selection script into existing tabs
+ * Needed because dynamically registered scripts only run on NEW page loads
  */
-async function unregisterAllSitesSelectionScript(): Promise<boolean> {
-  if (!isAllSitesScriptRegistered) return true;
-
+async function injectSelectionScriptIntoExistingTabs(): Promise<void> {
   try {
-    await chrome.scripting.unregisterContentScripts({
-      ids: [SELECTION_SCRIPT_ALL],
+    const tabs = await chrome.tabs.query({
+      url: ["http://*/*", "https://*/*"],
     });
-    isAllSitesScriptRegistered = false;
-    console.log("[CC Words] All sites selection script unregistered");
-    return true;
-  } catch (error) {
-    console.error(
-      "[CC Words] Failed to unregister all sites selection script:",
-      error
-    );
-    return false;
-  }
-}
-
-/**
- * Inject selection script into existing tabs that match the pattern
- * This is needed because dynamically registered scripts only run on NEW page loads
- */
-async function injectSelectionScriptIntoExistingTabs(
-  patterns: string[]
-): Promise<void> {
-  try {
-    // Query all tabs matching the patterns
-    const tabs = await chrome.tabs.query({ url: patterns });
 
     for (const tab of tabs) {
       if (tab.id === undefined) continue;
 
       try {
-        // Check if script is already injected by looking for our marker
         const [result] = await chrome.scripting.executeScript({
           target: { tabId: tab.id },
           func: () =>
@@ -182,14 +108,8 @@ async function injectSelectionScriptIntoExistingTabs(
               .__ccPlusSelectionInjected,
         });
 
-        if (result?.result) {
-          console.log(
-            `[CC Words] Selection script already injected in tab ${tab.id}`
-          );
-          continue;
-        }
+        if (result?.result) continue;
 
-        // Inject the script
         await chrome.scripting.executeScript({
           target: { tabId: tab.id },
           files: ["content-scripts/selection.js"],
@@ -198,10 +118,6 @@ async function injectSelectionScriptIntoExistingTabs(
         console.log(`[CC Words] Injected selection script into tab ${tab.id}`);
       } catch (error) {
         // Ignore errors for tabs we can't access (e.g., chrome:// pages)
-        console.log(
-          `[CC Words] Could not inject into tab ${tab.id}:`,
-          error instanceof Error ? error.message : error
-        );
       }
     }
   } catch (error) {
@@ -210,66 +126,36 @@ async function injectSelectionScriptIntoExistingTabs(
 }
 
 /**
- * Update selection script registration based on permission and settings
- * - YouTube: always available when wordSelection is enabled
- * - All sites: only when user has granted <all_urls> permission
+ * Update selection script registration based on settings
  */
 async function updateSelectionScriptState(
   injectIntoExisting = false
 ): Promise<void> {
-  const hasAllUrlsPerm = await hasAllUrlsPermission();
   const { settings } = await chrome.storage.local.get("settings");
   const wordSelectionEnabled = settings?.wordSelection ?? true;
 
   console.log("[CC Words] Updating selection scripts:", {
     wordSelectionEnabled,
-    hasAllUrlsPerm,
     injectIntoExisting,
   });
 
-  // YouTube selection script - no extra permission needed
   if (wordSelectionEnabled) {
-    await registerYouTubeSelectionScript();
-    // Inject into existing YouTube tabs if requested
+    await registerSelectionScript();
     if (injectIntoExisting) {
-      await injectSelectionScriptIntoExistingTabs([
-        "*://www.youtube.com/*",
-        "*://youtube.com/*",
-      ]);
+      await injectSelectionScriptIntoExistingTabs();
     }
   } else {
-    await unregisterYouTubeSelectionScript();
-  }
-
-  // All sites selection script - requires <all_urls> permission
-  if (wordSelectionEnabled && hasAllUrlsPerm) {
-    await registerAllSitesSelectionScript();
-    // Inject into existing tabs if requested (only non-YouTube since those are handled above)
-    if (injectIntoExisting) {
-      await injectSelectionScriptIntoExistingTabs([
-        "http://*/*",
-        "https://*/*",
-      ]);
-    }
-  } else {
-    await unregisterAllSitesSelectionScript();
+    await unregisterSelectionScript();
   }
 }
 
 export default defineBackground(() => {
   // --- Word Selection Script Management ---
 
-  // Clean up legacy scripts then initialize based on current permission/settings
+  // Clean up legacy scripts then initialize based on current settings
   // Also inject into existing tabs on startup (e.g., after extension update)
   cleanupLegacyScripts().then(() => {
-    updateSelectionScriptState(true); // Inject into existing tabs
-  });
-
-  // Listen for permission changes
-  onPermissionChange((hasPermission) => {
-    console.log("[CC Words] Permission changed:", hasPermission);
-    // When permission is granted, inject into existing tabs
-    updateSelectionScriptState(hasPermission);
+    updateSelectionScriptState(true);
   });
 
   // Listen for settings changes
@@ -330,15 +216,7 @@ export default defineBackground(() => {
       return false;
     }
 
-    // Check if word selection permission is granted
-    if (message.type === "check-word-selection-permission") {
-      hasAllUrlsPermission()
-        .then((hasPermission) => sendResponse({ hasPermission }))
-        .catch(() => sendResponse({ hasPermission: false }));
-      return true;
-    }
-
-    // Update selection script state (after permission granted/revoked)
+    // Update selection script state
     if (message.type === "update-selection-script") {
       updateSelectionScriptState(true)
         .then(() => sendResponse({ success: true }))

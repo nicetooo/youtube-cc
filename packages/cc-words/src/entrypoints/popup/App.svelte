@@ -13,10 +13,6 @@
     onAuthChange,
     WEBSITE_USER_KEY,
   } from "@aspect/shared";
-  import {
-    hasAllUrlsPermission,
-    requestAllUrlsPermission,
-  } from "@/shared/utils/permissions";
   import MiniHeatmap from "./MiniHeatmap.svelte";
 
   // Simplified Firebase user info type
@@ -34,15 +30,8 @@
   let syncStatus = $state<"idle" | "syncing" | "success" | "error">("idle");
   let unsubscribeAuth: (() => void) | null = null;
 
-  // Word selection permission state
-  let hasWordSelectionPermission = $state(false);
-  let permissionLoading = $state(false);
-
   onMount(async () => {
     subscribeStorageChange();
-
-    // Check word selection permission
-    hasWordSelectionPermission = await hasAllUrlsPermission();
 
     // First check for website user (logged in via website)
     const result = await chrome.storage.local.get(WEBSITE_USER_KEY);
@@ -179,24 +168,6 @@
         showActivityChart: !s.settings.showActivityChart,
       },
     }));
-  }
-
-  // Enable word selection on all websites (requires permission)
-  async function enableAllSitesSelection() {
-    if (hasWordSelectionPermission) return;
-
-    permissionLoading = true;
-    try {
-      const granted = await requestAllUrlsPermission();
-      if (granted) {
-        hasWordSelectionPermission = true;
-        chrome.runtime.sendMessage({ type: "update-selection-script" });
-      }
-    } catch (error) {
-      console.error("[CC Plus Words] Failed to request permission:", error);
-    } finally {
-      permissionLoading = false;
-    }
   }
 
   // Update target language
@@ -559,56 +530,6 @@
 
         <!-- Translation-related settings (only show when word selection is enabled) -->
         {#if $appStore.settings.wordSelection ?? true}
-          <!-- All Sites Word Selection (requires permission) -->
-          <button
-            onclick={enableAllSitesSelection}
-            disabled={permissionLoading || hasWordSelectionPermission}
-            class="w-full flex items-center justify-between p-3.5 rounded-xl bg-[var(--cc-bg-secondary)] border border-[var(--cc-border)] hover:border-[var(--cc-border-hover)] hover:bg-[var(--cc-bg-hover)] transition-all group disabled:opacity-60"
-          >
-            <div class="flex flex-col text-left">
-              <span
-                class="text-sm font-semibold text-[var(--cc-text-secondary)] group-hover:text-[var(--cc-text)] transition-colors"
-                >{i18n("all_sites_selection")}</span
-              >
-              <span class="text-xs text-[var(--cc-text-muted)]"
-                >{i18n("all_sites_selection_sub")}</span
-              >
-            </div>
-            {#if permissionLoading}
-              <div
-                class="w-5 h-5 border-2 border-[var(--cc-text-muted)] border-t-transparent rounded-full animate-spin"
-              ></div>
-            {:else if hasWordSelectionPermission}
-              <svg
-                class="w-5 h-5 text-green-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            {:else}
-              <svg
-                class="w-5 h-5 text-[var(--cc-text-muted)] group-hover:text-[var(--cc-text)] transition-colors"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
-            {/if}
-          </button>
-
           <!-- My Language Selector -->
           <div class="relative lang-dropdown">
             <button
@@ -858,15 +779,15 @@
               >
             </div>
             <div
-              class={`w-10 h-5 rounded-full relative transition-colors duration-300 ${($appStore.settings.showActivityChart ?? true) ? "bg-[var(--cc-accent)]" : "bg-[var(--cc-toggle-off)]"}`}
+              class={`w-10 h-5 rounded-full relative transition-colors duration-300 ${($appStore.settings.showActivityChart ?? false) ? "bg-[var(--cc-accent)]" : "bg-[var(--cc-toggle-off)]"}`}
             >
               <div
-                class={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${($appStore.settings.showActivityChart ?? true) ? "left-6" : "left-1"}`}
+                class={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${($appStore.settings.showActivityChart ?? false) ? "left-6" : "left-1"}`}
               ></div>
             </div>
           </button>
 
-          {#if $appStore.settings.showActivityChart ?? true}
+          {#if $appStore.settings.showActivityChart ?? false}
             <MiniHeatmap />
           {/if}
         </div>
