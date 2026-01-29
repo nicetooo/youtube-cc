@@ -274,8 +274,8 @@
           text: "#f1f1f1",
           textSecondary: "#9ca3af",
           border: "rgba(255, 255, 255, 0.1)",
-          accent: "#dc2626",
-          accentHover: "#b91c1c",
+          accent: "#10b981",
+          accentHover: "#059669",
           buttonBg: "#333333",
           buttonHover: "#444444",
         }
@@ -284,8 +284,8 @@
           text: "#1a1a1a",
           textSecondary: "#6b7280",
           border: "rgba(0, 0, 0, 0.1)",
-          accent: "#dc2626",
-          accentHover: "#b91c1c",
+          accent: "#10b981",
+          accentHover: "#059669",
           buttonBg: "#f3f4f6",
           buttonHover: "#e5e7eb",
         }

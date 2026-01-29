@@ -18,8 +18,8 @@ export const theme = {
     borderHover: "rgba(255, 255, 255, 0.1)",
 
     // Accent colors
-    accent: "#dc2626", // red-600
-    accentHover: "#b91c1c", // red-700
+    accent: "#10b981", // emerald-500
+    accentHover: "#059669", // emerald-600
 
     // Toggle off state
     toggleOff: "#333333",
@@ -28,7 +28,7 @@ export const theme = {
     scrollbar: "#333333",
 
     // Selection highlight
-    selection: "rgba(239, 68, 68, 0.3)", // red-500/30
+    selection: "rgba(16, 185, 129, 0.3)", // emerald-500/30
   },
   light: {
     // Background colors
@@ -46,8 +46,8 @@ export const theme = {
     borderHover: "rgba(0, 0, 0, 0.1)",
 
     // Accent colors
-    accent: "#dc2626", // red-600
-    accentHover: "#b91c1c", // red-700
+    accent: "#10b981", // emerald-500
+    accentHover: "#059669", // emerald-600
 
     // Toggle off state
     toggleOff: "#d1d5db", // gray-300
@@ -56,7 +56,7 @@ export const theme = {
     scrollbar: "#d1d5db", // gray-300
 
     // Selection highlight
-    selection: "rgba(239, 68, 68, 0.2)", // red-500/20
+    selection: "rgba(16, 185, 129, 0.2)", // emerald-500/20
   },
 } as const;
 

@@ -420,7 +420,7 @@
 }
 
 .cc-plus-selection-trigger:hover {
-  color: #dc2626;
+  color: #10b981;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
 }
 
@@ -436,7 +436,7 @@
 }
 
 .cc-plus-selection-trigger.dark:hover {
-  color: #dc2626;
+  color: #10b981;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
 }
 
