@@ -1012,7 +1012,7 @@
           {/if}
         </div>
 
-        {#if secondCaption}
+        {#if selectedLangLower}
           <button
             class="ytp-button"
             style="width: 24px;height:24px;display: flex; align-items: center; justify-content: center;"
@@ -1322,8 +1322,8 @@
 
   .timestamp {
     flex-shrink: 0;
-    min-width: 3.2em;
-    margin-right: 8px;
+    min-width: 2.5em;
+    margin-right: 6px;
     padding-top: 1px;
     color: var(--yt-spec-text-secondary, #aaa);
     font-size: 0.8em;
