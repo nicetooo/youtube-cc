@@ -85,7 +85,7 @@ importers:
         specifier: ^0.19.13
         version: 0.19.29(@types/node@25.0.9)(lightningcss@1.30.2)(rollup@4.55.1)(terser@5.46.0)
 
-  packages/cc-translation:
+  packages/cc-words:
     dependencies:
       autoprefixer:
         specifier: ^10.4.23
