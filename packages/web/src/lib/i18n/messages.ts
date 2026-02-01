@@ -69,6 +69,37 @@ export const messages = {
     home_feature_word_selection_desc:
       "Select any text to translate and save words",
 
+    // Home page - redesigned
+    home_hero_badge: "YouTube Learning Toolkit",
+    home_ccplus_tag: "YouTube Enhanced",
+    home_ccplus_desc:
+      "Transform YouTube into an immersive learning environment with interactive bilingual captions, clean interface, and theater mode.",
+    home_ccwords_tag: "Smart Vocabulary",
+    home_ccwords_desc:
+      "Select any word on any webpage to translate instantly, save to your vocabulary, and master with spaced repetition.",
+    home_install_free: "Install Free",
+    home_platform_title: "Your Learning Hub",
+    home_platform_desc:
+      "Manage vocabulary, review with flashcards, and track your progress — all in one place.",
+    home_platform_review: "Flashcard Review",
+    home_platform_review_desc:
+      "Science-backed SM-2 spaced repetition system helps you remember words long-term",
+    home_platform_stats: "Learning Analytics",
+    home_platform_stats_desc:
+      "Track your streak, mastery distribution, and daily progress with detailed charts",
+    home_platform_sync: "Cross-device Sync",
+    home_platform_sync_desc:
+      "Sign in to sync your vocabulary seamlessly between extensions and website",
+    home_open_app: "Open Web App",
+    footer_privacy: "Privacy",
+    footer_terms: "Terms",
+    home_ccwords_f_context: "Context Capture",
+    home_ccwords_f_context_desc:
+      "Automatically saves the surrounding sentence for better memorization",
+    home_ccwords_f_activity: "Activity Tracking",
+    home_ccwords_f_activity_desc:
+      "Visualize your learning habits with GitHub-style heatmaps",
+
     // Words page
     words_title: "My Vocabulary",
     words_search_placeholder: "Search words...",
@@ -267,6 +298,34 @@ export const messages = {
     home_feature_word_selection: "划词翻译",
     home_feature_word_selection_desc: "选中文字即可翻译并保存生词",
 
+    // Home page - redesigned
+    home_hero_badge: "YouTube 学习工具",
+    home_ccplus_tag: "YouTube 增强",
+    home_ccplus_desc:
+      "将 YouTube 打造为沉浸式学习环境：互动双语字幕、界面净化、剧院模式，一键开启。",
+    home_ccwords_tag: "智能生词本",
+    home_ccwords_desc:
+      "在任意网页选中单词即刻翻译，一键收藏生词，用间隔重复科学记忆。",
+    home_install_free: "免费安装",
+    home_platform_title: "你的学习中心",
+    home_platform_desc:
+      "在这里管理生词、用闪卡复习、追踪学习进度——一站式搞定。",
+    home_platform_review: "闪卡复习",
+    home_platform_review_desc:
+      "基于 SM-2 间隔重复算法，科学安排复习时间，助你长期记忆",
+    home_platform_stats: "学习分析",
+    home_platform_stats_desc:
+      "追踪连续学习天数、掌握分布和每日进度，用数据驱动学习",
+    home_platform_sync: "跨设备同步",
+    home_platform_sync_desc: "登录后生词在扩展和网站之间自动同步，随时随地学习",
+    home_open_app: "打开网页版",
+    footer_privacy: "隐私政策",
+    footer_terms: "服务条款",
+    home_ccwords_f_context: "上下文捕获",
+    home_ccwords_f_context_desc: "自动保存生词所在的原句，帮助理解和记忆",
+    home_ccwords_f_activity: "活跃追踪",
+    home_ccwords_f_activity_desc: "用 GitHub 风格的热力图可视化你的学习习惯",
+
     // Words page
     words_title: "我的生词",
     words_search_placeholder: "搜索单词...",
@@ -462,6 +521,34 @@ export const messages = {
     home_feature_comment_search_desc: "輕鬆搜尋和過濾評論",
     home_feature_word_selection: "劃詞翻譯",
     home_feature_word_selection_desc: "選中文字即可翻譯並保存生詞",
+
+    // Home page - redesigned
+    home_hero_badge: "YouTube 學習工具",
+    home_ccplus_tag: "YouTube 增強",
+    home_ccplus_desc:
+      "將 YouTube 打造為沉浸式學習環境：互動雙語字幕、介面淨化、劇院模式，一鍵開啟。",
+    home_ccwords_tag: "智慧生詞本",
+    home_ccwords_desc:
+      "在任意網頁選中單字即刻翻譯，一鍵收藏生詞，用間隔重複科學記憶。",
+    home_install_free: "免費安裝",
+    home_platform_title: "你的學習中心",
+    home_platform_desc:
+      "在這裡管理生詞、用閃卡複習、追蹤學習進度——一站式搞定。",
+    home_platform_review: "閃卡複習",
+    home_platform_review_desc:
+      "基於 SM-2 間隔重複演算法，科學安排複習時間，助你長期記憶",
+    home_platform_stats: "學習分析",
+    home_platform_stats_desc:
+      "追蹤連續學習天數、掌握分布和每日進度，用數據驅動學習",
+    home_platform_sync: "跨裝置同步",
+    home_platform_sync_desc: "登入後生詞在擴充和網站之間自動同步，隨時隨地學習",
+    home_open_app: "開啟網頁版",
+    footer_privacy: "隱私政策",
+    footer_terms: "服務條款",
+    home_ccwords_f_context: "上下文擷取",
+    home_ccwords_f_context_desc: "自動儲存生詞所在的原句，幫助理解和記憶",
+    home_ccwords_f_activity: "活躍追蹤",
+    home_ccwords_f_activity_desc: "用 GitHub 風格的熱力圖視覺化你的學習習慣",
 
     // Words page
     words_title: "我的生詞",
@@ -661,6 +748,35 @@ export const messages = {
     home_feature_word_selection: "選択翻訳",
     home_feature_word_selection_desc: "テキストを選択して翻訳・単語保存",
 
+    // Home page - redesigned
+    home_hero_badge: "YouTube学習ツールキット",
+    home_ccplus_tag: "YouTube強化",
+    home_ccplus_desc:
+      "YouTubeを没入型の学習環境に：インタラクティブなバイリンガル字幕、クリーンなインターフェース、シアターモード。",
+    home_ccwords_tag: "スマート単語帳",
+    home_ccwords_desc:
+      "あらゆるWebページで単語を選択して即座に翻訳、単語帳に保存、間隔反復で習得。",
+    home_install_free: "無料インストール",
+    home_platform_title: "学習ハブ",
+    home_platform_desc:
+      "単語管理、フラッシュカード復習、学習進捗の追跡をまとめて。",
+    home_platform_review: "フラッシュカード復習",
+    home_platform_review_desc:
+      "SM-2間隔反復アルゴリズムで最適なタイミングの復習をサポート",
+    home_platform_stats: "学習分析",
+    home_platform_stats_desc:
+      "連続学習日数、習得分布、毎日の進捗をチャートで追跡",
+    home_platform_sync: "クロスデバイス同期",
+    home_platform_sync_desc:
+      "ログインすると拡張機能とWebサイト間で単語帳が自動同期",
+    home_open_app: "Webアプリを開く",
+    footer_privacy: "プライバシー",
+    footer_terms: "利用規約",
+    home_ccwords_f_context: "コンテキスト保存",
+    home_ccwords_f_context_desc: "前後の文を自動保存し、理解と記憶を助けます",
+    home_ccwords_f_activity: "活動追跡",
+    home_ccwords_f_activity_desc: "GitHub風のヒートマップで学習習慣を視覚化",
+
     // Words page
     words_title: "私の単語",
     words_search_placeholder: "単語を検索...",
@@ -859,6 +975,36 @@ export const messages = {
     home_feature_comment_search_desc: "댓글을 쉽게 검색하고 필터링",
     home_feature_word_selection: "선택 번역",
     home_feature_word_selection_desc: "텍스트를 선택하여 번역하고 단어 저장",
+
+    // Home page - redesigned
+    home_hero_badge: "YouTube 학습 도구",
+    home_ccplus_tag: "YouTube 강화",
+    home_ccplus_desc:
+      "YouTube를 몰입형 학습 환경으로: 인터랙티브 이중 자막, 깨끗한 인터페이스, 극장 모드.",
+    home_ccwords_tag: "스마트 단어장",
+    home_ccwords_desc:
+      "모든 웹페이지에서 단어를 선택하여 즉시 번역, 단어장에 저장, 간격 반복으로 학습.",
+    home_install_free: "무료 설치",
+    home_platform_title: "학습 허브",
+    home_platform_desc:
+      "단어 관리, 플래시카드 복습, 학습 진행 추적을 한곳에서.",
+    home_platform_review: "플래시카드 복습",
+    home_platform_review_desc:
+      "SM-2 간격 반복 알고리즘으로 과학적인 복습 스케줄링",
+    home_platform_stats: "학습 분석",
+    home_platform_stats_desc:
+      "연속 학습일, 숙달 분포, 일일 진행률을 차트로 추적",
+    home_platform_sync: "크로스 디바이스 동기화",
+    home_platform_sync_desc:
+      "로그인하면 확장 프로그램과 웹사이트 간 단어장 자동 동기화",
+    home_open_app: "웹 앱 열기",
+    footer_privacy: "개인정보",
+    footer_terms: "이용약관",
+    home_ccwords_f_context: "문맥 캡처",
+    home_ccwords_f_context_desc:
+      "원문 문장을 자동 저장하여 이해와 암기를 돕습니다",
+    home_ccwords_f_activity: "활동 추적",
+    home_ccwords_f_activity_desc: "GitHub 스타일 히트맵으로 학습 습관 시각화",
 
     // Words page
     words_title: "내 단어장",
@@ -1062,6 +1208,37 @@ export const messages = {
     home_feature_word_selection: "शब्द चयन",
     home_feature_word_selection_desc:
       "अनुवाद और शब्द सहेजने के लिए टेक्स्ट चुनें",
+
+    // Home page - redesigned
+    home_hero_badge: "YouTube लर्निंग टूलकिट",
+    home_ccplus_tag: "YouTube एन्हांस्ड",
+    home_ccplus_desc:
+      "YouTube को इमर्सिव लर्निंग एनवायरनमेंट में बदलें: इंटरैक्टिव बाइलिंगुअल सबटाइटल, क्लीन इंटरफेस, थिएटर मोड।",
+    home_ccwords_tag: "स्मार्ट वोकैबलरी",
+    home_ccwords_desc:
+      "किसी भी वेबपेज पर शब्द चुनकर तुरंत अनुवाद करें, शब्दकोश में सेव करें, स्पेस्ड रिपीटिशन से याद करें।",
+    home_install_free: "मुफ्त इंस्टॉल करें",
+    home_platform_title: "आपका लर्निंग हब",
+    home_platform_desc:
+      "शब्द प्रबंधन, फ्लैशकार्ड रिव्यू और प्रगति ट्रैकिंग — सब एक जगह।",
+    home_platform_review: "फ्लैशकार्ड रिव्यू",
+    home_platform_review_desc:
+      "SM-2 स्पेस्ड रिपीटिशन एल्गोरिदम से वैज्ञानिक रिव्यू शेड्यूलिंग",
+    home_platform_stats: "लर्निंग एनालिटिक्स",
+    home_platform_stats_desc:
+      "स्ट्रीक, मास्टरी डिस्ट्रीब्यूशन और दैनिक प्रगति को चार्ट से ट्रैक करें",
+    home_platform_sync: "क्रॉस-डिवाइस सिंक",
+    home_platform_sync_desc:
+      "लॉगिन करके एक्सटेंशन और वेबसाइट के बीच शब्दकोश सिंक करें",
+    home_open_app: "वेब ऐप खोलें",
+    footer_privacy: "गोपनीयता",
+    footer_terms: "शर्तें",
+    home_ccwords_f_context: "संदर्भ कैप्चर",
+    home_ccwords_f_context_desc:
+      "बेहतर याद रखने के लिए आसपास का वाक्य स्वचालित रूप से सहेजता है",
+    home_ccwords_f_activity: "गतिविधि ट्रैकिंग",
+    home_ccwords_f_activity_desc:
+      "GitHub शैली के हीटमैप से अपनी सीखने की आदतों को देखें",
 
     // Words page
     words_title: "मेरी शब्दावली",
@@ -1268,6 +1445,37 @@ export const messages = {
     home_feature_word_selection: "Selección de Palabras",
     home_feature_word_selection_desc:
       "Selecciona texto para traducir y guardar palabras",
+
+    // Home page - redesigned
+    home_hero_badge: "Kit de Aprendizaje YouTube",
+    home_ccplus_tag: "YouTube Mejorado",
+    home_ccplus_desc:
+      "Transforma YouTube en un entorno de aprendizaje inmersivo: subtítulos bilingües interactivos, interfaz limpia y modo teatro.",
+    home_ccwords_tag: "Vocabulario Inteligente",
+    home_ccwords_desc:
+      "Selecciona cualquier palabra en cualquier web para traducir al instante, guardar en tu vocabulario y dominar con repetición espaciada.",
+    home_install_free: "Instalar Gratis",
+    home_platform_title: "Tu Centro de Aprendizaje",
+    home_platform_desc:
+      "Gestiona vocabulario, repasa con tarjetas y sigue tu progreso — todo en un lugar.",
+    home_platform_review: "Repaso con Tarjetas",
+    home_platform_review_desc:
+      "Sistema de repetición espaciada SM-2 para una memorización a largo plazo",
+    home_platform_stats: "Analíticas de Aprendizaje",
+    home_platform_stats_desc:
+      "Sigue tu racha, distribución de dominio y progreso diario con gráficos detallados",
+    home_platform_sync: "Sincronización Multi-dispositivo",
+    home_platform_sync_desc:
+      "Inicia sesión para sincronizar vocabulario entre extensiones y sitio web",
+    home_open_app: "Abrir Web App",
+    footer_privacy: "Privacidad",
+    footer_terms: "Términos",
+    home_ccwords_f_context: "Captura de Contexto",
+    home_ccwords_f_context_desc:
+      "Guarda automáticamente la frase original para mejor memorización",
+    home_ccwords_f_activity: "Seguimiento de Actividad",
+    home_ccwords_f_activity_desc:
+      "Visualiza tus hábitos de aprendizaje con mapas de calor estilo GitHub",
 
     // Words page
     words_title: "Mi Vocabulario",
@@ -1479,6 +1687,37 @@ export const messages = {
     home_feature_word_selection_desc:
       "Sélectionnez du texte pour traduire et sauvegarder des mots",
 
+    // Home page - redesigned
+    home_hero_badge: "Boîte à Outils YouTube",
+    home_ccplus_tag: "YouTube Amélioré",
+    home_ccplus_desc:
+      "Transformez YouTube en environnement d'apprentissage immersif : sous-titres bilingues interactifs, interface épurée et mode théâtre.",
+    home_ccwords_tag: "Vocabulaire Intelligent",
+    home_ccwords_desc:
+      "Sélectionnez un mot sur n'importe quelle page web pour traduire instantanément, sauvegarder et maîtriser avec la répétition espacée.",
+    home_install_free: "Installer Gratuitement",
+    home_platform_title: "Votre Centre d'Apprentissage",
+    home_platform_desc:
+      "Gérez votre vocabulaire, révisez avec des flashcards et suivez vos progrès — tout en un seul endroit.",
+    home_platform_review: "Révision par Flashcards",
+    home_platform_review_desc:
+      "Système de répétition espacée SM-2 pour une mémorisation à long terme",
+    home_platform_stats: "Analytiques d'Apprentissage",
+    home_platform_stats_desc:
+      "Suivez votre série, la distribution de maîtrise et les progrès quotidiens",
+    home_platform_sync: "Synchronisation Multi-appareils",
+    home_platform_sync_desc:
+      "Connectez-vous pour synchroniser le vocabulaire entre extensions et site web",
+    home_open_app: "Ouvrir l'App Web",
+    footer_privacy: "Confidentialité",
+    footer_terms: "Conditions",
+    home_ccwords_f_context: "Capture de Contexte",
+    home_ccwords_f_context_desc:
+      "Sauvegarde automatiquement la phrase originale pour une meilleure mémorisation",
+    home_ccwords_f_activity: "Suivi d'Activité",
+    home_ccwords_f_activity_desc:
+      "Visualisez vos habitudes d'apprentissage avec des cartes thermiques style GitHub",
+
     // Words page
     words_title: "Mon Vocabulaire",
     words_search_placeholder: "Rechercher des mots...",
@@ -1684,6 +1923,35 @@ export const messages = {
     home_feature_word_selection: "تحديد الكلمات",
     home_feature_word_selection_desc: "حدد النص للترجمة وحفظ الكلمات",
 
+    // Home page - redesigned
+    home_hero_badge: "أدوات تعلم YouTube",
+    home_ccplus_tag: "YouTube محسّن",
+    home_ccplus_desc:
+      "حوّل YouTube إلى بيئة تعلم غامرة: ترجمات ثنائية تفاعلية، واجهة نظيفة، ووضع المسرح.",
+    home_ccwords_tag: "مفردات ذكية",
+    home_ccwords_desc:
+      "حدد أي كلمة في أي صفحة ويب للترجمة الفورية، احفظها في مفرداتك، وأتقنها بالتكرار المتباعد.",
+    home_install_free: "تثبيت مجاني",
+    home_platform_title: "مركز التعلم الخاص بك",
+    home_platform_desc:
+      "إدارة المفردات، المراجعة بالبطاقات، وتتبع تقدمك — كل شيء في مكان واحد.",
+    home_platform_review: "مراجعة البطاقات",
+    home_platform_review_desc:
+      "نظام التكرار المتباعد SM-2 المدعوم علمياً للحفظ طويل المدى",
+    home_platform_stats: "تحليلات التعلم",
+    home_platform_stats_desc:
+      "تتبع سلسلتك وتوزيع الإتقان والتقدم اليومي بالرسوم البيانية",
+    home_platform_sync: "مزامنة عبر الأجهزة",
+    home_platform_sync_desc: "سجل الدخول لمزامنة المفردات بين الإضافات والموقع",
+    home_open_app: "فتح تطبيق الويب",
+    footer_privacy: "الخصوصية",
+    footer_terms: "الشروط",
+    home_ccwords_f_context: "التقاط السياق",
+    home_ccwords_f_context_desc: "يحفظ تلقائياً الجملة المحيطة لتحسين الحفظ",
+    home_ccwords_f_activity: "تتبع النشاط",
+    home_ccwords_f_activity_desc:
+      "تصور عادات التعلم بخرائط حرارية بأسلوب GitHub",
+
     // Words page
     words_title: "مفرداتي",
     words_search_placeholder: "البحث عن كلمات...",
@@ -1887,6 +2155,37 @@ export const messages = {
     home_feature_word_selection: "শব্দ নির্বাচন",
     home_feature_word_selection_desc:
       "অনুবাদ এবং শব্দ সংরক্ষণ করতে টেক্সট নির্বাচন করুন",
+
+    // Home page - redesigned
+    home_hero_badge: "YouTube শেখার টুলকিট",
+    home_ccplus_tag: "YouTube উন্নত",
+    home_ccplus_desc:
+      "YouTube-কে নিমজ্জিত শেখার পরিবেশে রূপান্তরিত করুন: ইন্টারেক্টিভ দ্বিভাষিক সাবটাইটেল, পরিষ্কার ইন্টারফেস এবং থিয়েটার মোড।",
+    home_ccwords_tag: "স্মার্ট শব্দভাণ্ডার",
+    home_ccwords_desc:
+      "যেকোনো ওয়েবপেজে শব্দ নির্বাচন করে তাৎক্ষণিক অনুবাদ, শব্দভাণ্ডারে সংরক্ষণ এবং স্পেসড রিপিটিশনে আয়ত্ত করুন।",
+    home_install_free: "বিনামূল্যে ইনস্টল করুন",
+    home_platform_title: "আপনার শেখার কেন্দ্র",
+    home_platform_desc:
+      "শব্দভাণ্ডার পরিচালনা, ফ্ল্যাশকার্ড রিভিউ এবং অগ্রগতি ট্র্যাকিং — সব এক জায়গায়।",
+    home_platform_review: "ফ্ল্যাশকার্ড রিভিউ",
+    home_platform_review_desc:
+      "SM-2 স্পেসড রিপিটিশন অ্যালগরিদম দীর্ঘমেয়াদী স্মৃতিতে সাহায্য করে",
+    home_platform_stats: "শেখার বিশ্লেষণ",
+    home_platform_stats_desc:
+      "স্ট্রিক, দক্ষতা বিতরণ এবং দৈনিক অগ্রগতি চার্টে ট্র্যাক করুন",
+    home_platform_sync: "ক্রস-ডিভাইস সিঙ্ক",
+    home_platform_sync_desc:
+      "এক্সটেনশন এবং ওয়েবসাইটের মধ্যে শব্দভাণ্ডার সিঙ্ক করতে লগইন করুন",
+    home_open_app: "ওয়েব অ্যাপ খুলুন",
+    footer_privacy: "গোপনীয়তা",
+    footer_terms: "শর্তাবলী",
+    home_ccwords_f_context: "প্রসঙ্গ ক্যাপচার",
+    home_ccwords_f_context_desc:
+      "ভালো মুখস্থের জন্য আশেপাশের বাক্য স্বয়ংক্রিয়ভাবে সংরক্ষণ করে",
+    home_ccwords_f_activity: "কার্যকলাপ ট্র্যাকিং",
+    home_ccwords_f_activity_desc:
+      "GitHub স্টাইল হিটম্যাপে আপনার শেখার অভ্যাস দেখুন",
 
     // Words page
     words_title: "আমার শব্দভাণ্ডার",
@@ -2095,6 +2394,37 @@ export const messages = {
     home_feature_word_selection_desc:
       "Selecione texto para traduzir e salvar palavras",
 
+    // Home page - redesigned
+    home_hero_badge: "Kit de Aprendizado YouTube",
+    home_ccplus_tag: "YouTube Aprimorado",
+    home_ccplus_desc:
+      "Transforme o YouTube em um ambiente de aprendizado imersivo: legendas bilíngues interativas, interface limpa e modo teatro.",
+    home_ccwords_tag: "Vocabulário Inteligente",
+    home_ccwords_desc:
+      "Selecione qualquer palavra em qualquer página para traduzir instantaneamente, salvar no vocabulário e dominar com repetição espaçada.",
+    home_install_free: "Instalar Grátis",
+    home_platform_title: "Seu Centro de Aprendizado",
+    home_platform_desc:
+      "Gerencie vocabulário, revise com flashcards e acompanhe seu progresso — tudo em um lugar.",
+    home_platform_review: "Revisão com Flashcards",
+    home_platform_review_desc:
+      "Sistema de repetição espaçada SM-2 para memorização de longo prazo",
+    home_platform_stats: "Análises de Aprendizado",
+    home_platform_stats_desc:
+      "Acompanhe sua sequência, distribuição de domínio e progresso diário com gráficos",
+    home_platform_sync: "Sincronização Multi-dispositivo",
+    home_platform_sync_desc:
+      "Faça login para sincronizar vocabulário entre extensões e site",
+    home_open_app: "Abrir Web App",
+    footer_privacy: "Privacidade",
+    footer_terms: "Termos",
+    home_ccwords_f_context: "Captura de Contexto",
+    home_ccwords_f_context_desc:
+      "Salva automaticamente a frase original para melhor memorização",
+    home_ccwords_f_activity: "Rastreamento de Atividade",
+    home_ccwords_f_activity_desc:
+      "Visualize seus hábitos de aprendizado com mapas de calor estilo GitHub",
+
     // Words page
     words_title: "Meu Vocabulário",
     words_search_placeholder: "Buscar palavras...",
@@ -2302,6 +2632,37 @@ export const messages = {
     home_feature_word_selection: "Выделение слов",
     home_feature_word_selection_desc:
       "Выделите текст для перевода и сохранения слов",
+
+    // Home page - redesigned
+    home_hero_badge: "Инструменты для YouTube",
+    home_ccplus_tag: "YouTube Улучшенный",
+    home_ccplus_desc:
+      "Превратите YouTube в иммерсивную учебную среду: интерактивные двуязычные субтитры, чистый интерфейс и режим театра.",
+    home_ccwords_tag: "Умный Словарь",
+    home_ccwords_desc:
+      "Выделите любое слово на любой странице для мгновенного перевода, сохранения в словарь и освоения через интервальное повторение.",
+    home_install_free: "Установить Бесплатно",
+    home_platform_title: "Ваш Учебный Центр",
+    home_platform_desc:
+      "Управляйте словарём, повторяйте с карточками и отслеживайте прогресс — всё в одном месте.",
+    home_platform_review: "Повторение с Карточками",
+    home_platform_review_desc:
+      "Научно обоснованная система SM-2 для долгосрочного запоминания",
+    home_platform_stats: "Аналитика Обучения",
+    home_platform_stats_desc:
+      "Отслеживайте серию, распределение освоения и ежедневный прогресс",
+    home_platform_sync: "Кросс-платформенная Синхронизация",
+    home_platform_sync_desc:
+      "Войдите для синхронизации словаря между расширениями и сайтом",
+    home_open_app: "Открыть Веб-Приложение",
+    footer_privacy: "Конфиденциальность",
+    footer_terms: "Условия",
+    home_ccwords_f_context: "Захват Контекста",
+    home_ccwords_f_context_desc:
+      "Автоматически сохраняет окружающее предложение для лучшего запоминания",
+    home_ccwords_f_activity: "Отслеживание Активности",
+    home_ccwords_f_activity_desc:
+      "Визуализируйте свои учебные привычки с тепловыми картами в стиле GitHub",
 
     // Words page
     words_title: "Мой словарь",
