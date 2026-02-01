@@ -161,6 +161,28 @@
     return doc.documentElement.textContent;
   }
 
+  /** Escape HTML special characters to prevent XSS when using {@html} */
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  /**
+   * Highlight matching text by wrapping matches in <mark> tags.
+   * Returns HTML string safe for {@html} rendering.
+   */
+  function highlightText(text: string, query: string): string {
+    const escaped = escapeHtml(text);
+    if (!query) return escaped;
+    // Escape regex special chars in query
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(${escapedQuery})`, "gi");
+    return escaped.replace(regex, "<mark>$1</mark>");
+  }
+
   interface CaptionItem {
     start: string;
     dur: string;
@@ -215,8 +237,13 @@
   });
 
   let filteredCaption = $derived.by(() => {
-    return captions.filter(({ content = "" }, _i) => {
-      return content?.toLowerCase().includes(captionQuery.toLowerCase());
+    if (!captionQuery) return captions;
+    const q = captionQuery.toLowerCase();
+    return captions.filter(({ content = "", secondContent = "" }) => {
+      return (
+        content?.toLowerCase().includes(q) ||
+        secondContent?.toLowerCase().includes(q)
+      );
     });
   });
 
@@ -1183,9 +1210,13 @@
             >
               <span class="timestamp">{formatTimestamp(start)}</span>
               <div class="caption-content">
-                <span class="text">{content}</span>
+                <span class="text"
+                  >{@html highlightText(content || "", captionQuery)}</span
+                >
                 {#if secondContent}
-                  <span class="text secondary">{secondContent}</span>
+                  <span class="text secondary"
+                    >{@html highlightText(secondContent, captionQuery)}</span
+                  >
                 {/if}
               </div>
               <span
@@ -1304,6 +1335,13 @@
 
   .text {
     color: var(--yt-spec-text-primary);
+  }
+
+  .text :global(mark) {
+    background-color: rgba(62, 166, 255, 0.3);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 1px;
   }
 
   .text.secondary {

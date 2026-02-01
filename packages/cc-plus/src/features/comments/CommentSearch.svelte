@@ -16,6 +16,62 @@
   let commentShow: boolean = $state(false);
   let searchValue: string = $state("");
 
+  /** Store original innerHTML for each yt-attributed-string to restore on clear */
+  const originalHtmlMap = new WeakMap<HTMLElement, string>();
+
+  /**
+   * Highlight matching text in a DOM element.
+   * Uses TreeWalker to find text nodes and wraps matches in <mark> tags.
+   * Preserves the existing DOM structure (links, emoji, etc.).
+   */
+  function highlightElement(el: HTMLElement, query: string): void {
+    // Save original HTML on first encounter
+    if (!originalHtmlMap.has(el)) {
+      originalHtmlMap.set(el, el.innerHTML);
+    } else {
+      // Restore original before re-highlighting
+      el.innerHTML = originalHtmlMap.get(el)!;
+    }
+
+    if (!query) return;
+
+    const lowerQuery = query.toLowerCase();
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    let node: Text | null;
+    while ((node = walker.nextNode() as Text | null)) {
+      textNodes.push(node);
+    }
+
+    for (const textNode of textNodes) {
+      const text = textNode.textContent || "";
+      const lowerText = text.toLowerCase();
+      if (!lowerText.includes(lowerQuery)) continue;
+
+      // Split and rebuild with <mark> wrappers
+      const frag = document.createDocumentFragment();
+      let lastIdx = 0;
+      let idx = lowerText.indexOf(lowerQuery, lastIdx);
+      while (idx !== -1) {
+        // Text before match
+        if (idx > lastIdx) {
+          frag.appendChild(document.createTextNode(text.slice(lastIdx, idx)));
+        }
+        // Matched text in <mark>
+        const mark = document.createElement("mark");
+        mark.textContent = text.slice(idx, idx + query.length);
+        frag.appendChild(mark);
+        lastIdx = idx + query.length;
+        idx = lowerText.indexOf(lowerQuery, lastIdx);
+      }
+      // Remaining text
+      if (lastIdx < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+      }
+      textNode.parentNode?.replaceChild(frag, textNode);
+    }
+  }
+
   function search() {
     document
       .querySelectorAll<HTMLDivElement>("ytd-comment-thread-renderer")
@@ -26,14 +82,23 @@
         if (!contentString) {
           return;
         }
+        if (!searchValue) {
+          c.style.display = "block";
+          // Restore original HTML when search is cleared
+          highlightElement(contentString, "");
+          return;
+        }
         if (
           contentString.innerText
             .toLowerCase()
             .includes(searchValue.toLowerCase())
         ) {
           c.style.display = "block";
+          highlightElement(contentString, searchValue);
         } else {
           c.style.display = "none";
+          // Restore hidden comments too
+          highlightElement(contentString, "");
         }
       });
   }
@@ -172,5 +237,12 @@
 
   .clear-btn:hover {
     opacity: 1;
+  }
+
+  :global(ytd-comment-thread-renderer mark) {
+    background-color: rgba(62, 166, 255, 0.3);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 1px;
   }
 </style>
