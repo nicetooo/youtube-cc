@@ -12,6 +12,9 @@ export interface ExtensionSettings {
   captionFontSize: number;
   // Enlarge skip ad button
   enlargeSkipButton: boolean;
+  // Caption language preferences
+  captionPrimaryLang: string;
+  captionSecondaryLang: string;
 }
 
 // App store state type
@@ -30,6 +33,8 @@ const defaultSettings: ExtensionSettings = {
   commentSearch: true,
   captionFontSize: 14,
   enlargeSkipButton: false,
+  captionPrimaryLang: "",
+  captionSecondaryLang: "",
 };
 
 /** sync store between popup & content.js */

@@ -32,6 +32,17 @@
       },
     }));
   }
+
+  function handleLangChange(primary: string, secondary: string) {
+    appStore.update((v) => ({
+      ...v,
+      settings: {
+        ...v.settings,
+        captionPrimaryLang: primary,
+        captionSecondaryLang: secondary,
+      },
+    }));
+  }
 </script>
 
 {#if $appStore.isStorageLoad}
@@ -41,6 +52,9 @@
       {port}
       fontSize={$appStore.settings.captionFontSize ?? 14}
       onFontSizeChange={handleFontSizeChange}
+      preferredPrimaryLang={$appStore.settings.captionPrimaryLang ?? ""}
+      preferredSecondaryLang={$appStore.settings.captionSecondaryLang ?? ""}
+      onLangChange={handleLangChange}
     ></CaptionList>
     <SideComment isSideComment={$appStore.settings.sideComment} {port}
     ></SideComment>
