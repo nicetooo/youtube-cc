@@ -943,7 +943,7 @@
        margin-bottom:12px;
        display: ${shouldShow ? "flex" : "none"};
        border: 1px solid var(--yt-spec-10-percent-layer);
-       background: ${window.getComputedStyle(document.documentElement).backgroundColor};
+       background: var(--yt-spec-additive-background);
        `}
     >
       <div
@@ -1181,7 +1181,7 @@
               onkeypress={(e) =>
                 (e.key === "Enter" || e.key === " ") && toTimeStamp(start)}
             >
-              <span class="timestamp">【{formatTimestamp(start)}】</span>
+              <span class="timestamp">{formatTimestamp(start)}</span>
               <div class="caption-content">
                 <span class="text">{content}</span>
                 {#if secondContent}
@@ -1235,22 +1235,23 @@
 <style>
   .show-btn {
     user-select: none;
-    border: 1px solid var(--yt-spec-10-percent-layer);
+    border: none;
     border-radius: 99px;
     height: 34px;
     width: calc(100% - 24px);
     margin-bottom: 12px;
     font-size: 14px;
     font-weight: 500;
-    line-height: 36px;
+    line-height: 34px;
     color: var(--yt-spec-text-primary);
     text-align: center;
-    background-color: var(--yt-spec-base-background);
+    background-color: var(--yt-spec-additive-background);
     cursor: pointer;
+    transition: background-color 0.15s;
   }
 
   .show-btn:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--yt-spec-button-chip-background-hover);
   }
 
   .transcript {
@@ -1275,19 +1276,30 @@
 
   .caption-line {
     display: flex;
+    padding: 6px 4px;
+    border-radius: 6px;
+    transition: background-color 0.15s;
   }
 
   .caption-content {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
     flex: 1;
+    line-height: 1.45;
   }
 
   .timestamp {
     flex-shrink: 0;
-    color: var(--yt-live-chat-secondary-text-color);
-    font-weight: 500;
+    min-width: 3.2em;
+    margin-right: 8px;
+    padding-top: 1px;
+    color: var(--yt-spec-text-secondary, #aaa);
+    font-size: 0.8em;
+    font-family: "Roboto Mono", "SF Mono", "Menlo", monospace;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    user-select: none;
   }
 
   .text {
@@ -1296,17 +1308,23 @@
 
   .text.secondary {
     color: var(--yt-spec-text-secondary);
-    font-size: 0.9em;
-    font-style: italic;
+    font-size: 0.88em;
+    opacity: 0.8;
   }
 
   .caption-line:hover {
-    opacity: 0.5;
+    background-color: var(
+      --yt-spec-10-percent-layer,
+      rgba(255, 255, 255, 0.08)
+    );
     cursor: pointer;
   }
 
   .caption-line:active {
-    opacity: 0.5;
+    background-color: var(
+      --yt-spec-10-percent-layer,
+      rgba(255, 255, 255, 0.08)
+    );
   }
 
   .comment {
