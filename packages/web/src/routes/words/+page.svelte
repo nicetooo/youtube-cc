@@ -40,7 +40,7 @@
 </script>
 
 <svelte:head>
-  <title>{i18n.t("words_title")} - CC Plus</title>
+  <title>{i18n.t("words_title")} - CC Words</title>
 </svelte:head>
 
 <div class="max-w-3xl mx-auto px-4 py-6">

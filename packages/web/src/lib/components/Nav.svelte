@@ -15,7 +15,17 @@
 <header class="sticky top-0 z-50 bg-primary border-b border-default">
   <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
     <div class="flex items-center gap-8">
-      <a href="/" class="text-lg font-semibold text-accent"> CC Plus </a>
+      <a
+        href="/"
+        class="flex items-center gap-2 text-lg font-semibold"
+        style="color: var(--text-primary);"
+      >
+        <span
+          class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+          style="background: linear-gradient(135deg, #10b981, #06b6d4);">W</span
+        >
+        CC Words
+      </a>
       <nav class="hidden sm:flex items-center gap-1">
         {#each links as link}
           {@const isActive = $page.url.pathname === link.href}
@@ -28,7 +38,8 @@
             {i18n.t(link.labelKey)}
             {#if link.href === "/review" && wordsStore.dueForReview.length > 0}
               <span
-                class="ms-1 px-1.5 py-0.5 text-xs bg-accent text-white rounded-full"
+                class="ms-1 px-1.5 py-0.5 text-xs text-white rounded-full"
+                style="background-color: #10b981;"
               >
                 {wordsStore.dueForReview.length}
               </span>
@@ -77,8 +88,9 @@
       <a
         href={link.href}
         class="relative flex flex-col items-center gap-1 px-4 py-2 text-xs {isActive
-          ? 'text-accent'
+          ? ''
           : 'text-secondary'}"
+        style={isActive ? "color: #10b981;" : ""}
       >
         {#if link.href === "/words"}
           <svg
@@ -127,7 +139,8 @@
         <span>{i18n.t(link.labelKey)}</span>
         {#if link.href === "/review" && wordsStore.dueForReview.length > 0}
           <span
-            class="absolute -top-1 -right-1 px-1.5 text-xs bg-accent text-white rounded-full"
+            class="absolute -top-1 -right-1 px-1.5 text-xs text-white rounded-full"
+            style="background-color: #10b981;"
           >
             {wordsStore.dueForReview.length}
           </span>

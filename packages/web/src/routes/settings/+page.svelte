@@ -26,14 +26,14 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `ccplus-export-${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `ccwords-export-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
 </script>
 
 <svelte:head>
-  <title>{i18n.t("settings_title")} - CC Plus</title>
+  <title>{i18n.t("settings_title")} - CC Words</title>
 </svelte:head>
 
 <div class="max-w-xl mx-auto px-4 py-8">
@@ -260,7 +260,7 @@
   <!-- About -->
   <footer class="pt-4 border-t border-[var(--border)]">
     <div class="flex items-center justify-between text-sm text-tertiary">
-      <span>CC Plus v1.3.1</span>
+      <span>CC Words v1.0.0</span>
       <div class="flex items-center gap-4">
         <a href="/privacy" class="hover:text-secondary transition-colors"
           >Privacy</a

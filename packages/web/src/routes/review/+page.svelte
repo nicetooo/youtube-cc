@@ -82,7 +82,7 @@
 </script>
 
 <svelte:head>
-  <title>{i18n.t("review_title")} - CC Plus</title>
+  <title>{i18n.t("review_title")} - CC Words</title>
 </svelte:head>
 
 <svelte:window onkeydown={handleKeydown} />
