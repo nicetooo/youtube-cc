@@ -2,7 +2,7 @@
   "name": "cc-plus",
   "description": "Transform your YouTube viewing experience with interactive transcripts, immersive cinema mode, and advanced comment search.",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.2.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
