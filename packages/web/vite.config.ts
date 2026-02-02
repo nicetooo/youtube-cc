@@ -13,10 +13,10 @@ export default defineConfig({
       scope: "/",
       base: "/",
       manifest: {
-        name: "CC Plus - YouTube Learning",
-        short_name: "CC Plus",
+        name: "CC Words - Translate & Vocabulary",
+        short_name: "CC Words",
         description:
-          "YouTube CC Plus - Save words, sync across devices, master languages",
+          "CC Words - Save words, sync across devices, master languages",
         theme_color: "#0f0f0f",
         background_color: "#0f0f0f",
         display: "standalone",

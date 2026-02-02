@@ -259,7 +259,7 @@ export const messages = {
     terms_back: "Back to Settings",
 
     // PWA Install
-    pwa_install_title: "Install CC Plus",
+    pwa_install_title: "Install CC Words",
     pwa_install_hint: "Add to home screen for quick access",
     pwa_install_button: "Install",
     pwa_install_ios_hint: "Add to home screen for the best experience",
@@ -483,7 +483,7 @@ export const messages = {
     terms_back: "返回设置",
 
     // PWA Install
-    pwa_install_title: "安装 CC Plus",
+    pwa_install_title: "安装 CC Words",
     pwa_install_hint: "添加到主屏幕，快速访问",
     pwa_install_button: "安装",
     pwa_install_ios_hint: "添加到主屏幕以获得最佳体验",
@@ -707,7 +707,7 @@ export const messages = {
     terms_back: "返回設定",
 
     // PWA Install
-    pwa_install_title: "安裝 CC Plus",
+    pwa_install_title: "安裝 CC Words",
     pwa_install_hint: "新增到主畫面，快速存取",
     pwa_install_button: "安裝",
     pwa_install_ios_hint: "新增到主畫面以獲得最佳體驗",
@@ -935,7 +935,7 @@ export const messages = {
     terms_back: "設定に戻る",
 
     // PWA Install
-    pwa_install_title: "CC Plus をインストール",
+    pwa_install_title: "CC Words をインストール",
     pwa_install_hint: "ホーム画面に追加してすばやくアクセス",
     pwa_install_button: "インストール",
     pwa_install_ios_hint: "ホーム画面に追加して最高の体験を",
@@ -1164,7 +1164,7 @@ export const messages = {
     terms_back: "설정으로 돌아가기",
 
     // PWA Install
-    pwa_install_title: "CC Plus 설치",
+    pwa_install_title: "CC Words 설치",
     pwa_install_hint: "홈 화면에 추가하여 빠르게 접근",
     pwa_install_button: "설치",
     pwa_install_ios_hint: "홈 화면에 추가하여 최고의 경험을",
@@ -1400,7 +1400,7 @@ export const messages = {
     terms_back: "सेटिंग्स पर वापस जाएं",
 
     // PWA Install
-    pwa_install_title: "CC Plus इंस्टॉल करें",
+    pwa_install_title: "CC Words इंस्टॉल करें",
     pwa_install_hint: "त्वरित पहुंच के लिए होम स्क्रीन में जोड़ें",
     pwa_install_button: "इंस्टॉल करें",
     pwa_install_ios_hint: "बेहतर अनुभव के लिए होम स्क्रीन में जोड़ें",
@@ -1639,7 +1639,7 @@ export const messages = {
     terms_back: "Volver a Configuración",
 
     // PWA Install
-    pwa_install_title: "Instalar CC Plus",
+    pwa_install_title: "Instalar CC Words",
     pwa_install_hint: "Agregar a la pantalla de inicio para acceso rápido",
     pwa_install_button: "Instalar",
     pwa_install_ios_hint:
@@ -1882,7 +1882,7 @@ export const messages = {
     terms_back: "Retour aux Paramètres",
 
     // PWA Install
-    pwa_install_title: "Installer CC Plus",
+    pwa_install_title: "Installer CC Words",
     pwa_install_hint: "Ajouter à l'écran d'accueil pour un accès rapide",
     pwa_install_button: "Installer",
     pwa_install_ios_hint:
@@ -2110,7 +2110,7 @@ export const messages = {
     terms_back: "العودة للإعدادات",
 
     // PWA Install
-    pwa_install_title: "تثبيت CC Plus",
+    pwa_install_title: "تثبيت CC Words",
     pwa_install_hint: "أضف إلى الشاشة الرئيسية للوصول السريع",
     pwa_install_button: "تثبيت",
     pwa_install_ios_hint: "أضف إلى الشاشة الرئيسية لأفضل تجربة",
@@ -2348,7 +2348,7 @@ export const messages = {
     terms_back: "সেটিংসে ফিরে যান",
 
     // PWA Install
-    pwa_install_title: "CC Plus ইনস্টল করুন",
+    pwa_install_title: "CC Words ইনস্টল করুন",
     pwa_install_hint: "দ্রুত অ্যাক্সেসের জন্য হোম স্ক্রিনে যোগ করুন",
     pwa_install_button: "ইনস্টল করুন",
     pwa_install_ios_hint: "সেরা অভিজ্ঞতার জন্য হোম স্ক্রিনে যোগ করুন",
@@ -2587,7 +2587,7 @@ export const messages = {
     terms_back: "Voltar às Configurações",
 
     // PWA Install
-    pwa_install_title: "Instalar CC Plus",
+    pwa_install_title: "Instalar CC Words",
     pwa_install_hint: "Adicionar à tela inicial para acesso rápido",
     pwa_install_button: "Instalar",
     pwa_install_ios_hint: "Adicionar à tela inicial para melhor experiência",
@@ -2823,7 +2823,7 @@ export const messages = {
     terms_back: "Назад к настройкам",
 
     // PWA Install
-    pwa_install_title: "Установить CC Plus",
+    pwa_install_title: "Установить CC Words",
     pwa_install_hint: "Добавить на главный экран для быстрого доступа",
     pwa_install_button: "Установить",
     pwa_install_ios_hint: "Добавить на главный экран для лучшего опыта",
