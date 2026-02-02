@@ -68,6 +68,7 @@
   let selectedLangLower = $state(""); // Language shown on bottom line (optional)
   let langInitialized = false;
   let isLanguageSwitching = $state(false);
+  let pendingLanguageSwitch = false;
 
   /**
    * Cache of successfully fetched caption XML text, keyed by effective language code.
@@ -268,6 +269,8 @@
     if (!timedtextUrl) {
       return;
     }
+    // Don't fetch when panel is collapsed — URLs are stored, fetch deferred to expand
+    if (!isExpand) return;
     const lang = getEffectiveLang(timedtextUrl);
     try {
       const res = await fetch(timedtextUrl.toString());
@@ -299,6 +302,8 @@
     if (!secondTimedtextUrl) {
       return;
     }
+    // Don't fetch when panel is collapsed — URLs are stored, fetch deferred to expand
+    if (!isExpand) return;
     const lang = getEffectiveLang(secondTimedtextUrl);
     try {
       const res = await fetch(secondTimedtextUrl.toString());
@@ -531,14 +536,27 @@
                   (t) => t.languageCode === preferredPrimaryLang
                 );
               if (hasPreferred) {
-                // Only switch if preferred differs from what's currently displayed
-                const needsSwitch =
-                  selectedLangUpper !== preferredPrimaryLang ||
-                  selectedLangLower !== preferredSecondaryLang;
+                // Only switch if preferred differs from what's currently displayed.
+                // Also check against the current timedtext URL's language to avoid
+                // redundant setOption calls when YouTube already loaded the right track.
+                const currentUrlLang = getEffectiveLang(timedtextUrl);
+                const currentUrlLang2 = getEffectiveLang(secondTimedtextUrl);
+                const alreadyCorrect =
+                  (currentUrlLang === preferredPrimaryLang ||
+                    selectedLangUpper === preferredPrimaryLang) &&
+                  (!preferredSecondaryLang ||
+                    currentUrlLang2 === preferredSecondaryLang ||
+                    selectedLangLower === preferredSecondaryLang);
+
                 selectedLangUpper = preferredPrimaryLang;
                 selectedLangLower = preferredSecondaryLang;
-                if (needsSwitch) {
-                  performLanguageSwitch();
+                if (!alreadyCorrect) {
+                  if (isExpand) {
+                    performLanguageSwitch();
+                  } else {
+                    // Defer until panel is expanded
+                    pendingLanguageSwitch = true;
+                  }
                 }
               }
             }
@@ -598,6 +616,11 @@
     if (isAutoClicked) {
       return;
     }
+    // Skip if captions are already loading or loaded
+    if (timedtextUrl || caption) {
+      isAutoClicked = true;
+      return;
+    }
     const subTitleBtn = document.getElementsByClassName(
       "ytp-subtitles-button"
     )[0] as HTMLDivElement;
@@ -605,10 +628,13 @@
       return;
     }
     isAutoClicked = true;
+    // If CC is already active, YouTube has already loaded captions —
+    // the background script will forward the intercepted URL to us.
+    if (subTitleBtn.getAttribute("aria-pressed") === "true") {
+      return;
+    }
+    // Single click to enable CC and trigger caption loading
     subTitleBtn.click();
-    setTimeout(() => {
-      subTitleBtn.click();
-    }, 1000);
   }
 
   const handleMouseEnter = () => {
@@ -694,7 +720,11 @@
       const ad = document.querySelector(".ytp-ad-player-overlay-layout");
       if (ad === null) {
         videoCurrentTime = video.currentTime;
-        clickCCBtn();
+        // Only trigger caption loading when the panel is expanded
+        // and storage has loaded (prevents race: default isExpand=true before storage sets it to false)
+        if (isExpand && isStorageLoad) {
+          clickCCBtn();
+        }
       }
     };
 
@@ -718,6 +748,25 @@
     }
     chrome.storage.local.set({ isExpand }, () => {});
   });
+
+  /** Handle panel expand — trigger deferred caption loading */
+  function handleExpandPanel() {
+    isExpand = true;
+    isAutoClicked = false;
+
+    if (pendingLanguageSwitch) {
+      // Need language switch: setOption will trigger YouTube to load correct track
+      pendingLanguageSwitch = false;
+      performLanguageSwitch();
+    } else if (timedtextUrl && !caption) {
+      // URLs stored from YouTube auto-load while collapsed, fetch now
+      getCaptions();
+      if (secondTimedtextUrl && !secondCaption) {
+        getSecondCaptions();
+      }
+    }
+    // Otherwise timeUpdateHandler will call clickCCBtn() on next timeupdate
+  }
 
   // Close popups when clicking outside
   function handleGlobalClick(e: MouseEvent) {
@@ -1257,7 +1306,7 @@
   {:else if shouldShow}
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <div class="show-btn" onclick={() => (isExpand = true)}>
+    <div class="show-btn" onclick={handleExpandPanel}>
       {i18n("display_transcription")}
     </div>
   {/if}
