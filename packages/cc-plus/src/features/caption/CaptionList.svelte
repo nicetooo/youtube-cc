@@ -51,6 +51,7 @@
   let isStorageLoad = false;
   let showFontSizePopup = $state(false);
   let showLangPopup = $state(false);
+  let currentPath = $state(location.pathname); // Reactive path for SPA navigation
 
   const MIN_FONT_SIZE = 12;
   const MAX_FONT_SIZE = 24;
@@ -71,19 +72,92 @@
   let pendingLanguageSwitch = false;
 
   /**
-   * Cache of successfully fetched caption XML text, keyed by effective language code.
+   * LRU Cache of successfully fetched caption XML text, keyed by "videoId:lang".
    * Used as fallback when:
    * - YouTube returns 429 (rate limited)
    * - YouTube serves track from memory cache (no network request for us to intercept)
    * - Any other fetch failure
-   * Cleared on video change (url_change).
+   * Cache persists across video changes since key includes videoId.
+   * Limited to MAX_CACHE_SIZE entries to prevent unbounded memory growth.
    */
   const captionTextCache = new Map<string, string>();
+  const MAX_CACHE_SIZE = 100; // ~50 videos with dual language captions
+
+  /**
+   * LRU cache get: returns value and moves entry to end (most recently used)
+   */
+  function cacheGet(key: string): string | undefined {
+    if (!captionTextCache.has(key)) return undefined;
+    const value = captionTextCache.get(key)!;
+    // Move to end (most recently used)
+    captionTextCache.delete(key);
+    captionTextCache.set(key, value);
+    return value;
+  }
+
+  /**
+   * LRU cache set: adds entry and evicts oldest if at capacity
+   */
+  function cacheSet(key: string, value: string): void {
+    // If key exists, delete first to update position
+    if (captionTextCache.has(key)) {
+      captionTextCache.delete(key);
+    }
+    // Evict oldest entries if at capacity
+    while (captionTextCache.size >= MAX_CACHE_SIZE) {
+      const oldestKey = captionTextCache.keys().next().value;
+      if (oldestKey) {
+        captionTextCache.delete(oldestKey);
+        console.log("[CaptionList] Cache evicted (LRU):", oldestKey);
+      } else {
+        break;
+      }
+    }
+    captionTextCache.set(key, value);
+  }
 
   /** Get the effective language code from a timedtext URL */
   function getEffectiveLang(url: URL | null): string {
     if (!url) return "";
     return url.searchParams.get("tlang") || url.searchParams.get("lang") || "";
+  }
+
+  /** Build cache key from videoId and language */
+  function getCacheKey(vid: string | null, lang: string): string {
+    if (!vid || !lang) return "";
+    return `${vid}:${lang}`;
+  }
+
+  /**
+   * Request queue to prevent 429 rate limiting.
+   * Ensures only one caption request is in-flight at a time,
+   * with a delay between requests.
+   */
+  let requestQueue: Array<() => Promise<void>> = [];
+  let isProcessingQueue = false;
+  const REQUEST_DELAY_MS = 3000; // Delay between requests to avoid 429
+
+  async function processRequestQueue() {
+    if (isProcessingQueue || requestQueue.length === 0) return;
+    isProcessingQueue = true;
+
+    while (requestQueue.length > 0) {
+      const request = requestQueue.shift();
+      if (request) {
+        await request();
+        // Wait before processing next request
+        if (requestQueue.length > 0) {
+          await new Promise((resolve) => setTimeout(resolve, REQUEST_DELAY_MS));
+        }
+      }
+    }
+
+    isProcessingQueue = false;
+  }
+
+  function enqueueRequest(request: () => Promise<void>) {
+    requestQueue.push(request);
+    processRequestQueue();
   }
 
   /** Unified language option for dropdowns */
@@ -155,7 +229,6 @@
   let captionQuery = $state("");
   let hasChat = $state(false);
   let isMouseHover = false;
-  let isAutoClicked = false;
 
   function decodeHTML(str: string) {
     const doc = new DOMParser().parseFromString(str, "text/html");
@@ -248,8 +321,8 @@
     });
   });
 
-  // 提取显示条件为 derived state
-  let shouldShow = $derived(isCaptionOn && location.pathname === "/watch");
+  // 提取显示条件为 derived state (use reactive currentPath for SPA navigation)
+  let shouldShow = $derived(isCaptionOn && currentPath === "/watch");
 
   function toTimeStamp(time: string) {
     if (!video) {
@@ -265,70 +338,121 @@
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   }
 
-  async function getCaptions() {
+  function getCaptions() {
     if (!timedtextUrl) {
       return;
     }
     // Don't fetch when panel is collapsed — URLs are stored, fetch deferred to expand
     if (!isExpand) return;
     const lang = getEffectiveLang(timedtextUrl);
-    try {
-      const res = await fetch(timedtextUrl.toString());
-      if (!res.ok) {
-        console.warn("[CaptionList] Failed to fetch captions:", res.status);
-        // Fallback to cache
-        if (lang && captionTextCache.has(lang)) {
-          console.log("[CaptionList] Using cached caption for", lang);
-          caption = captionTextCache.get(lang)!;
-        }
+    const cacheKey = getCacheKey(videoId, lang);
+
+    // Cache-first: use cached data if available to avoid redundant requests (429)
+    if (cacheKey) {
+      const cached = cacheGet(cacheKey);
+      if (cached) {
+        console.log("[CaptionList] Cache hit for caption:", cacheKey);
+        caption = cached;
         return;
       }
-      const text = await res.text();
-      caption = text;
-      // Cache on success
-      if (lang && text) {
-        captionTextCache.set(lang, text);
-      }
-    } catch (err) {
-      console.error("[CaptionList] Error fetching captions:", err);
-      // Fallback to cache
-      if (lang && captionTextCache.has(lang)) {
-        caption = captionTextCache.get(lang)!;
-      }
     }
+
+    // Capture URL for the async request (may change before queue processes)
+    const urlToFetch = timedtextUrl.toString();
+
+    // Enqueue the network request to prevent concurrent requests (429)
+    enqueueRequest(async () => {
+      // Double-check cache (might have been populated by another request)
+      if (cacheKey) {
+        const cached = cacheGet(cacheKey);
+        if (cached) {
+          console.log(
+            "[CaptionList] Cache hit (in queue) for caption:",
+            cacheKey
+          );
+          caption = cached;
+          return;
+        }
+      }
+
+      try {
+        console.log("[CaptionList] Fetching caption:", cacheKey);
+        const res = await fetch(urlToFetch);
+        if (!res.ok) {
+          console.warn("[CaptionList] Failed to fetch captions:", res.status);
+          return;
+        }
+        const text = await res.text();
+        caption = text;
+        // Cache on success (LRU)
+        if (cacheKey && text) {
+          cacheSet(cacheKey, text);
+          console.log("[CaptionList] Cached caption:", cacheKey);
+        }
+      } catch (err) {
+        console.error("[CaptionList] Error fetching captions:", err);
+      }
+    });
   }
 
-  async function getSecondCaptions() {
+  function getSecondCaptions() {
     if (!secondTimedtextUrl) {
       return;
     }
     // Don't fetch when panel is collapsed — URLs are stored, fetch deferred to expand
     if (!isExpand) return;
     const lang = getEffectiveLang(secondTimedtextUrl);
-    try {
-      const res = await fetch(secondTimedtextUrl.toString());
-      if (!res.ok) {
-        console.warn(
-          "[CaptionList] Failed to fetch second captions:",
-          res.status
-        );
-        if (lang && captionTextCache.has(lang)) {
-          console.log("[CaptionList] Using cached second caption for", lang);
-          secondCaption = captionTextCache.get(lang)!;
-        }
+    const cacheKey = getCacheKey(videoId, lang);
+
+    // Cache-first: use cached data if available to avoid redundant requests (429)
+    if (cacheKey) {
+      const cached = cacheGet(cacheKey);
+      if (cached) {
+        console.log("[CaptionList] Cache hit for second caption:", cacheKey);
+        secondCaption = cached;
         return;
       }
-      const text = await res.text();
-      secondCaption = text;
-      if (lang && text) {
-        captionTextCache.set(lang, text);
-      }
-    } catch (err) {
-      console.error("[CaptionList] Error fetching second captions:", err);
-      if (lang && captionTextCache.has(lang)) {
-        secondCaption = captionTextCache.get(lang)!;
-      }
     }
+
+    // Capture URL for the async request (may change before queue processes)
+    const urlToFetch = secondTimedtextUrl.toString();
+
+    // Enqueue the network request to prevent concurrent requests (429)
+    enqueueRequest(async () => {
+      // Double-check cache (might have been populated by another request)
+      if (cacheKey) {
+        const cached = cacheGet(cacheKey);
+        if (cached) {
+          console.log(
+            "[CaptionList] Cache hit (in queue) for second caption:",
+            cacheKey
+          );
+          secondCaption = cached;
+          return;
+        }
+      }
+
+      try {
+        console.log("[CaptionList] Fetching second caption:", cacheKey);
+        const res = await fetch(urlToFetch);
+        if (!res.ok) {
+          console.warn(
+            "[CaptionList] Failed to fetch second captions:",
+            res.status
+          );
+          return;
+        }
+        const text = await res.text();
+        secondCaption = text;
+        // Cache on success (LRU)
+        if (cacheKey && text) {
+          cacheSet(cacheKey, text);
+          console.log("[CaptionList] Cached second caption:", cacheKey);
+        }
+      } catch (err) {
+        console.error("[CaptionList] Error fetching second captions:", err);
+      }
+    });
   }
 
   function swapCaptions() {
@@ -451,24 +575,20 @@
       let resolved = false;
 
       if (!timedtextUrl && selectedLangUpper) {
-        const cached = captionTextCache.get(selectedLangUpper);
+        const upperCacheKey = getCacheKey(videoId, selectedLangUpper);
+        const cached = upperCacheKey ? cacheGet(upperCacheKey) : undefined;
         if (cached) {
-          console.log(
-            "[CaptionList] Cache fallback for upper:",
-            selectedLangUpper
-          );
+          console.log("[CaptionList] Cache fallback for upper:", upperCacheKey);
           caption = cached;
           resolved = true;
         }
       }
 
       if (!secondTimedtextUrl && selectedLangLower) {
-        const cached = captionTextCache.get(selectedLangLower);
+        const lowerCacheKey = getCacheKey(videoId, selectedLangLower);
+        const cached = lowerCacheKey ? cacheGet(lowerCacheKey) : undefined;
         if (cached) {
-          console.log(
-            "[CaptionList] Cache fallback for lower:",
-            selectedLangLower
-          );
+          console.log("[CaptionList] Cache fallback for lower:", lowerCacheKey);
           secondCaption = cached;
           resolved = true;
         }
@@ -539,9 +659,12 @@
                 // Only switch if preferred differs from what's currently displayed.
                 // Also check against the current timedtext URL's language to avoid
                 // redundant setOption calls when YouTube already loaded the right track.
+                // IMPORTANT: timedtextUrl must exist for "already correct" to be true,
+                // otherwise we haven't loaded any captions yet for this video.
                 const currentUrlLang = getEffectiveLang(timedtextUrl);
                 const currentUrlLang2 = getEffectiveLang(secondTimedtextUrl);
                 const alreadyCorrect =
+                  timedtextUrl !== null &&
                   (currentUrlLang === preferredPrimaryLang ||
                     selectedLangUpper === preferredPrimaryLang) &&
                   (!preferredSecondaryLang ||
@@ -558,6 +681,14 @@
                     pendingLanguageSwitch = true;
                   }
                 }
+              }
+            } else {
+              // No preferred language set — use first available track to trigger loading
+              // This ensures captions load even without user preference
+              const firstTrack = captionTracks[0];
+              if (firstTrack && isExpand && !timedtextUrl) {
+                selectedLangUpper = firstTrack.languageCode;
+                performLanguageSwitch();
               }
             }
           }
@@ -611,32 +742,6 @@
 
     line.parentElement.scrollTop += scrollTop;
   }, 200);
-
-  function clickCCBtn() {
-    if (isAutoClicked) {
-      return;
-    }
-    // Skip if captions are already loading or loaded
-    if (timedtextUrl || caption) {
-      isAutoClicked = true;
-      return;
-    }
-    const subTitleBtn = document.getElementsByClassName(
-      "ytp-subtitles-button"
-    )[0] as HTMLDivElement;
-    if (!subTitleBtn) {
-      return;
-    }
-    isAutoClicked = true;
-    // If CC is already active, YouTube has already loaded captions —
-    // the background script will forward the intercepted URL to us.
-    if (subTitleBtn.getAttribute("aria-pressed") === "true") {
-      return;
-    }
-    // Single click to enable CC and trigger caption loading
-    subTitleBtn.click();
-  }
-
   const handleMouseEnter = () => {
     isMouseHover = true;
   };
@@ -720,11 +825,6 @@
       const ad = document.querySelector(".ytp-ad-player-overlay-layout");
       if (ad === null) {
         videoCurrentTime = video.currentTime;
-        // Only trigger caption loading when the panel is expanded
-        // and storage has loaded (prevents race: default isExpand=true before storage sets it to false)
-        if (isExpand && isStorageLoad) {
-          clickCCBtn();
-        }
       }
     };
 
@@ -752,7 +852,6 @@
   /** Handle panel expand — trigger deferred caption loading */
   function handleExpandPanel() {
     isExpand = true;
-    isAutoClicked = false;
 
     if (pendingLanguageSwitch) {
       // Need language switch: setOption will trigger YouTube to load correct track
@@ -765,7 +864,6 @@
         getSecondCaptions();
       }
     }
-    // Otherwise timeUpdateHandler will call clickCCBtn() on next timeupdate
   }
 
   // Close popups when clicking outside
@@ -799,10 +897,15 @@
           secondTimedtextUrl = null;
           caption = "";
           secondCaption = "";
-          captionTextCache.clear();
+          // Note: captionTextCache is NOT cleared here since key includes videoId
+          // This allows cache reuse when returning to previously watched videos
+          // Clear track data for new video (will be repopulated by requestTracks)
+          captionTracks = [];
+          translationLanguages = [];
           langInitialized = false;
           isLanguageSwitching = false;
-          isAutoClicked = false;
+          // Update reactive path for shouldShow to re-evaluate
+          currentPath = location.pathname;
           videoId = new URL(location.href).searchParams.get("v");
           setUp();
 
